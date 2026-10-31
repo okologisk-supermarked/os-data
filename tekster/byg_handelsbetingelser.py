@@ -5,12 +5,12 @@ D = os.path.dirname(os.path.abspath(__file__))
 SHOPS = {
  'os': dict(navn='Økologisk-Supermarked.dk', mail='info@okologisk-supermarked.dk', g='#2e7d32', lg='#f1f8f1', bd='#d3e8d4', knap='#f7941d',
    kontakt='Ejbyvej 82B, 4623 Lille Skensved<br>E-mail: info@okologisk-supermarked.dk',
-   gebyr='<p>Betaling med betalingskort udstedt til private i EU/EØS er gebyrfri. Der opkræves gebyr på erhvervskort (firmakort). Gebyret oplyses i betalingsvinduet, før betalingen gennemføres, og kan ses på ordren efterfølgende.</p>',
+   gebyr='<p>Betaling med betalingskort udstedt til private i EU/EØS er gebyrfri. Der opkræves gebyr på erhvervskort (firmakort) og på kort udstedt uden for EU/EØS. Gebyret oplyses i betalingsvinduet, før betalingen gennemføres, og kan ses på ordren efterfølgende.</p>',
    fragt=[('GLS Pakkeshop', 'Gratis ved køb over 699 kr. Beløbet regnes efter fradrag af loyalitetskroner og rabatkoder.', '48,75 kr.'), ('GLS Erhvervslevering', 'Levering på hverdage i åbningstiden. Husk at udfylde firmanavn.', '58,75 kr.'), ('GLS Hjemmelevering', '', '68,75 kr.')],
    fjern='2-4', fjernsend='4', infoside='Information', retur_glas=''),
  'he': dict(navn='Helsekost-Ekspres.dk', mail='info@helsekost-ekspres.dk', g='#1e5b3a', lg='#f2f7f4', bd='#d5e5da', knap='#1e5b3a',
    kontakt='Ejbyvej 82B, 4623 Lille Skensved<br>Tlf.: 42 47 93 90 (mandag-fredag kl. 10-14)<br>E-mail: info@helsekost-ekspres.dk (vi besvarer e-mails inden for 1 hverdag)',
-   gebyr='<p>Betaling med betalingskort udstedt til private i EU/EØS er gebyrfri. Der opkræves gebyr på erhvervskort (firmakort). Gebyret oplyses i betalingsvinduet, før betalingen gennemføres, og kan ses på ordren efterfølgende.</p>',
+   gebyr='<p>Betaling med betalingskort udstedt til private i EU/EØS er gebyrfri. Der opkræves gebyr på erhvervskort (firmakort) og på kort udstedt uden for EU/EØS. Gebyret oplyses i betalingsvinduet, før betalingen gennemføres, og kan ses på ordren efterfølgende.</p>',
    fragt=[('GLS Pakkeshop', '', '58,75 kr.'), ('GLS Erhvervslevering', 'Levering på hverdage i åbningstiden. Husk at udfylde firmanavn.', '68,75 kr.'), ('GLS Hjemmelevering', '', '78,75 kr.')],
    fjern='1-3', fjernsend='3', infoside='Kundeservice', retur_glas=' Udgifterne til returnering af disse varer forventes højst at koste 80 kr.'),
 }
