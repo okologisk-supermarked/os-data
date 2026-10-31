@@ -101,7 +101,7 @@ function doPost(e) {
     });
 
     MailApp.sendEmail({
-      to: TIL, replyTo: email, name: BUTIK + ' webformular', subject: emne,
+      to: SHOPMAIL, replyTo: email, name: BUTIK + ' webformular', subject: emne,
       htmlBody: linjer + (bilag.length ? '<p>' + bilag.length + ' billede(r) vedhæftet.</p>' : ''),
       attachments: bilag
     });
