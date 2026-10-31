@@ -1,44 +1,44 @@
 {
- "synonymer": {
-  "c-vitamin": [
-   "vitamin c"
+  "synonymer": {
+    "c-vitamin": [
+      "vitamin c"
+    ],
+    "d-vitamin": [
+      "d3"
+    ],
+    "havremælk": [
+      "havredrik"
+    ],
+    "mandelmælk": [
+      "mandeldrik"
+    ],
+    "opvask": [
+      "opvaskemiddel"
+    ],
+    "rismælk": [
+      "risdrik"
+    ],
+    "shampoo": [
+      "shampo"
+    ],
+    "sojamælk": [
+      "sojadrik"
+    ],
+    "tandbørste": [
+      "tandbørster"
+    ]
+  },
+  "top": {},
+  "skjul": [],
+  "populaere": [
+    "Kaffe",
+    "Havregryn",
+    "D-vitamin",
+    "Kokosolie",
+    "Tandpasta",
+    "Glutenfri",
+    "Magnesium",
+    "Te"
   ],
-  "d-vitamin": [
-   "d3"
-  ],
-  "havremælk": [
-   "havredrik"
-  ],
-  "mandelmælk": [
-   "mandeldrik"
-  ],
-  "opvask": [
-   "opvaskemiddel"
-  ],
-  "rismælk": [
-   "risdrik"
-  ],
-  "shampoo": [
-   "shampo"
-  ],
-  "sojamælk": [
-   "sojadrik"
-  ],
-  "tandbørste": [
-   "tandbørster"
-  ]
- },
- "top": {},
- "skjul": [],
- "populaere": [
-  "Kaffe",
-  "Havregryn",
-  "D-vitamin",
-  "Kokosolie",
-  "Tandpasta",
-  "Glutenfri",
-  "Magnesium",
-  "Te"
- ],
- "skjul_sog": []
+  "skjul_sog": []
 }
