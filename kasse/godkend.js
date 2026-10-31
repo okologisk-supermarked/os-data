@@ -11,6 +11,7 @@ var CHK='<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="'+C
 var SHIELD='<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="'+C.a+'" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"/><path d="M8.5 12l2.5 2.5 4.5-5"/></svg>';
 var css=
 "#order-confirm{font-size:14px;line-height:1.45;color:#222}"+
+"#acceptLoyaltyCreationContainer{display:none!important}"+
 "#order-confirm>h2{border-radius:8px}"+
 "#confirm-termsandconditions-text,#confirm-termsandconditions-link-text,#confirm-terms-gdpr-link-text{display:none!important}"+
 ".osk-intro{margin:12px 2px 12px;color:#444}"+
