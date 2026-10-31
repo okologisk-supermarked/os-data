@@ -1,5 +1,5 @@
 /* Helsekost-Ekspres – forbedret "Varen er lagt i kurven"-popup (som på ØS, uden fri fragt)
-   viser varens pris, fragt + bæredygtig emballage i opgørelsen og 3 populære varer. */
+   viser varens pris, fragt + bæredygtig emballage i opgørelsen og 3 populære varer, når varen ikke selv har "Vi anbefaler også". */
 (function(){
 if(window.__heKurv)return;window.__heKurv=1;
 var RAW="https://raw.githubusercontent.com/okologisk-supermarked/os-data/main/sog/version.json",CDN="https://cdn.jsdelivr.net/gh/okologisk-supermarked/os-data@";
@@ -18,7 +18,7 @@ function data(cb){if(DATA)return cb(DATA);try{var c=JSON.parse(sessionStorage.ge
   fetch(RAW+"?t="+Math.floor(Date.now()/300000),{cache:"no-cache"}).then(function(r){return r.json();}).then(function(v){return fetch(CDN+v.sha+"/kurv/kurv_he.json");}).then(function(r){return r.json();}).then(function(l){DATA=l||[];try{sessionStorage.setItem("heRecs1",JSON.stringify({t:Date.now(),l:DATA}));}catch(e){}cb(DATA);})["catch"](function(){cb([]);});}
 function recs(box){data(function(l){var navn=(document.querySelector(".basketPopupName")||{}).textContent||"",pool=l.filter(function(p){return clean(p[1])!==clean(navn);}),pick=[];
   for(var i=0;i<pool.length&&pick.length<3;i++){var j=i+Math.floor(Math.random()*Math.min(8,pool.length-i));var t=pool[i];pool[i]=pool[j];pool[j]=t;pick.push(pool[i]);}
-  if(!pick.length){box.style.display="none";return;}var ret=location.pathname+location.search;
+  var pp=box.closest(".basketPopup");if(!pick.length||(pp&&pp.querySelector(".basketPopupRelated img"))){box.style.display="none";return;}var ret=location.pathname+location.search;
   var h="<div class=\"he-recs-t\">Populært lige nu</div><div class=\"he-recs-g\">";
   pick.forEach(function(p){h+="<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(p[0])+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\">"+
     "<a href=\""+esc(p[2])+"\"><img src=\""+esc(p[3])+"\" alt=\"\"><span>"+esc(p[1])+"</span></a><div class=\"he-recs-p\">"+(p[5]?"<del>"+kr(p[5])+"</del> ":"")+kr(p[4])+"</div><button type=\"submit\">Læg i kurv</button></form>";});
@@ -37,6 +37,6 @@ var CSS=".basketPopup .he-pris{font-weight:700;font-size:1.05rem;margin-top:.3re
 ".he-recs button{width:100%;background:#1e5b3a;color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;font-size:.8rem;cursor:pointer;text-transform:uppercase}"+
 "@media (max-width:640px){.basketPopupOverlay .basketPopup{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;max-width:100%!important;max-height:100vh;max-height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:0!important;transform:none!important;border-radius:0}.he-recs{padding:10px}.he-recs-g{gap:6px}.he-recs img{height:64px}}";
 function start(){var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);fix();
-  if(window.MutationObserver){var t;new MutationObserver(function(){clearTimeout(t);t=setTimeout(function(){var p=document.querySelector(".basketPopup");if(p&&p.getAttribute("data-he")&&!p.querySelector(".he-recs"))p.removeAttribute("data-he");fix();},60);}).observe(document.body,{childList:true,subtree:true});}}
+  if(window.MutationObserver){var t;new MutationObserver(function(){clearTimeout(t);t=setTimeout(function(){var p=document.querySelector(".basketPopup");if(p&&p.getAttribute("data-he")&&!p.querySelector(".he-recs"))p.removeAttribute("data-he");fix();if(p){var hr=p.querySelector(".he-recs");if(hr&&p.querySelector(".basketPopupRelated img"))hr.style.display="none";}},60);}).observe(document.body,{childList:true,subtree:true});}}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
 })();
