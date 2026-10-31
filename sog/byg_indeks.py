@@ -1,6 +1,7 @@
 # Bygger søgeindeks for Økologisk-Supermarked (site 26) via DanDomain API -> os-data/sog/indeks.json
 import sys,json,re,time,os
-sys.path.insert(0,'/root/vejl')
+D=os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0,D)
 from dd import *
 from concurrent.futures import ThreadPoolExecutor
 SKIP=re.compile(r'^(HELSAM|3784|3806|3814|3846|146$|organic|3844)',re.I)
@@ -48,7 +49,6 @@ for i in items:
     url=(i.get('url') or '').replace('https://www.okologisk-supermarked.dk','')
     img=i.get('image') or ''
     out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0])
-os.makedirs('/home/claude/os-data/sog',exist_ok=True)
 meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager']}
-json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap},open('/home/claude/os-data/sog/indeks.json','w'),ensure_ascii=False,separators=(',',':'))
-print(meta, os.path.getsize('/home/claude/os-data/sog/indeks.json'))
+json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
+print(meta, os.path.getsize(os.path.join(D,'indeks.json')))
