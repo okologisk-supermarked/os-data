@@ -81,6 +81,7 @@ window.osSog={open:open,close:close};
 // overtag butikkens søgefelter
 function isSearch(el){return el&&el.tagName==="INPUT"&&!el.closest(".oss")&&(el.closest("#Search_Form")||/søg|search/i.test(el.placeholder||"")||el.name==="keyword"||el.classList.contains("bp_lsaSearchinput"));}
 function grab(e){var el=e.target;if(!isSearch(el))return;e.preventDefault();e.stopImmediatePropagation();var v=el.value;el.blur();open(v);}
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#searchBtn");if(!b)return;e.preventDefault();e.stopImmediatePropagation();open("");},true);
 document.addEventListener("focusin",grab,true);document.addEventListener("mousedown",grab,true);document.addEventListener("touchstart",grab,{capture:true,passive:false});
 document.addEventListener("submit",function(e){var f=e.target;if(f&&f.id==="Search_Form"){e.preventDefault();e.stopImmediatePropagation();var i=f.querySelector("input[type=text],input[type=search],input[name=keyword]");open(i?i.value:"");}},true);
 var hs=document.createElement("style");hs.textContent=".bp_lsaFullScreen,.bp_LiveSearchApp .bp_lsaResults{display:none!important}";document.head.appendChild(hs);
