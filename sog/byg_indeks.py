@@ -48,7 +48,7 @@ for i in items:
     cats=[c.get('name','') for c in ((i.get('categories') or {}).get('items') or []) if c.get('name') and not SKIP.match(str(c.get('id','')))]
     url=(i.get('url') or '').replace('https://www.okologisk-supermarked.dk','')
     img=i.get('image') or ''
-    out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0])
+    out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0,i.get('sortOrder') if i.get('sortOrder') is not None else 99999])
 # "Mest købte lige nu": antal ordrer pr. vare på ØS de seneste 3 dage, fyldt op med de seneste 30 dage
 import datetime
 def opage(start,o):
@@ -89,6 +89,6 @@ kat=[g for g in sorted(k3,key=lambda g:(-k3[g],-k30.get(g,0)))][:10]
 if len(kat)<10: kat+=[g for g in sorted(k30,key=lambda g:-k30[g]) if g not in kat][:10-len(kat)]
 kat=[[g,catmap[g]] for g in kat]
 print('kat',[g for g,u in kat])
-meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager']}
+meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager','sort']}
 json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest,'kat':kat},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,'indeks.json')))
