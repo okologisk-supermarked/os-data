@@ -67,18 +67,7 @@ def side(k):
 <p>Vi modtager kun pakker, der sendes direkte til adressen. Der er ikke mulighed for afhentning eller salg fra adressen.</p>''')
     add('Klageadgang', f'''<p>Du kan få behandlet en klage ved at skrive til {M}.</p>
 <p>Klagen kan derudover indbringes for Center for Klageløsning og/eller Forbrugerklagenævnet, Nævnenes Hus, Toldboden 2, 8800 Viborg. Læs mere på <a href="https://www.forbrug.dk/" target="_blank" rel="noopener">forbrug.dk</a>.</p>''')
-    add('Persondatapolitik', f'''<p>Her kan du læse, hvordan {N} behandler de personoplysninger, du giver os, når du handler hos os eller bruger vores hjemmeside. Den dataansvarlige er Benjo ApS, Ejbyvej 82B, 4623 Lille Skensved.</p>
-<p><strong>Hvilke oplysninger vi bruger</strong><br>Når du handler hos os, har vi brug for dit navn, din adresse, dit telefonnummer og din e-mailadresse. Vi gemmer kun de oplysninger, der er nødvendige for at gennemføre din bestilling, og alle oplysninger om kunder og bestillinger behandles fortroligt.</p>
-<p><strong>Hvad vi bruger dem til</strong></p>
-<ul><li>Gennemførelse af din ordre: ordrebekræftelse, forsendelse, reklamationer og returnering</li><li>Gennemførelse og verificering af betaling (oplysningerne sendes krypteret)</li><li>Administration af din profil eller brugerkonto</li><li>Nyhedsbreve, særlige tilbud og invitationer, men kun hvis du har givet dit samtykke, medmindre loven giver mulighed for at kontakte dig uden samtykke</li></ul>
-<p><strong>Hvem vi deler dem med</strong><br>Vi sender varer med GLS, som bruger dit navn, telefonnummer og din e-mailadresse til at give dig besked om pakken, og dit navn og din adresse ved levering eller afhentning. Vi samarbejder desuden med andre virksomheder, der opbevarer og behandler data på vores vegne. De må ikke bruge oplysningerne til egne formål, og vi samarbejder kun med databehandlere i EU eller i lande, der kan give dine oplysninger tilstrækkelig beskyttelse. Vi sælger aldrig dine oplysninger.</p>
-<p>Oplysninger kan derudover kun videregives, hvis det er påkrævet ved lov, i forbindelse med et retligt opgør, eller for at fastslå, udøve eller forsvare vores lovmæssige rettigheder.</p>
-<p><strong>Hvor længe vi gemmer dem</strong><br>Af hensyn til lovkrav gemmes oplysningerne i 5 år, hvorefter de slettes. Oplysninger kan opbevares længere i anonymiseret form. Tilmelder du dig vores nyhedsbrev, kan du altid afmelde dig via linket i mailen eller ved at kontakte os, og dine oplysninger slettes derefter.</p>
-<p>Det er frivilligt, om du vil give os oplysningerne, men uden dem kan vi ikke gennemføre din bestilling.</p>
-<p><strong>Cookies</strong><br>Vi bruger cookies på hjemmesiden til at forbedre din oplevelse, fx ved at gøre søgning og navigation hurtigere.</p>
-<p><strong>Sikkerhed</strong><br>Vi har sikkerhedsforanstaltninger, der sikrer, at oplysningerne opbevares og behandles i et sikret miljø. Kun betroede medarbejdere og databehandlere, der arbejder efter vores instruks, har adgang til dem. Du bør aldrig udlevere dine brugeroplysninger og adgangskoder til andre.</p>
-<p><strong>Dine rettigheder</strong><br>Du har ret til indsigt i de oplysninger, vi behandler om dig, med visse lovbestemte undtagelser. Du kan gøre indsigelse mod behandlingen, få rettet forkerte oplysninger og i visse tilfælde få dine oplysninger slettet. Ønsker du det, eller har du spørgsmål, så skriv til {M} eller til adressen ovenfor.</p>
-<p><strong>Links til andre hjemmesider</strong><br>Vores hjemmeside kan indeholde links til andre hjemmesider. Vi er ikke ansvarlige for deres indhold eller for, hvordan de behandler personoplysninger.</p>''')
+    add('Persondatapolitik', f'''<p>Hvordan vi behandler dine personoplysninger og bruger cookies, kan du læse i vores <a href="#persondata">persondatapolitik</a> nedenfor.</p>''')
     add('Ophavsret', '''<p>Indholdet på denne hjemmeside er omfattet af den danske ophavsretslovgivning. Kopiering, download, udskrift og enhver anden udnyttelse uden for ophavsrettens rammer kræver skriftligt samtykke. Downloads og kopier er kun tilladt til privat, ikke-kommerciel brug. Indhold fra tredjeparter er omfattet af tredjeparternes ophavsret. Bliver du opmærksom på en krænkelse af ophavsretten, så giv os besked, så fjerner vi indholdet straks.</p>
 <p>Brug af offentliggjorte kontaktoplysninger til at sende uopfordrede reklamer, fx spam-mails, er udtrykkeligt forbudt, og vi forbeholder os retten til at tage retlige skridt.</p>''')
     add('Standardfortrydelsesformular', f'''<p>(Denne formular udfyldes og returneres kun, hvis fortrydelsesretten gøres gældende. Du kan også bruge vores <a href="#os-fortryd">digitale formular</a>.)</p>
@@ -107,3 +96,44 @@ def side(k):
 for k in SHOPS:
     open(os.path.join(D, f'handelsbetingelser_{k}.html'), 'w').write(side(k))
     print(k, len(side(k)))
+
+# ---------- Persondatapolitik (vises under handelsbetingelserne og linkes fra kassen) ----------
+def persondata(k):
+    s = SHOPS[k]; N = s['navn']; M = s['mail']
+    sek = [
+     ('Vores tilgang', f'''<p>Vi indhenter kun persondata, når det er relevant for din aktivitet hos {N}.</p>
+<p>Ved indsamling, behandling og anvendelse af dine persondata overholder vi altid alle relevante lovbestemmelser. Vi indsamler ikke personfølsomme oplysninger.</p>
+<p>Vi opbevarer kun dine persondata, så længe vi er juridisk forpligtet til det, eller så længe det er relevant for det formål, de blev indsamlet til.</p>'''),
+     ('Oplysninger vi indsamler', f'''<p>Når du køber og modtager en vare fra os, har vi brug for visse persondata for at kunne gennemføre handlen og tilbyde dig vores service. Det drejer sig om navn, e-mailadresse, postadresse og telefonnummer.</p>
+<p>{N} indsamler og behandler dine persondata, når du:</p>
+<ul><li>besøger vores hjemmeside</li><li>gennemfører et køb</li><li>opretter en kundekonto</li><li>tilmelder dig vores nyhedsbrev</li><li>sender os spørgsmål, fortrydelser, reklamationer eller feedback</li></ul>'''),
+     ('Den dataansvarlige', f'''<p>Den dataansvarlige for indsamling, behandling og anvendelse af dine personoplysninger hos {N} er Benjo ApS, Ejbyvej 82B, 4623 Lille Skensved, CVR-nr. 32787339.</p>'''),
+     ('Behandlingsgrundlag og formål', '''<p>Vi bruger dit navn og din adresse til at levere de varer, du har købt, og din e-mailadresse til at sende dig ordrebekræftelse og leveringsbekræftelse.</p>
+<p>De oplysninger, der indsamles i forbindelse med betalingen, bruges og gemmes kun til betalingsafvikling og opfyldelse af aftalen.</p>
+<p>Har du givet samtykke til det, bruger vi din e-mailadresse til at sende dig vores nyhedsbrev. Du kan altid afmelde dig via linket i nyhedsbrevet. Er en behandling baseret på dit samtykke, kan du til enhver tid trække samtykket tilbage.</p>
+<p>Ønsker du ikke at oplyse de persondata, der er nødvendige for at gennemføre et køb, kan du desværre ikke handle hos os.</p>
+<p>Dine oplysninger slettes 5 år efter, at du har modtaget din vare. Din e-mailadresse gemmes dog længere, hvis du har givet samtykke til at modtage tilbud.</p>'''),
+     ('Hvem vi deler oplysningerne med', '''<p>Vi sælger ikke dine persondata, og vi overfører dem ikke til lande uden for EU.</p>
+<p>Ved levering giver vi dit navn, din adresse, dit telefonnummer og din e-mailadresse videre til vores fragtfirma, i dag GLS.</p>
+<p>Vores webshop drives af DanDomain A/S, som er vores databehandler, og dine oplysninger opbevares i DanDomains datacentre. Vi har databehandleraftaler med vores databehandlere, så de overholder reglerne om beskyttelse af dine personoplysninger.</p>'''),
+     ('Dine rettigheder', f'''<p>Du har en række rettigheder, som vi altid skal sikre. Du kan bede os om at:</p>
+<ul><li>få adgang til og få rettet dine persondata</li><li>få slettet dine persondata</li><li>begrænse eller stoppe behandlingen af dine persondata</li></ul>
+<p>Du har også ret til at gøre indsigelse mod behandlingen og til at klage til Datatilsynet.</p>
+<p>Skriv til os på {M}, hvis du vil gøre brug af dine rettigheder.</p>'''),
+     ('Cookies', '''<p>Vi bruger cookies på hjemmesiden. Der er fire typer:</p>
+<ul><li><strong>Nødvendige/tekniske:</strong> nødvendige for, at hjemmesiden fungerer. De har kun teknisk betydning og registrerer ikke, hvad du gør på andre hjemmesider.</li>
+<li><strong>Funktionelle:</strong> husker dine valg og indstillinger på hjemmesiden, fx sprog og tekststørrelse.</li>
+<li><strong>Statistiske:</strong> bruges til at forbedre design, brugervenlighed og effektivitet, fx ved at vise hvilke sider der er mest populære.</li>
+<li><strong>Markedsføring:</strong> følger dig på tværs af hjemmesider for at vise dig relevante annoncer for ting, du har vist interesse for.</li></ul>
+<p>Du vælger selv i cookiebanneret, hvilke cookies du accepterer.</p>'''),
+    ]
+    def slug(t): return 'pd-' + re.sub(r'[^a-z0-9]+', '-', t.lower().replace('æ', 'ae').replace('ø', 'oe').replace('å', 'aa')).strip('-')[:40]
+    toc = ''.join(f'<li><a href="#{slug(t)}">{t}</a></li>' for t, _ in sek)
+    body = ''.join(f'<h2 class="hb-h" id="{slug(t)}">{t}</h2>\n{h}\n' for t, h in sek)
+    css = re.search(r'<style>.*?</style>', side(k), re.S).group(0)
+    return f'''<!--PD-START-->{css}<div class="os-hb" id="persondata" style="margin-top:40px"><h1 class="hb-titel" style="font-size:1.6rem">Persondatapolitik</h1>
+<div class="hb-top"><p>Her kan du læse, hvordan {N} indsamler og behandler dine personoplysninger, og hvordan vi bruger cookies.</p><p style="margin:0"><strong>Indhold</strong></p><ol class="hb-indhold">{toc}</ol></div>
+{body}</div><!--PD-END-->'''
+
+for k in SHOPS:
+    open(os.path.join(D, f'persondata_{k}.html'), 'w').write(persondata(k))
