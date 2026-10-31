@@ -89,11 +89,11 @@ function open(q0,fraIkon){
 }
 function close(){logNu();if(ov)ov.style.display="none";document.documentElement.style.overflow="";}
 // HE mobil: lup i sidehovedet ved siden af Loyalitets konto (som på ØS)
-function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"),f=document.getElementById("Search_Form"),m=document.getElementById("btn-menu");if(!acc)return;
+function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"),f=document.querySelector("header #Search_Form"),m=document.getElementById("btn-menu");if(!acc)return;
   var b=document.getElementById("os-lup");if(!b){b=document.createElement("a");b.id="os-lup";b.href="#";b.setAttribute("aria-label","Søg");
     b.innerHTML="<svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\"><circle cx=\"10.5\" cy=\"10.5\" r=\"6.5\"/><path d=\"m20 20-4.6-4.6\"/></svg>";
     acc.parentNode.insertBefore(b,acc);b.addEventListener("click",function(e){e.preventDefault();e.stopPropagation();open("",1);});}
-  if(f&&getComputedStyle(f).display!=="none"){b.style.display="none";return;}
+  if(f&&f.offsetParent!==null&&f.offsetWidth>0){b.style.display="none";return;}
   var top=(m||acc).offsetTop,h=(m||acc).offsetHeight||44;
   b.style.cssText="position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:"+h+"px;color:#222;z-index:5;text-decoration:none;left:"+Math.max(0,acc.offsetLeft-50)+"px;top:"+top+"px";}
 if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t);heLup.t=setTimeout(heLup,150);});window.addEventListener("load",heLup);}
