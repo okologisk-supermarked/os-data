@@ -16,7 +16,7 @@ var CSS=".oss{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:c
 ".oss-card{background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:10px;display:flex;flex-direction:column;position:relative}"+
 ".oss-card .prodImg{position:relative;text-align:center;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}.oss-card .prodImg img{max-height:150px;max-width:100%;object-fit:contain}"+
 ".oss-card .prodName{color:#222;font-size:.86rem;line-height:1.3;min-height:3.4em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-decoration:none;border-top:1px solid #eee;padding-top:8px}"+
-".oss-card .priceouter{margin-top:auto;text-align:right;padding-top:6px}.oss-card .prodPrice{font-size:1.25rem;font-weight:400;color:#222}.oss-card .prodPrice span{font-size:.65em;vertical-align:super}"+
+".oss-card .priceouter{margin-top:auto;text-align:right;padding-top:1.5em}.oss-card .prodPrice{font-size:1.25rem;font-weight:400;color:#222}.oss-card .prodPrice span{font-size:.65em;vertical-align:super}"+
 ".oss-card form{margin:8px 0 0}.oss-card button{width:100%;background:#f7941d;color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;cursor:pointer;font-size:.85rem}"+
 ".oss-list a{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px;margin-bottom:8px;color:#222;text-decoration:none;font-size:.9rem}.oss-list a:after{content:'\\203A';font-size:1.2rem;color:#888}"+
 ".oss-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.oss-chips a{background:#fff;border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none}"+
