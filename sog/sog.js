@@ -98,6 +98,13 @@ function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"
   if(f&&f.offsetParent!==null&&f.offsetWidth>0){b.style.display="none";return;}
   var vis=function(e){return e&&e.offsetWidth>0&&e.offsetHeight>0;},bk=document.querySelector("header #basket"),anc=vis(acc)?acc:(vis(bk)?bk:acc),ref=vis(m)?m:anc,pr=(b.offsetParent||document.body).getBoundingClientRect(),rr=ref.getBoundingClientRect(),ra=anc.getBoundingClientRect(),top=Math.round(rr.top-pr.top),h=Math.round(rr.height)||44;
   b.style.cssText="position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:"+h+"px;color:#222;z-index:60;text-decoration:none;left:"+Math.max(0,Math.round(ra.left-pr.left)-50)+"px;top:"+top+"px";}
+// ØS mobil: loyalitets-ikon i ikonrækken (menu, søg, konto, kurv)
+function osKonto(){if(HE||document.getElementById("os-konto"))return;var row=document.querySelector(".headerTop .navIcons .row");if(!row)return;var cols=row.children;if(cols.length<3)return;
+  var c=document.createElement("div");c.className="small-3 columns";c.id="os-konto";
+  c.innerHTML="<a href=\"/shop/customer.html\" aria-label=\"Loyalitets konto\" style=\"display:inline-flex;align-items:center;justify-content:center;width:30px;height:42px;color:#222\"><svg viewBox=\"0 0 24 24\" width=\"30\" height=\"30\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.8\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><circle cx=\"12\" cy=\"8\" r=\"4\"/><path d=\"M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7\"/></svg></a>";
+  row.insertBefore(c,cols[cols.length-1]);for(var i=0;i<row.children.length;i++){row.children[i].className=row.children[i].className.replace(/\bsmall-4\b/,"small-3");}
+  var st=document.createElement("style");st.textContent="@media (max-width:639px){a.loyaltyAccount{display:none!important}}body.webshop-checkout #os-konto{display:none!important}";document.head.appendChild(st);}
+if(!HE){if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",osKonto);else osKonto();}
 if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t);heLup.t=setTimeout(heLup,150);});window.addEventListener("load",heLup);}
 window.addEventListener("pagehide",logNu);
 window.osSog={open:open,close:close};
