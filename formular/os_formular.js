@@ -1,4 +1,6 @@
 (function(){
+if(window.__osForm)return;window.__osForm=1;
+var HE=/helsekost-ekspres/i.test(location.hostname),MAIL=HE?"info@helsekost-ekspres.dk":"info@okologisk-supermarked.dk",GRN=HE?"#1e5b3a":"#2e7d32";
 var URL="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec";
 var CSS=".osf-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:100000;display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:4vh 12px}"+
 ".osf{background:#fff;border-radius:10px;max-width:520px;width:100%;padding:22px 22px 18px;box-shadow:0 10px 40px rgba(0,0,0,.3);position:relative;font-size:15px;color:#222}"+
@@ -6,7 +8,7 @@ var CSS=".osf-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:10000
 ".osf label{display:block;font-weight:600;font-size:.85rem;margin:10px 0 4px}.osf input,.osf textarea,.osf select{width:100%;box-sizing:border-box;border:1px solid #ccc;border-radius:6px;padding:9px 10px;font-size:15px;margin:0;height:auto;box-shadow:none}"+
 ".osf textarea{min-height:80px;resize:vertical}.osf .osf-row{display:flex;gap:10px}.osf .osf-row>div{flex:1}"+
 ".osf .osf-x{position:absolute;top:8px;right:10px;border:0;background:none;font-size:26px;line-height:1;cursor:pointer;color:#666}"+
-".osf .osf-btn{display:block;width:100%;margin-top:16px;background:#2e7d32;color:#fff;border:0;border-radius:6px;padding:12px;font-size:1rem;font-weight:700;cursor:pointer}.osf .osf-btn[disabled]{opacity:.6;cursor:wait}"+
+".osf .osf-btn{display:block;width:100%;margin-top:16px;background:"+GRN+";color:#fff;border:0;border-radius:6px;padding:12px;font-size:1rem;font-weight:700;cursor:pointer}.osf .osf-btn[disabled]{opacity:.6;cursor:wait}"+
 ".osf .osf-note{background:#fff8e1;border:1px solid #ffe08a;border-radius:6px;padding:8px 10px;font-size:.82rem;margin:8px 0 0;color:#5c4400}"+
 ".osf .osf-err{color:#c62828;font-size:.85rem;margin-top:8px;display:none}.osf .osf-ok{text-align:center;padding:20px 0}.osf .osf-ok b{display:block;font-size:1.2rem;margin:8px 0}"+
 ".osf .osf-hp{position:absolute;left:-5000px;width:1px;height:1px;overflow:hidden}.osf .osf-thumbs{display:flex;gap:6px;margin-top:6px;flex-wrap:wrap}.osf .osf-thumbs img{width:56px;height:56px;object-fit:cover;border-radius:4px;border:1px solid #ddd}"+
@@ -38,17 +40,18 @@ f.onsubmit=function(e){e.preventDefault();err.style.display="none";
 var v=function(n){var x=f.elements[n];return x?String(x.value||"").trim():"";};
 var miss=[].slice.call(f.querySelectorAll("[required]")).filter(function(x){return !String(x.value||"").trim();});
 if(miss.length||!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v("email"))){err.textContent=miss.length?"Udfyld venligst alle felter med *.":"Tjek venligst din e-mail.";err.style.display="block";(miss[0]||f.elements.email).focus();return;}
-var data={type:fortryd?"fortryd":"reklamation",website:v("website"),fornavn:v("fornavn"),efternavn:v("efternavn"),email:v("email"),telefon:v("telefon"),ordre:v("ordre"),varer:v("varer"),beskrivelse:v("beskrivelse"),losning:v("losning"),kommentar:v("kommentar"),
+var data={site:HE?"he":"os",type:fortryd?"fortryd":"reklamation",website:v("website"),fornavn:v("fornavn"),efternavn:v("efternavn"),email:v("email"),telefon:v("telefon"),ordre:v("ordre"),varer:v("varer"),beskrivelse:v("beskrivelse"),losning:v("losning"),kommentar:v("kommentar"),
 billeder:imgs.map(function(u){return {type:"image/jpeg",data:u.split(",")[1]};})};
 var b=f.querySelector(".osf-btn");b.disabled=true;b.textContent="Sender…";
 fetch(URL,{method:"POST",body:JSON.stringify(data)}).then(function(r){return r.json();}).then(function(j){
-if(j&&j.ok){box.innerHTML="<button type=\"button\" class=\"osf-x\" aria-label=\"Luk\">&times;</button><div class=\"osf-ok\"><div style=\"font-size:2.4rem;color:#2e7d32\">✓</div><b>Tak, vi har modtaget din "+(fortryd?"fortrydelse":"reklamation")+"</b>Du får en kvittering på "+data.email.replace(/</g,"")+".<br>Vi vender tilbage hurtigst muligt.</div>";box.querySelector(".osf-x").onclick=close;}
+if(j&&j.ok){box.innerHTML="<button type=\"button\" class=\"osf-x\" aria-label=\"Luk\">&times;</button><div class=\"osf-ok\"><div style=\"font-size:2.4rem;color:"+GRN+"\">✓</div><b>Tak, vi har modtaget din "+(fortryd?"fortrydelse":"reklamation")+"</b>Du får en kvittering på "+data.email.replace(/</g,"")+".<br>Vi vender tilbage hurtigst muligt.</div>";box.querySelector(".osf-x").onclick=close;}
 else{throw new Error(j&&j.fejl||"fejl");}
-}).catch(function(x){b.disabled=false;b.textContent=fortryd?"Send fortrydelse":"Send reklamation";err.textContent=(x&&x.message&&x.message!=="fejl"&&x.message.length<120&&!/fetch|JSON|network/i.test(x.message))?x.message:"Det lykkedes ikke at sende. Prøv igen, eller skriv til info@okologisk-supermarked.dk.";err.style.display="block";});};
+}).catch(function(x){b.disabled=false;b.textContent=fortryd?"Send fortrydelse":"Send reklamation";err.textContent=(x&&x.message&&x.message!=="fejl"&&x.message.length<120&&!/fetch|JSON|network/i.test(x.message))?x.message:"Det lykkedes ikke at sende. Prøv igen, eller skriv til "+MAIL+".";err.style.display="block";});};
 document.body.appendChild(bg);setTimeout(function(){var x=f.elements.fornavn;x&&x.focus();},50);}
-function which(href){href=String(href||"");if(/#(bp_form_4|os-fortryd)/.test(href))return "fortryd";if(/#(bp_form_3399|os-reklamation)/.test(href))return "reklamation";return null;}
+function which(href){href=String(href||"");if(/#(bp_form_4|bp_form_1c7f9cc4aa5d|os-fortryd)/.test(href))return "fortryd";if(/#(bp_form_3399|os-reklamation)/.test(href))return "reklamation";return null;}
 document.addEventListener("click",function(e){var a=e.target.closest&&e.target.closest("a[href*='#']");if(!a)return;var t=which(a.getAttribute("href"));if(!t)return;e.preventDefault();e.stopImmediatePropagation();open(t);},true);
 window.osOpenForm=open;
-function start(){var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);var t=which(location.hash);if(t)setTimeout(function(){open(t);},400);}
+function start(){var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
+if(HE&&!document.querySelector("a[href*='#os-reklamation'],a[href*='#bp_form_3399']")){var fa=document.querySelector("a[href*='#bp_form_1c7f9cc4aa5d']");if(fa){var ra=fa.cloneNode(false);ra.setAttribute("href","#os-reklamation");ra.textContent="Reklamation";var sep=document.createTextNode(" ");fa.parentNode.insertBefore(ra,fa.nextSibling);fa.parentNode.insertBefore(sep,ra);if(getComputedStyle(fa).display!=="inline"){var br=document.createElement("br");fa.parentNode.insertBefore(br,ra);}}}var t=which(location.hash);if(t)setTimeout(function(){open(t);},400);}
 if(document.readyState==="loading"){document.addEventListener("DOMContentLoaded",start);}else{start();}
 })();

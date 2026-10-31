@@ -63,6 +63,9 @@ function doPost(e) {
     if (d.type === 'sog') return logSog(d);
     if (d.website) return svar({ ok: true }); // honeypot: bots udfylder skjult felt
     var type = d.type === 'reklamation' ? 'reklamation' : 'fortryd';
+    var he = d.site === 'he';
+    var BUTIK = he ? 'Helsekost-Ekspres' : 'Økologisk-Supermarked';
+    var SHOPMAIL = he ? 'info@helsekost-ekspres.dk' : 'info@okologisk-supermarked.dk';
     var navn = rens(d.fornavn) + ' ' + rens(d.efternavn);
     var email = rens(d.email).toLowerCase();
     var ordre = rens(d.ordre).replace(/[^0-9A-Za-z-]/g, '');
@@ -71,14 +74,14 @@ function doPost(e) {
     }
     // simpel spærre mod gentagne indsendelser
     var cache = CacheService.getScriptCache();
-    var key = 'k_' + Utilities.base64EncodeWebSafe(email + type + ordre).slice(0, 200);
+    var key = 'k_' + Utilities.base64EncodeWebSafe((he ? 'he' : 'os') + email + type + ordre).slice(0, 200);
     if (cache.get(key)) return svar({ ok: true, igen: true });
     cache.put(key, '1', 120);
 
     var titel = type === 'fortryd' ? 'Fortrydelse' : 'Reklamation';
-    var emne = titel + ' – ordre ' + ordre + ' – ' + navn.trim();
+    var emne = (he ? 'HE – ' : '') + titel + ' – ordre ' + ordre + ' – ' + navn.trim();
     var linjer = [
-      '<h2 style="margin:0 0 10px">' + titel + '</h2>',
+      '<h2 style="margin:0 0 10px">' + titel + (he ? ' – Helsekost-Ekspres' : '') + '</h2>',
       '<table cellpadding="4" style="border-collapse:collapse;font-family:Arial,sans-serif;font-size:14px">',
       rk('Navn', navn), rk('E-mail', email), rk('Telefon', d.telefon), rk('Ordrenummer', ordre),
       rk(type === 'fortryd' ? 'Varer der fortrydes' : 'Vare(r) det drejer sig om', d.varer),
@@ -107,17 +110,17 @@ function doPost(e) {
       ? 'Vi har modtaget din fortrydelse af ordre <b>' + esc(ordre) + '</b> den ' + Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'dd-MM-yyyy \'kl.\' HH:mm') + '.<br><br>Vi vender tilbage hurtigst muligt med information om returnering og tilbagebetaling.'
       : 'Vi har modtaget din reklamation vedrørende ordre <b>' + esc(ordre) + '</b> den ' + Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'dd-MM-yyyy \'kl.\' HH:mm') + '.<br><br>Vi ser på sagen og vender tilbage hurtigst muligt.';
     MailApp.sendEmail({
-      to: email, replyTo: TIL, name: BUTIK,
+      to: email, replyTo: SHOPMAIL, name: BUTIK,
       subject: 'Kvittering: ' + titel.toLowerCase() + ' af ordre ' + ordre + ' er modtaget',
       htmlBody: '<div style="font-family:Arial,sans-serif;font-size:14px;line-height:1.5">Kære ' + esc(rens(d.fornavn)) + '<br><br>' + kvit +
-        '<br><br>Har du spørgsmål, kan du blot svare på denne mail.<br><br>Venlig hilsen<br>' + BUTIK + '<br>info@okologisk-supermarked.dk</div>' +
+        '<br><br>Har du spørgsmål, kan du blot svare på denne mail.<br><br>Venlig hilsen<br>' + BUTIK + '<br>' + SHOPMAIL + '</div>' +
         '<hr style="border:0;border-top:1px solid #ddd;margin:16px 0"><div style="font-family:Arial,sans-serif;font-size:12px;color:#666">Dine oplysninger:</div>' + linjer
     });
 
-    logArk([new Date(), titel, ordre, navn.trim(), email, rens(d.telefon), rens(d.varer), rens(d.beskrivelse), rens(d.losning), rens(d.kommentar), bilag.length]);
+    logArk([new Date(), (he ? 'HE ' : '') + titel, ordre, navn.trim(), email, rens(d.telefon), rens(d.varer), rens(d.beskrivelse), rens(d.losning), rens(d.kommentar), bilag.length]);
     return svar({ ok: true });
   } catch (err) {
-    return svar({ ok: false, fejl: 'Der skete en fejl. Skriv venligst til info@okologisk-supermarked.dk.' });
+    return svar({ ok: false, fejl: 'Der skete en fejl. Skriv venligst til os på mail.' });
   }
 }
 
