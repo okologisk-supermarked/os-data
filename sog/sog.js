@@ -68,7 +68,7 @@ function render(q,limit){
     "<div class=\"oss-empty\">Vi fandt ingen produkter for “"+esc(q)+"”.<br>Prøv et andet ord, eller skriv til os på info@okologisk-supermarked.dk – så hjælper vi.</div>";
   side.innerHTML=list("Kategorier",r.grupper)+list("Brands",r.brands);
 }
-function open(q0){
+function open(q0,fraIkon){
   if(!ov){
     var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
     var logo=document.querySelector("header img[src*=ogo],.logo img,a[href*=frontpage] img");
@@ -82,7 +82,7 @@ function open(q0){
   }
   ov.style.display="flex";document.documentElement.style.overflow="hidden";
   if(POP===null){POP=[];hentPop();}
-  inp.value=q0||inp.value||"";render(inp.value);setTimeout(function(){inp.focus();},30);
+  inp.value=q0||inp.value||"";render(inp.value);var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;if(!(fraIkon&&touch))setTimeout(function(){inp.focus();},30);else{try{inp.blur();}catch(e){}}
   load().then(function(){if(ov.style.display!=="none")render(inp.value);}).catch(function(){ov.querySelector(".oss-main").innerHTML="<div class=\"oss-empty\">Søgningen kunne ikke hentes lige nu.</div>";});
 }
 function close(){logNu();if(ov)ov.style.display="none";document.documentElement.style.overflow="";}
@@ -91,7 +91,7 @@ window.osSog={open:open,close:close};
 // overtag butikkens søgefelter
 function isSearch(el){return el&&el.tagName==="INPUT"&&!el.closest(".oss")&&(el.closest("#Search_Form")||/søg|search/i.test(el.placeholder||"")||el.name==="keyword"||el.classList.contains("bp_lsaSearchinput"));}
 function grab(e){var el=e.target;if(!isSearch(el))return;e.preventDefault();e.stopImmediatePropagation();var v=el.value;el.blur();open(v);}
-document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#searchBtn");if(!b)return;e.preventDefault();e.stopImmediatePropagation();open("");},true);
+document.addEventListener("click",function(e){var b=e.target.closest&&e.target.closest("#searchBtn");if(!b)return;e.preventDefault();e.stopImmediatePropagation();open("",1);},true);
 document.addEventListener("focusin",grab,true);document.addEventListener("mousedown",grab,true);document.addEventListener("touchstart",grab,{capture:true,passive:false});
 document.addEventListener("submit",function(e){var f=e.target;if(f&&f.id==="Search_Form"){e.preventDefault();e.stopImmediatePropagation();var i=f.querySelector("input[type=text],input[type=search],input[name=keyword]");open(i?i.value:"");}},true);
 var hs=document.createElement("style");hs.textContent=".bp_lsaFullScreen,.bp_LiveSearchApp .bp_lsaResults{display:none!important}";document.head.appendChild(hs);
