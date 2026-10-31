@@ -19,6 +19,7 @@ def side(k):
     s = SHOPS[k]; N = s['navn']; M = s['mail']
     fragt = ''.join(f'<tr><td>{a}' + (f'<br><span class="hb-lille">{b}</span>' if b else '') + f'</td><td class="hb-pris">{c}</td></tr>' for a, b, c in s['fragt'])
     sek = []
+    std = ' Du kan også bruge standardfortrydelsesformularen nederst på siden.' if k == 'os' else ''
     def add(titel, html): sek.append((titel, html))
     add('Generelt', f'''<p>Her finder du svar på de mest almindelige spørgsmål om, hvordan du handler hos {N}.</p>
 <p>Nedenstående salgs- og leveringsbetingelser gælder for alle leverancer fra {N}, CVR-nr. 32787339. Juridisk navn: Benjo ApS.</p>
@@ -44,7 +45,7 @@ def side(k):
 <p>Når varerne sendes fra vores lager, modtager du en e-mail med et trackingnummer.</p>
 <p>Leveringstiden afhænger af, om varerne er på lager, og beregnes altid efter den vare, der har længst leveringstid. Er alle varer på lager, forventer vi at afsende ordren inden for 1 hverdag. Bestiller du varer med {s['fjern']} hverdages leveringstid fra fjernlager, forventer vi at afsende ordren inden for {s['fjernsend']} hverdage.</p>''')
     add('Fortrydelsesret', f'''<p>Ifølge forbrugeraftaleloven har du som forbruger 14 dages fortrydelsesret fra den dag, du modtager varen. Fristen betyder, at du har 14 dage fra modtagelsen til at give os besked om, at du vil fortryde dit køb, og derefter yderligere 14 dage til at sende varen retur.</p>
-<p>Du giver os besked ved at bruge vores digitale formular, ved at skrive til {M} eller ved at bruge standardfortrydelsesformularen nederst på siden.</p>
+<p>Du giver os besked ved at bruge vores digitale formular eller ved at skrive til {M}.{std}</p>
 <p><a class="hb-knap" href="#os-fortryd">Fortryd dit køb</a></p>
 <p>Du kan ikke fortryde købet ved at nægte at modtage pakken eller ved ikke at hente den i pakkeshoppen. Gør du det, opkræver vi et beløb, der svarer til vores udgifter til returneringen.</p>
 <p><strong>Fortrydelse af en del af købet</strong><br>Har du købt flere varer, kan du sende én eller flere af dem retur, selvom de er købt i én ordre. Bemærk, at du ikke får fragten retur, hvis du kun fortryder en del af dit køb.</p>''')
@@ -80,7 +81,7 @@ def side(k):
 <p><strong>Links til andre hjemmesider</strong><br>Vores hjemmeside kan indeholde links til andre hjemmesider. Vi er ikke ansvarlige for deres indhold eller for, hvordan de behandler personoplysninger.</p>''')
     add('Ophavsret', '''<p>Indholdet på denne hjemmeside er omfattet af den danske ophavsretslovgivning. Kopiering, download, udskrift og enhver anden udnyttelse uden for ophavsrettens rammer kræver skriftligt samtykke. Downloads og kopier er kun tilladt til privat, ikke-kommerciel brug. Indhold fra tredjeparter er omfattet af tredjeparternes ophavsret. Bliver du opmærksom på en krænkelse af ophavsretten, så giv os besked, så fjerner vi indholdet straks.</p>
 <p>Brug af offentliggjorte kontaktoplysninger til at sende uopfordrede reklamer, fx spam-mails, er udtrykkeligt forbudt, og vi forbeholder os retten til at tage retlige skridt.</p>''')
-    add('Standardfortrydelsesformular', f'''<p>(Denne formular udfyldes og returneres kun, hvis fortrydelsesretten gøres gældende. Du kan også bruge vores <a href="#os-fortryd">digitale formular</a>.)</p>
+    if k == 'os': add('Standardfortrydelsesformular', f'''<p>(Denne formular udfyldes og returneres kun, hvis fortrydelsesretten gøres gældende. Du kan også bruge vores <a href="#os-fortryd">digitale formular</a>.)</p>
 <p>Til: {N}, Ejbyvej 82B, 4623 Lille Skensved, e-mail: {M}</p>
 <p>Jeg meddeler herved, at jeg ønsker at gøre fortrydelsesretten gældende i forbindelse med min købsaftale om følgende varer:<br>______________________________________________</p>
 <p>Bestilt den: ________________ Modtaget den: ________________</p>
