@@ -68,7 +68,8 @@ function betaling(){var fs=document.querySelectorAll("span.payment-fee");for(var
   if(!HE){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false),n,l=[];while((n=w.nextNode()))l.push(n);
     l.forEach(function(n){if(/^\s*Forsendelsesgebyr:?\s*$/i.test(n.nodeValue))n.nodeValue=n.nodeValue.replace(/Forsendelsesgebyr/i,"Fragt");});}
 }
-function kør(){addCss();boks();betaling();}
+function kode(){var ls=document.querySelectorAll("#customer-data label");for(var i=0;i<ls.length;i++){if(/^\s*Vælg kodeord/i.test(ls[i].textContent))ls[i].style.setProperty("display","none","important");}}
+function kør(){addCss();boks();betaling();kode();}
 var tm=null;function snart(){if(tm)return;tm=setTimeout(function(){tm=null;kør();},120);}
 function start(){kør();new MutationObserver(snart).observe(document.body,{childList:true,subtree:true});}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
