@@ -34,7 +34,7 @@ var css=
 ".osk-trust ul{list-style:none;margin:0;padding:0}"+
 ".osk-trust li{display:flex;align-items:center;gap:7px;margin:4px 0}"+
 ".osk-trust a{color:"+C.a+"!important}"+
-".osk-gebyr{display:block;font-size:11px;line-height:1.35;color:#666;margin-top:3px}label.checkout-payment-method,label.checkout-payment-method table{height:auto!important;max-height:none!important;overflow:visible!important}";
+".osk-gebyr{display:block;font-weight:400!important;font-size:11px;line-height:1.35;color:#666;margin-top:3px}label.checkout-payment-method,label.checkout-payment-method table{height:auto!important;max-height:none!important;overflow:visible!important}";
 function addCss(){if(document.getElementById("osk-css"))return;var s=document.createElement("style");s.id="osk-css";s.textContent=css;document.head.appendChild(s);}
 function boks(){var b=document.getElementById("order-confirm");if(!b||b.getAttribute("data-osk"))return;b.setAttribute("data-osk","1");
   var h=b.querySelector("h2");
@@ -47,6 +47,7 @@ function boks(){var b=document.getElementById("order-confirm");if(!b||b.getAttri
     acc.addEventListener("click",function(e){if(e.target===cb||e.target.closest("a"))return;var f=cb.checked;setTimeout(function(){if(cb.checked===f)cb.click();sync();},0);},true);
     cb.addEventListener("change",sync);sync();}
   var nl=document.getElementById("subscription-maillist");
+  var fe=b.querySelector(".osk-fejltekst");if(nl&&fe&&fe.nextElementSibling!==nl)fe.parentNode.insertBefore(nl,fe.nextSibling);
   if(nl){var ni=nl.querySelector("input"),nlab=nl.querySelector("label");if(ni&&nlab){if(ni.id)nlab.htmlFor=ni.id;nl.addEventListener("click",function(e){if(e.target===ni||e.target===nlab)return;var f=ni.checked;setTimeout(function(){if(ni.checked===f)ni.click();},0);},true);}}
   var btn=document.getElementById("confirm-complete-button");
   if(btn){btn.value="Godkend og betal";
