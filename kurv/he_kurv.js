@@ -23,7 +23,7 @@ function recs(box){data(function(l){var navn=(document.querySelector(".basketPop
   pick.forEach(function(p){h+="<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(p[0])+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\">"+
     "<a href=\""+esc(p[2])+"\"><img src=\""+esc(p[3])+"\" alt=\"\"><span>"+esc(p[1])+"</span></a><div class=\"he-recs-p\">"+(p[5]?"<del>"+kr(p[5])+"</del> ":"")+kr(p[4])+"</div><button type=\"submit\">Læg i kurv</button></form>";});
   box.innerHTML=h+"</div>";});}
-function fix(){var p=document.querySelector(".basketPopup");if(!p||p.offsetParent===null&&getComputedStyle(p).display==="none"||p.getAttribute("data-he"))return;p.setAttribute("data-he","1");
+function fix(){var p=document.querySelector(".basketPopup");if(!p||p.getAttribute("data-he")||!p.querySelector(".basketPopupBasket"))return;p.setAttribute("data-he","1");
   var hd=p.querySelector(".basketPopupHeaderLeft");if(hd)hd.textContent="Varen er lagt i kurven";
   var nm=p.querySelector(".basketPopupName"),la=lastAdded();try{sessionStorage.removeItem("heLastAdded");}catch(e){}LAST=null;
   if(nm&&la&&la.price&&!p.querySelector(".he-pris")){var d=document.createElement("div");d.className="he-pris";d.textContent=la.price;nm.parentNode.insertBefore(d,nm.nextSibling);}
@@ -37,6 +37,7 @@ var CSS=".basketPopup .he-pris{font-weight:700;font-size:1.05rem;margin-top:.3re
 ".he-recs button{width:100%;background:#1e5b3a;color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;font-size:.8rem;cursor:pointer;text-transform:uppercase}"+
 "@media (max-width:640px){.basketPopupOverlay .basketPopup{position:fixed!important;top:0!important;left:0!important;right:0!important;width:100%!important;max-width:100%!important;max-height:100vh;max-height:100dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;margin:0!important;transform:none!important;border-radius:0}.he-recs{padding:10px}.he-recs-g{gap:6px}.he-recs img{height:64px}}";
 function start(){var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);fix();
-  if(window.MutationObserver){var t;new MutationObserver(function(){clearTimeout(t);t=setTimeout(function(){var p=document.querySelector(".basketPopup");if(p&&p.getAttribute("data-he")&&!p.querySelector(".he-recs"))p.removeAttribute("data-he");fix();if(p){var hr=p.querySelector(".he-recs");if(hr&&p.querySelector(".basketPopupRelated img"))hr.style.display="none";}},60);}).observe(document.body,{childList:true,subtree:true});}}
+  if(window.MutationObserver){var t;new MutationObserver(function(){clearTimeout(t);t=setTimeout(function(){var p=document.querySelector(".basketPopup");if(p&&p.getAttribute("data-he")&&!p.querySelector(".he-recs"))p.removeAttribute("data-he");fix();if(p){var hr=p.querySelector(".he-recs");if(hr&&p.querySelector(".basketPopupRelated img"))hr.style.display="none";}},60);}).observe(document.body,{childList:true,subtree:true,attributes:true,attributeFilter:["class","style"]});}
+  var n=0,iv=setInterval(function(){fix();if(++n>30)clearInterval(iv);},500);}
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
 })();
