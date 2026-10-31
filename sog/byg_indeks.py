@@ -98,3 +98,13 @@ print('kat',[g for g,u in kat])
 meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager','sort']}
 json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest,'kat':kat},open(os.path.join(D,UD),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,UD)))
+
+# Helsekost-Ekspres: "Gode tilbud lige nu" i kurv-popuppen (kurv/kurv_he.json)
+if SITE==27:
+    tb=[r for r in out if r[5] and r[10]==1]
+    tb.sort(key=lambda r:r[11])
+    rec=tb[:30]
+    if len(rec)<24: rec+=[ix[n] for n in mest if n in ix and ix[n] not in rec][:24-len(rec)]
+    os.makedirs(os.path.join(D,'..','kurv'),exist_ok=True)
+    json.dump([[r[0],r[1],r[2],r[3],r[4],r[5]] for r in rec],open(os.path.join(D,'..','kurv','kurv_he.json'),'w'),ensure_ascii=False,separators=(',',':'))
+    print('kurv_he',len(rec),'heraf tilbud',min(len(tb),30))
