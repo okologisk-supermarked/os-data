@@ -42,7 +42,7 @@ for r in rows:
     except Exception: n = 0
     sog[site]['med' if n > 0 else 'nul'][q].add(str(r[3]))
 def top(m, k): return [[q, len(s)] for q, s in sorted(m.items(), key=lambda x: -len(x[1]))[:k]]
-ud = {'opdateret': time.strftime('%Y-%m-%dT%H:%M:%S'),
+ud = {'opdateret': time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime()),
       'os': idx('indeks.json'), 'he': idx('indeks_he.json'),
       'soeg': {s: {'antal': antal[s], 'top': top(sog[s]['med'], 25), 'nul': top(sog[s]['nul'], 50)} for s in sog}}
 json.dump(ud, open(sys.argv[2], 'w'), ensure_ascii=False)
