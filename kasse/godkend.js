@@ -44,10 +44,10 @@ function boks(){var b=document.getElementById("order-confirm");if(!b||b.getAttri
     sp.innerHTML='Jeg accepterer <a href="/shop/terms.html" target="_blank" rel="noopener">handelsbetingelserne</a> og <a href="/shop/terms.html#persondata" target="_blank" rel="noopener">persondatapolitikken</a>';
     var ft=document.createElement("div");ft.className="osk-fejltekst";ft.textContent="Sæt flueben for at godkende betingelserne, før du betaler.";acc.parentNode.insertBefore(ft,acc.nextSibling);
     var sync=function(){acc.classList.toggle("osk-ok",cb.checked);if(cb.checked)acc.classList.remove("osk-fejl");};
-    acc.addEventListener("click",function(e){if(e.target===cb||e.target.closest("a"))return;var f=cb.checked;setTimeout(function(){if(cb.checked===f)cb.click();sync();},0);});
+    acc.addEventListener("click",function(e){if(e.target===cb||e.target.closest("a"))return;var f=cb.checked;setTimeout(function(){if(cb.checked===f)cb.click();sync();},0);},true);
     cb.addEventListener("change",sync);sync();}
   var nl=document.getElementById("subscription-maillist");
-  if(nl){var ni=nl.querySelector("input"),nlab=nl.querySelector("label");if(ni&&nlab){if(ni.id)nlab.htmlFor=ni.id;nl.addEventListener("click",function(e){if(e.target===ni||e.target===nlab)return;var f=ni.checked;setTimeout(function(){if(ni.checked===f)ni.click();},0);});}}
+  if(nl){var ni=nl.querySelector("input"),nlab=nl.querySelector("label");if(ni&&nlab){if(ni.id)nlab.htmlFor=ni.id;nl.addEventListener("click",function(e){if(e.target===ni||e.target===nlab)return;var f=ni.checked;setTimeout(function(){if(ni.checked===f)ni.click();},0);},true);}}
   var btn=document.getElementById("confirm-complete-button");
   if(btn){btn.value="Godkend og betal";
     btn.addEventListener("click",function(){if(cb&&!cb.checked&&acc&&btn.offsetParent){acc.classList.remove("osk-fejl");void acc.offsetWidth;acc.classList.add("osk-fejl");}},true);}
