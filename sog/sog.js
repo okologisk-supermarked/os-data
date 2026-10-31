@@ -48,7 +48,7 @@ function load(){
 function card(p){
   var ret=location.pathname+location.search;
   return "<div class=\"oss-card\" data-productno=\""+esc(p[0])+"\"><div class=\"prodImg\"><a href=\""+esc(p[2])+"\"><img src=\""+esc(p[3].replace(/(\.\w+)$/,"-t$1"))+"\" loading=\"lazy\" alt=\"\" onerror=\"this.onerror=null;this.src='"+esc(p[3])+"'\"></a></div>"+
-  "<a class=\"prodName\" href=\""+esc(p[2])+"\">"+esc(p[1])+"</a><div class=\"priceouter\">"+(p[5]?"<del class=\"bp_lsaOldPrice\" style=\"color:#888;font-size:.85rem;margin-right:6px\">"+krp(p[5])+"</del>":"")+"<span class=\"prodPrice\">"+(p[4]===0?"Gratis":kr(p[4]))+"</span></div>"+
+  (p[5]&&p[5]>p[4]&&!/\(KOPI\)/i.test(p[0])?"<span class=\"bp_lsaProductSavingBadge\" style=\"display:none\">"+Math.floor((1-p[4]/p[5])*100+1e-6)+"%</span>":"")+"<a class=\"prodName\" href=\""+esc(p[2])+"\">"+esc(p[1])+"</a><div class=\"priceouter\">"+(p[5]?"<del class=\"bp_lsaOldPrice\" style=\"color:#888;font-size:.85rem;margin-right:6px\">"+krp(p[5])+"</del>":"")+"<span class=\"prodPrice\">"+(p[4]===0?"Gratis":kr(p[4]))+"</span></div>"+
   "<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(p[0])+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\"><button type=\"submit\">Læg i indkøbsvogn</button></form></div>";
 }
 function list(t,arr){return arr.length?"<h4>"+t+"</h4><div class=\"oss-list\">"+arr.map(function(a){return "<a href=\""+esc(a[1])+"\">"+esc(a[0])+"</a>";}).join("")+"</div>":"";}
