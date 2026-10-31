@@ -4,7 +4,7 @@ var TIL = 'info@okologisk-supermarked.dk';
 var BUTIK = 'Økologisk-Supermarked';
 
 function doGet(e) {
-  if (e && e.parameter && e.parameter.a === 'pop') return svar(populaere());
+  if (e && e.parameter && e.parameter.a === 'pop') return svar(populaere(e.parameter.s === 'he' ? 'he' : 'os'));
   return ContentService.createTextOutput('OK');
 }
 
@@ -14,8 +14,9 @@ function logSog(d) {
   if (q.length < 2 || /@/.test(q)) return svar({ ok: true });
   var sid = rens(d.sid).replace(/[^a-z0-9]/gi, '').slice(0, 16) || 'x';
   var n = parseInt(d.n, 10) || 0;
+  var site = d.site === 'he' ? 'he' : 'os';
   var lock = LockService.getScriptLock();
-  try { lock.waitLock(5000); sogArk().appendRow([new Date(), q, n, sid]); } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
+  try { lock.waitLock(5000); sogArk().appendRow([new Date(), q, n, sid, site]); } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
   return svar({ ok: true });
 }
 
@@ -24,21 +25,23 @@ function sogArk() {
   if (id) { ss = SpreadsheetApp.openById(id); }
   else {
     ss = SpreadsheetApp.create('Søgelog – Økologisk-Supermarked');
-    ss.getSheets()[0].appendRow(['Tid', 'Søgeord', 'Resultater', 'Session']);
+    ss.getSheets()[0].appendRow(['Tid', 'Søgeord', 'Resultater', 'Session', 'Shop']);
     p.setProperty('SOG', ss.getId());
   }
   return ss.getSheets()[0];
 }
 
-function populaere() {
-  var cache = CacheService.getScriptCache(), c = cache.get('pop');
+function populaere(site) {
+  site = site || 'os';
+  var cache = CacheService.getScriptCache(), c = cache.get('pop_' + site);
   if (c) return JSON.parse(c);
-  var sh = sogArk(), rows = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, 4).getValues() : [];
+  var sh = sogArk(), rows = sh.getLastRow() > 1 ? sh.getRange(2, 1, sh.getLastRow() - 1, 5).getValues() : [];
   var nu = Date.now(), uge = 7 * 864e5, gammel = 35 * 864e5, med = {}, nul = {}, slet = 0;
   rows.forEach(function (r, i) {
     var t = new Date(r[0]).getTime();
     if (nu - t > gammel) { slet = i + 1; return; }
     if (nu - t > uge) return;
+    if ((r[4] || 'os') !== site) return;
     var q = String(r[1]), key = q + '|' + r[3];
     var m = Number(r[2]) > 0 ? med : nul;
     (m[q] = m[q] || {})[key] = 1;
@@ -49,7 +52,7 @@ function populaere() {
       .filter(function (a) { return a[1] >= min; }).sort(function (a, b) { return b[1] - a[1]; }).slice(0, max);
   }
   var res = { pop: top(med, 3, 12).map(function (a) { return a[0]; }), nul: top(nul, 1, 100), t: new Date().toISOString() };
-  cache.put('pop', JSON.stringify(res), 3600);
+  cache.put('pop_' + site, JSON.stringify(res), 3600);
   return res;
 }
 

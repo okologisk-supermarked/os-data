@@ -3,14 +3,15 @@
 (function(){
 if(window.__osSog)return;window.__osSog=1;
 var RAW="https://raw.githubusercontent.com/okologisk-supermarked/os-data/main/",CDN="https://cdn.jsdelivr.net/gh/okologisk-supermarked/os-data@";
+var HE=/helsekost-ekspres/i.test(location.hostname),SITE=HE?"he":"os";
 var M=null,CFG={},loading=null,ov=null,inp=null,lastQ="",gaT=null;
 var LOG="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec",POP=null,logged={},logT=null,pend=null;
 function sid(){try{var x=sessionStorage.getItem("ossSid");if(!x){x=Math.random().toString(36).slice(2,12);sessionStorage.setItem("ossSid",x);}return x;}catch(e){return "x";}}
 function logNu(){clearTimeout(logT);if(!pend)return;var q=pend.q,n=pend.n;pend=null;var k=q.toLowerCase();if(logged[k]||q.length<2||q.length>40||/@/.test(q))return;logged[k]=1;
-  try{var b=JSON.stringify({type:"sog",q:q,n:n,sid:sid()});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
+  try{var b=JSON.stringify({type:"sog",q:q,n:n,sid:sid(),site:SITE});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
 function logSoon(q,n){pend={q:q,n:n};clearTimeout(logT);logT=setTimeout(logNu,4000);}
 function hentPop(){try{var c=JSON.parse(localStorage.getItem("ossPop")||"null");if(c&&Date.now()-c.t<3600000){POP=c.pop;return;}}catch(e){}
-  fetch(LOG+"?a=pop").then(function(r){return r.json();}).then(function(j){if(j&&j.pop){POP=j.pop;try{localStorage.setItem("ossPop",JSON.stringify({t:Date.now(),pop:POP}));}catch(e){}if(ov&&ov.style.display!=="none"&&inp.value.trim().length<2)render(inp.value);}}).catch(function(){});}
+  fetch(LOG+"?a=pop&s="+SITE).then(function(r){return r.json();}).then(function(j){if(j&&j.pop){POP=j.pop;try{localStorage.setItem("ossPop",JSON.stringify({t:Date.now(),pop:POP}));}catch(e){}if(ov&&ov.style.display!=="none"&&inp.value.trim().length<2)render(inp.value);}}).catch(function(){});}
 var CSS=".oss{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:column;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}"+
 ".oss-top{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:14px 16px}.oss-top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:16px}"+
 ".oss-logo img{height:38px;display:block}.oss-f{flex:1;max-width:620px;margin:0 auto;position:relative}"+
@@ -24,7 +25,7 @@ var CSS=".oss{position:fixed;inset:0;z-index:99990;display:flex;flex-direction:c
 ".oss-card .prodImg{position:relative;text-align:center;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}.oss-card .prodImg img{max-height:150px;max-width:100%;object-fit:contain}"+
 ".oss-card .prodName{color:#222;font-size:.86rem;line-height:1.3;min-height:3.4em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-decoration:none;border-top:1px solid #eee;padding-top:8px}"+
 ".oss-card .priceouter{margin-top:auto;text-align:right;padding-top:1.5em}.oss-card .prodPrice{font-size:1.25rem;font-weight:400;color:#222}.oss-card .prodPrice span{font-size:.65em;vertical-align:super}"+
-".oss-card form{margin:8px 0 0}.oss-card button{width:100%;background:#f7941d;color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;cursor:pointer;font-size:.85rem}"+
+".oss-card form{margin:8px 0 0}.oss-card button{width:100%;background:"+(HE?"#1e5b3a":"#f7941d")+";color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;cursor:pointer;font-size:.85rem}"+
 ".oss-list a{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px;margin-bottom:8px;color:#222;text-decoration:none;font-size:.9rem}.oss-list a:after{content:'\\203A';font-size:1.2rem;color:#888}"+
 ".oss-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.oss-chips a{background:#fff;border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none}"+
 ".oss-more{display:block;margin:18px auto 0;background:#fff;border:1px solid #2e7d32;color:#2e7d32;border-radius:6px;padding:10px 18px;font-weight:700;cursor:pointer}"+
@@ -39,7 +40,7 @@ function load(){
   if(loading)return loading;
   loading=js(RAW+"sog/version.json?t="+Math.floor(Date.now()/300000)).catch(function(){return {sha:"main"};}).then(function(v){
     var base=CDN+(v.sha||"main")+"/sog/";
-    return Promise.all([js(base+"indeks.json"),js(base+"config.json").catch(function(){return {};}),window.OSMotor?1:new Promise(function(ok,no){var s=document.createElement("script");s.src=base+"motor.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);})]);
+    return Promise.all([js(base+(HE?"indeks_he.json":"indeks.json")),js(base+"config.json").catch(function(){return {};}),window.OSMotor?1:new Promise(function(ok,no){var s=document.createElement("script");s.src=base+"motor.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);})]);
   }).then(function(r){CFG=r[1]||{};M=new window.OSMotor(r[0],CFG);M.mest=r[0].mest||null;M.kat=r[0].kat||null;return M;});
   return loading;
 }
@@ -68,12 +69,13 @@ function render(q,limit){
     "<div class=\"oss-empty\">Vi fandt ingen produkter for “"+esc(q)+"”.<br>Prøv et andet ord, eller skriv til os på info@okologisk-supermarked.dk – så hjælper vi.</div>";
   side.innerHTML=list("Kategorier",r.grupper)+list("Brands",r.brands);
 }
+function PH(){var i=document.querySelector("#Search_Form input[placeholder]");return i&&i.placeholder||"Søg blandt vores 12.000 produkter";}
 function open(q0,fraIkon){
   if(!ov){
     var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
     var logo=document.querySelector("header img[src*=ogo],.logo img,a[href*=frontpage] img");
     ov=document.createElement("div");ov.className="oss";ov.setAttribute("role","dialog");
-    ov.innerHTML="<div class=\"oss-top\"><div class=\"oss-top-in\"><a class=\"oss-logo\" href=\"/shop/frontpage.html\">"+(logo?"<img src=\""+esc(logo.getAttribute("src"))+"\" alt=\"\">":"")+"</a><div class=\"oss-f\"><input type=\"search\" autocomplete=\"off\" placeholder=\"Søg blandt vores 12.000 produkter\" aria-label=\"Søg\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-4-4\"/></svg></div><button class=\"oss-x\" aria-label=\"Luk\">&times;</button></div></div><div class=\"oss-body\"><div class=\"oss-in\"><div class=\"oss-main\"></div><div class=\"oss-side\"></div></div></div>";
+    ov.innerHTML="<div class=\"oss-top\"><div class=\"oss-top-in\"><a class=\"oss-logo\" href=\"/shop/frontpage.html\">"+(logo?"<img src=\""+esc(logo.getAttribute("src"))+"\" alt=\"\">":"")+"</a><div class=\"oss-f\"><input type=\"search\" autocomplete=\"off\" placeholder=\""+esc(PH())+"\" aria-label=\"Søg\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-4-4\"/></svg></div><button class=\"oss-x\" aria-label=\"Luk\">&times;</button></div></div><div class=\"oss-body\"><div class=\"oss-in\"><div class=\"oss-main\"></div><div class=\"oss-side\"></div></div></div>";
     document.body.appendChild(ov);inp=ov.querySelector("input");
     var t;inp.addEventListener("input",function(){clearTimeout(t);t=setTimeout(function(){lastQ=inp.value;render(lastQ);},120);});
     inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();render(inp.value,80);inp.blur();logNu();}if(e.key==="Escape")close();});
