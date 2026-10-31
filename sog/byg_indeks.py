@@ -72,6 +72,23 @@ paa=[r for r in out if r[10]==1]
 mest=[r[0] for r in sorted([r for r in paa if c3.get(r[0])],key=lambda r:(-c3[r[0]],-c30.get(r[0],0),-r[8]))][:24]
 if len(mest)<24: mest+=[r[0] for r in sorted([r for r in paa if c30.get(r[0]) and r[0] not in mest],key=lambda r:(-c30[r[0]],-r[8]))][:24-len(mest)]
 print('ordrer',len(ordrer),'mest',len(mest),'heraf 3 dage',sum(1 for n in mest if c3.get(n)))
+# "Populære kategorier lige nu": ordrer pr. kategori de seneste 3 dage (fyldt op med 30 dage)
+INTERN=re.compile(r'^lager |tilbud|discount|stop madspild|outlet|køb europæisk|nyhed|bedst|kampagne|black ?friday|gratis|kopi',re.I)
+def katcount(cc):
+    k={}
+    for nr,n in cc.items():
+        r=ix.get(nr)
+        if not r: continue
+        for g in dict.fromkeys(x for x in r[7].split('|') if x):
+            if INTERN.search(g) or g not in catmap: continue
+            k[g]=k.get(g,0)+n
+    return k
+ix={r[0]:r for r in out}
+k3,k30=katcount(c3),katcount(c30)
+kat=[g for g in sorted(k3,key=lambda g:(-k3[g],-k30.get(g,0)))][:10]
+if len(kat)<10: kat+=[g for g in sorted(k30,key=lambda g:-k30[g]) if g not in kat][:10-len(kat)]
+kat=[[g,catmap[g]] for g in kat]
+print('kat',[g for g,u in kat])
 meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager']}
-json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
+json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest,'kat':kat},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,'indeks.json')))
