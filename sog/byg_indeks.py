@@ -49,6 +49,29 @@ for i in items:
     url=(i.get('url') or '').replace('https://www.okologisk-supermarked.dk','')
     img=i.get('image') or ''
     out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0])
+# "Mest købte lige nu": antal ordrer pr. vare på ØS de seneste 3 dage, fyldt op med de seneste 30 dage
+import datetime
+def opage(start,o):
+    for t in range(4):
+        try: return call('GET',f'/orders?start={start}&limit=100&offset={o}&include=lines')
+        except Exception as e: err=e; time.sleep(2)
+    raise err
+nu=datetime.datetime.now(); start=(nu-datetime.timedelta(days=30)).date().isoformat(); ordrer=[]; off=0
+while True:
+    d=opage(start,off); ordrer+=d['items']
+    if not d.get('hasMore'): break
+    off+=100
+c3,c30={},{}
+for o in ordrer:
+    if o.get('siteID')!=26 or o.get('incomplete') or o['orderStateInfo']['name'].strip().lower()=='afviste': continue
+    ny=(nu-datetime.datetime.fromisoformat(o['createdDate'][:19])).total_seconds()<=3*86400
+    for nr in {(l.get('productNumber') or '').strip() for l in o['lines']['items'] if not l.get('lineType') and not l.get('isCredited')}:
+        c30[nr]=c30.get(nr,0)+1
+        if ny: c3[nr]=c3.get(nr,0)+1
+paa=[r for r in out if r[10]==1]
+mest=[r[0] for r in sorted([r for r in paa if c3.get(r[0])],key=lambda r:(-c3[r[0]],-c30.get(r[0],0),-r[8]))][:24]
+if len(mest)<24: mest+=[r[0] for r in sorted([r for r in paa if c30.get(r[0]) and r[0] not in mest],key=lambda r:(-c30[r[0]],-r[8]))][:24-len(mest)]
+print('ordrer',len(ordrer),'mest',len(mest),'heraf 3 dage',sum(1 for n in mest if c3.get(n)))
 meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager']}
-json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
+json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest},open(os.path.join(D,'indeks.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,'indeks.json')))

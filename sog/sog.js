@@ -33,7 +33,7 @@ function load(){
   loading=js(RAW+"sog/version.json?t="+Math.floor(Date.now()/300000)).catch(function(){return {sha:"main"};}).then(function(v){
     var base=CDN+(v.sha||"main")+"/sog/";
     return Promise.all([js(base+"indeks.json"),js(base+"config.json").catch(function(){return {};}),window.OSMotor?1:new Promise(function(ok,no){var s=document.createElement("script");s.src=base+"motor.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);})]);
-  }).then(function(r){CFG=r[1]||{};M=new window.OSMotor(r[0],CFG);return M;});
+  }).then(function(r){CFG=r[1]||{};M=new window.OSMotor(r[0],CFG);M.mest=r[0].mest||null;return M;});
   return loading;
 }
 function card(p){
@@ -50,7 +50,7 @@ function render(q,limit){
   q=q.trim();
   if(q.length<2){
     var pop=(CFG.populaere||["Kaffe","Havregryn","D-vitamin","Kokosolie","Tandpasta","Glutenfri"]);
-    var best=M.P.slice().sort(function(a,b){return b[8]-a[8];}).slice(0,12);
+    var best;if(M.mest&&M.mest.length){var ix={};M.P.forEach(function(p){ix[p[0]]=p;});best=M.mest.map(function(n){return ix[n];}).filter(Boolean).slice(0,12);}if(!best||best.length<4)best=M.P.slice().sort(function(a,b){return b[8]-a[8];}).slice(0,12);
     main.innerHTML="<h4>Populære søgninger</h4><div class=\"oss-chips\">"+pop.map(function(s){return "<a data-q=\""+esc(s)+"\">"+esc(s)+"</a>";}).join("")+"</div><h4>Mest købte lige nu</h4><div class=\"oss-grid\">"+best.map(card).join("")+"</div>";
     side.innerHTML="";return;}
   var r=M.sog(q,limit),note="";
