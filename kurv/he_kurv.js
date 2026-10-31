@@ -1,5 +1,5 @@
 /* Helsekost-Ekspres – forbedret "Varen er lagt i kurven"-popup (som på ØS, uden fri fragt)
-   viser varens pris, fragt + bæredygtig emballage i opgørelsen og 3 populære varer, når varen ikke selv har "Vi anbefaler også". */
+   viser varens pris, fragt fra i opgørelsen og 3 populære varer, når varen ikke selv har "Vi anbefaler også". */
 (function(){
 if(window.__heKurv)return;window.__heKurv=1;
 var RAW="https://raw.githubusercontent.com/okologisk-supermarked/os-data/main/sog/version.json",CDN="https://cdn.jsdelivr.net/gh/okologisk-supermarked/os-data@";
@@ -27,7 +27,7 @@ function fix(){var p=document.querySelector(".basketPopup");if(!p||p.getAttribut
   var hd=p.querySelector(".basketPopupHeaderLeft");if(hd)hd.textContent="Varen er lagt i kurven";
   var nm=p.querySelector(".basketPopupName"),la=lastAdded();try{sessionStorage.removeItem("heLastAdded");}catch(e){}LAST=null;
   if(nm&&la&&la.price&&!p.querySelector(".he-pris")){var d=document.createElement("div");d.className="he-pris";d.textContent=la.price;nm.parentNode.insertBefore(d,nm.nextSibling);}
-  var b=p.querySelector(".basketPopupBasket");if(b&&!b.querySelector(".he-emb")){var ds=b.children;for(var i=0;i<ds.length;i++){if(/^\s*Levering\s*$/i.test(ds[i].textContent)){ds[i].textContent="Fragt fra (vælges i kassen)";var v=document.createElement("div");v.className="he-emb";v.textContent=EMB;var l=document.createElement("div");l.className="he-emb-l";l.textContent="Bæredygtig emballage";ds[i].parentNode.insertBefore(l,ds[i].nextSibling);ds[i].parentNode.insertBefore(v,l);break;}}for(var k=0;k<ds.length;k++){if(/^\s*Pris i alt\s*$/i.test(ds[k].textContent))ds[k].textContent="Pris i alt fra";}}
+  var b=p.querySelector(".basketPopupBasket");if(b&&!b.querySelector(".he-emb")){var ds=b.children;for(var i=0;i<ds.length;i++){if(/^\s*Levering\s*$/i.test(ds[i].textContent)){ds[i].textContent="Fragt fra (vælges i kassen)";var mk=document.createElement("span");mk.className="he-emb";mk.style.display="none";ds[i].appendChild(mk);break;}}for(var k=0;k<ds.length;k++){if(/^\s*Pris i alt\s*$/i.test(ds[k].textContent))ds[k].textContent="Pris i alt fra";}}
   var top=p.querySelector(".basketPopupContentTop");if(top&&!p.querySelector(".he-recs")){var rb=document.createElement("div");rb.className="he-recs";rb.innerHTML="<div style=\"height:150px\"></div>";top.parentNode.insertBefore(rb,top.nextSibling);recs(rb);}}
 var CSS=".basketPopup .he-pris{font-weight:700;font-size:1.05rem;margin-top:.3rem;text-align:center}"+
 ".he-recs{clear:both;border-top:1px solid #eee;margin-top:12px;padding:12px 16px 14px;background:#fff;text-align:left}.he-recs-t{font-weight:700;font-size:1rem;margin:0 0 8px}"+
