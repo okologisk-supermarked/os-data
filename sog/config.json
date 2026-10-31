@@ -1,0 +1,16 @@
+{
+  "synonymer": {
+    "havremælk": ["havredrik"],
+    "mandelmælk": ["mandeldrik"],
+    "rismælk": ["risdrik"],
+    "sojamælk": ["sojadrik"],
+    "d-vitamin": ["d3"],
+    "c-vitamin": ["vitamin c"],
+    "opvask": ["opvaskemiddel"],
+    "tandbørste": ["tandbørster"],
+    "shampoo": ["shampo"]
+  },
+  "skjul": [],
+  "top": {},
+  "populaere": ["Kaffe", "Havregryn", "D-vitamin", "Kokosolie", "Tandpasta", "Glutenfri", "Magnesium", "Te"]
+}
