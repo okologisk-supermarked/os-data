@@ -19,7 +19,7 @@ def side(k):
     s = SHOPS[k]; N = s['navn']; M = s['mail']
     fragt = ''.join(f'<tr><td>{a}' + (f'<br><span class="hb-lille">{b}</span>' if b else '') + f'</td><td class="hb-pris">{c}</td></tr>' for a, b, c in s['fragt'])
     sek = []
-    std = ' Du kan også bruge standardfortrydelsesformularen nederst på siden.' if k == 'os' else ''
+    std = ''
     def add(titel, html): sek.append((titel, html))
     add('Generelt', f'''<p>Her finder du svar på de mest almindelige spørgsmål om, hvordan du handler hos {N}.</p>
 <p>Nedenstående salgs- og leveringsbetingelser gælder for alle leverancer fra {N}, CVR-nr. 32787339. Juridisk navn: Benjo ApS.</p>
@@ -81,7 +81,7 @@ def side(k):
 <p><strong>Links til andre hjemmesider</strong><br>Vores hjemmeside kan indeholde links til andre hjemmesider. Vi er ikke ansvarlige for deres indhold eller for, hvordan de behandler personoplysninger.</p>''')
     add('Ophavsret', '''<p>Indholdet på denne hjemmeside er omfattet af den danske ophavsretslovgivning. Kopiering, download, udskrift og enhver anden udnyttelse uden for ophavsrettens rammer kræver skriftligt samtykke. Downloads og kopier er kun tilladt til privat, ikke-kommerciel brug. Indhold fra tredjeparter er omfattet af tredjeparternes ophavsret. Bliver du opmærksom på en krænkelse af ophavsretten, så giv os besked, så fjerner vi indholdet straks.</p>
 <p>Brug af offentliggjorte kontaktoplysninger til at sende uopfordrede reklamer, fx spam-mails, er udtrykkeligt forbudt, og vi forbeholder os retten til at tage retlige skridt.</p>''')
-    if k == 'os': add('Standardfortrydelsesformular', f'''<p>(Denne formular udfyldes og returneres kun, hvis fortrydelsesretten gøres gældende. Du kan også bruge vores <a href="#os-fortryd">digitale formular</a>.)</p>
+    if False: add('Standardfortrydelsesformular', f'''<p>(Denne formular udfyldes og returneres kun, hvis fortrydelsesretten gøres gældende. Du kan også bruge vores <a href="#os-fortryd">digitale formular</a>.)</p>
 <p>Til: {N}, Ejbyvej 82B, 4623 Lille Skensved, e-mail: {M}</p>
 <p>Jeg meddeler herved, at jeg ønsker at gøre fortrydelsesretten gældende i forbindelse med min købsaftale om følgende varer:<br>______________________________________________</p>
 <p>Bestilt den: ________________ Modtaget den: ________________</p>
