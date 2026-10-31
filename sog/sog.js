@@ -15,7 +15,8 @@ function hentPop(){try{var c=JSON.parse(localStorage.getItem("ossPop")||"null");
 var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direction:column;background:rgba(255,255,255,.55);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}"+
 ".oss-top{background:#fff;box-shadow:0 2px 10px rgba(0,0,0,.08);padding:14px 16px}.oss-top-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:16px}"+
 ".oss-logo img{height:38px;display:block}.oss-f{flex:1;max-width:620px;margin:0 auto;position:relative}"+
-".oss-f input{width:100%;height:46px;border:1px solid #ddd;border-radius:8px;padding:0 44px 0 14px;font-size:16px;margin:0;box-shadow:none}.oss-f svg{position:absolute;right:13px;top:13px;width:20px;height:20px;color:#333}"+
+".oss-f input{width:100%;height:46px;border:1px solid #ddd;border-radius:8px;padding:0 74px 0 14px;font-size:16px;margin:0;box-shadow:none}.oss-f svg{position:absolute;right:13px;top:13px;width:20px;height:20px;color:#333}"+
+".oss-f input::-webkit-search-cancel-button{-webkit-appearance:none;display:none}.oss-clr{position:absolute;right:40px;top:9px;width:28px;height:28px;border:0;border-radius:50%;background:#e9ecea;color:#333;font-size:20px;line-height:26px;padding:0;cursor:pointer;text-align:center}.oss-clr[hidden]{display:none}"+
 ".oss-x{border:0;background:none;font-size:34px;line-height:1;cursor:pointer;color:#222;padding:0 4px}"+
 ".oss-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}.oss-in{max-width:1180px;margin:0 auto;padding:22px 16px 60px;display:flex;gap:24px;align-items:flex-start}"+
 ".oss-main{flex:1;min-width:0}.oss-side{width:270px;flex:0 0 270px}"+
@@ -75,16 +76,17 @@ function open(q0,fraIkon){
     var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
     var logo=document.querySelector("header img[src*=ogo],.logo img,a[href*=frontpage] img");
     ov=document.createElement("div");ov.className="oss";ov.setAttribute("role","dialog");
-    ov.innerHTML="<div class=\"oss-top\"><div class=\"oss-top-in\"><a class=\"oss-logo\" href=\"/shop/frontpage.html\">"+(logo?"<img src=\""+esc(logo.getAttribute("src"))+"\" alt=\"\">":"")+"</a><div class=\"oss-f\"><input type=\"search\" autocomplete=\"off\" placeholder=\""+esc(PH())+"\" aria-label=\"Søg\"><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-4-4\"/></svg></div><button class=\"oss-x\" aria-label=\"Luk\">&times;</button></div></div><div class=\"oss-body\"><div class=\"oss-in\"><div class=\"oss-main\"></div><div class=\"oss-side\"></div></div></div>";
+    ov.innerHTML="<div class=\"oss-top\"><div class=\"oss-top-in\"><a class=\"oss-logo\" href=\"/shop/frontpage.html\">"+(logo?"<img src=\""+esc(logo.getAttribute("src"))+"\" alt=\"\">":"")+"</a><div class=\"oss-f\"><input type=\"search\" autocomplete=\"off\" placeholder=\""+esc(PH())+"\" aria-label=\"Søg\"><button type=\"button\" class=\"oss-clr\" aria-label=\"Slet søgeord\" hidden>&times;</button><svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\"><circle cx=\"11\" cy=\"11\" r=\"7\"/><path d=\"m20 20-4-4\"/></svg></div><button class=\"oss-x\" aria-label=\"Luk\">&times;</button></div></div><div class=\"oss-body\"><div class=\"oss-in\"><div class=\"oss-main\"></div><div class=\"oss-side\"></div></div></div>";
     document.body.appendChild(ov);inp=ov.querySelector("input");
-    var t;inp.addEventListener("input",function(){clearTimeout(t);t=setTimeout(function(){lastQ=inp.value;render(lastQ);},120);});
+    var clr=ov.querySelector(".oss-clr");function vis(){clr.hidden=!inp.value;}clr.addEventListener("click",function(){inp.value="";vis();lastQ="";render("");inp.focus();});
+    var t;inp.addEventListener("input",function(){vis();clearTimeout(t);t=setTimeout(function(){lastQ=inp.value;render(lastQ);},120);});
     inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();render(inp.value,80);inp.blur();logNu();}if(e.key==="Escape")close();});
     ov.querySelector(".oss-x").onclick=close;
     ov.addEventListener("click",function(e){if(e.target.closest("a[href],button[type=submit],form button"))logNu();var c=e.target.closest("[data-q]");if(c){inp.value=c.getAttribute("data-q");render(inp.value);}var m=e.target.closest("[data-more]");if(m)render(inp.value,parseInt(m.getAttribute("data-more"),10));});
   }
   ov.style.display="flex";document.documentElement.style.overflow="hidden";
   if(POP===null){POP=[];hentPop();}
-  inp.value=q0||inp.value||"";render(inp.value);var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;if(!(fraIkon&&touch))setTimeout(function(){inp.focus();},30);else{try{inp.blur();}catch(e){}}
+  inp.value=q0||inp.value||"";var c0=ov.querySelector(".oss-clr");if(c0)c0.hidden=!inp.value;render(inp.value);var touch=window.matchMedia&&matchMedia("(pointer:coarse)").matches;if(!(fraIkon&&touch))setTimeout(function(){inp.focus();},30);else{try{inp.blur();}catch(e){}}
   load().then(function(){if(ov.style.display!=="none")render(inp.value);}).catch(function(){ov.querySelector(".oss-main").innerHTML="<div class=\"oss-empty\">Søgningen kunne ikke hentes lige nu.</div>";});
 }
 function close(){logNu();if(ov)ov.style.display="none";document.documentElement.style.overflow="";}
