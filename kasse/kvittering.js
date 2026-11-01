@@ -21,8 +21,8 @@ var css=
 ".osq-nr b{color:"+C.a+"}"+
 ".osq-grid{display:grid;grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);gap:18px;align-items:start}"+
 "@media (max-width:760px){.osq-grid{grid-template-columns:minmax(0,1fr)}.osq-top h1{font-size:23px}}"+
-".osq-card{background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:18px 20px;margin:0 0 18px}"+
-".osq-card h2{font-size:17px;margin:0 0 12px;color:#222;font-weight:700}"+
+".osq-card{text-align:left;background:#fff;border:1px solid #e6e6e6;border-radius:10px;padding:18px 20px;margin:0 0 18px}"+
+".osq-card h2{text-align:left;font-size:17px;margin:0 0 12px;color:#222;font-weight:700}"+
 ".osq-line{display:flex;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid #f0f0f0}"+
 ".osq-line:last-child{border-bottom:0}"+
 ".osq-img{flex:0 0 56px;height:56px;display:flex;align-items:center;justify-content:center}"+
