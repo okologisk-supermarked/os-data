@@ -98,6 +98,19 @@ function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"
   if(f&&f.offsetParent!==null&&f.offsetWidth>0){b.style.display="none";return;}
   var vis=function(e){return e&&e.offsetWidth>0&&e.offsetHeight>0;},bk=document.querySelector("header #basket"),anc=vis(acc)?acc:(vis(bk)?bk:acc),ref=vis(m)?m:anc,pr=(b.offsetParent||document.body).getBoundingClientRect(),rr=ref.getBoundingClientRect(),ra=anc.getBoundingClientRect(),top=Math.round(rr.top-pr.top),h=Math.round(rr.height)||44;
   b.style.cssText="position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:"+h+"px;color:#222;z-index:60;text-decoration:none;left:"+Math.max(0,Math.round(ra.left-pr.left)-50)+"px;top:"+top+"px";}
+// Google-bedømmelse uden cookies: vises kun når Googles eget badge ikke er der (fx afviste cookies). Tallet rettes her.
+var OS_RATING=HE?{s:"4,6",d:"helsekost-ekspres.dk"}:{s:"4,7",d:"okologisk-supermarked.dk"};
+function osBadge(){var g=document.querySelector('[id^="___ratingbadge"]'),m=document.getElementById("os-gbadge");
+  if(g){if(m)m.parentNode.removeChild(m);return;}
+  if(m||document.body.classList.contains("webshop-orderstep4"))return;
+  var a=document.createElement("a");a.id="os-gbadge";a.target="_blank";a.rel="noopener";
+  a.href="https://www.google.com/shopping/ratings/account/metrics?q="+OS_RATING.d+"&c=DK&v=19&hl=da";
+  a.setAttribute("aria-label","Google-bedømmelse "+OS_RATING.s+" ud af 5");a.title="Google-bedømmelse "+OS_RATING.s+" ud af 5";
+  a.innerHTML="<span>"+OS_RATING.s+"</span><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" aria-hidden=\"true\"><path fill=\"#f4a20c\" d=\"M12 2.6l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z\"/></svg>";
+  a.style.cssText="position:fixed;right:24px;bottom:24px;z-index:2147482000;display:flex;align-items:center;gap:6px;background:#fff;color:#3c4043;font:500 17px/1 Roboto,Arial,sans-serif;padding:11px 16px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.12);text-decoration:none";
+  document.body.appendChild(a);}
+function osBadgeStart(){setTimeout(osBadge,3500);setInterval(osBadge,2000);}
+if(document.readyState==="complete")osBadgeStart();else window.addEventListener("load",osBadgeStart);
 // ØS mobil: loyalitets-ikon i ikonrækken (menu, søg, konto, kurv)
 function osKonto(){if(HE||document.getElementById("os-konto"))return;var row=document.querySelector(".headerTop .navIcons .row");if(!row)return;var cols=row.children;if(cols.length<3)return;
   var c=document.createElement("div");c.className="small-3 columns";c.id="os-konto";
