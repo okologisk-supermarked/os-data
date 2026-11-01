@@ -27,7 +27,7 @@ var css=
 ".osk-fejltekst{display:none;color:#c62828;font-size:13px;margin:-4px 2px 10px}"+
 "#confirm-accepterms.osk-fejl+.osk-fejltekst{display:block}"+
 "#confirm-checkout{margin:6px 0 0!important;padding:0!important;text-align:center}"+
-"#column-order-summary #order-summary>table{display:table!important;width:100%!important;table-layout:auto}"+
+"#column-order-summary #order-summary>table:not(.order-summary)>tbody{display:table;width:100%}"+
 "#column-order-summary #order-summary>table td.right-align{text-align:right!important;white-space:nowrap}"+
 "#confirm-complete-button{display:block!important;width:100%!important;max-width:none!important;margin:0!important;border:0!important;border-radius:8px!important;background:"+C.btn+" url(\""+LOCK+"\") no-repeat 18px center/20px!important;color:#fff!important;font-size:18px!important;font-weight:700!important;letter-spacing:.02em;text-transform:none!important;padding:15px 18px 15px 46px!important;line-height:1.2!important;height:auto!important;cursor:pointer;box-shadow:0 2px 6px rgba(0,0,0,.15);transition:background-color .15s}"+
 "#confirm-complete-button:hover{background-color:"+C.btnh+"!important}"+
