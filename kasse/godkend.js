@@ -62,7 +62,8 @@ function boks(){var b=document.getElementById("order-confirm");if(!b||b.getAttri
       '<li>'+CHK+'<span>Dansk virksomhed, CVR 32787339</span></li></ul>';
     cc.parentNode.insertBefore(t,cc.nextSibling);}
 }
-function betaling(){var fs=document.querySelectorAll("span.payment-fee");for(var i=0;i<fs.length;i++){var f=fs[i];if(f.getAttribute("data-osk"))continue;f.setAttribute("data-osk","1");
+function nulGebyr(){var tr=document.querySelectorAll("tr");for(var i=0;i<tr.length;i++){var c=tr[i].children;if(c.length>=2&&/^\s*(Kortgebyr|Betalingsgebyr):?\s*$/i.test(c[0].textContent)&&/^\s*0,00(\s*DKK)?\s*$/i.test(c[c.length-1].textContent))tr[i].style.setProperty("display","none","important");else if(c.length>=2&&/^\s*(Kortgebyr|Betalingsgebyr):?\s*$/i.test(c[0].textContent))tr[i].style.removeProperty("display");}}
+function betaling(){nulGebyr();var fs=document.querySelectorAll("span.payment-fee");for(var i=0;i<fs.length;i++){var f=fs[i];if(f.getAttribute("data-osk"))continue;f.setAttribute("data-osk","1");
   var t=f.textContent;if(/^\s*\(\s*0,00\s*DKK/i.test(t)){f.style.display="none";
     if(/Kortgebyr/i.test(t)){var g=document.createElement("span");g.className="osk-gebyr";g.textContent="Gebyrfrit for private kort fra EU/EØS. Gebyr på firmakort og kort udstedt uden for EU/EØS oplyses i betalingsvinduet.";var pm=f.parentNode.querySelector(".payment-message");f.parentNode.insertBefore(g,pm?pm.nextSibling:f.nextSibling);}}}
   if(!HE){var w=document.createTreeWalker(document.body,NodeFilter.SHOW_TEXT,null,false),n,l=[];while((n=w.nextNode()))l.push(n);
