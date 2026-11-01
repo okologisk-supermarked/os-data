@@ -36,14 +36,14 @@ var css=
 ".osk-trust li{display:flex;align-items:center;gap:7px;margin:4px 0}"+
 ".osk-trust a{color:"+C.a+"!important}"+
 ".osk-gebyr{display:block;font-weight:400!important;font-size:11px;line-height:1.35;color:#666;margin-top:3px}label.checkout-payment-method,label.checkout-payment-method table{height:auto!important;max-height:none!important;overflow:visible!important}"+
-"label[for=res3]{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;background:"+(HE?C.l:"#F0E6DC")+";border-radius:10px;padding:12px 14px!important;margin:16px 0 6px!important;float:none!important;width:auto!important;height:auto!important}"+
+"label[for=res3]{display:grid!important;grid-template-columns:minmax(0,1fr) auto;align-items:stretch;background:#f9f6ec;border:1px solid #eee;border-radius:3px;padding:12px 20px 14px!important;margin:10px 0!important;font-weight:400;float:none!important;width:auto!important;height:auto!important}"+
 "label[for=res3] .salesdiscountcode-label{grid-column:1/-1;font-weight:700;color:"+C.a+";font-size:15px;margin:0 0 8px}"+
 "label[for=res3] .salesdiscountcode-container{min-width:0;float:none!important;width:auto!important;margin:0!important;padding:0!important}"+
-"#res3{display:block;min-width:0!important;height:44px!important;margin:0!important;border:1px solid #b9b1a8!important;border-right:0!important;border-radius:8px 0 0 8px!important;background:#fff!important;font-size:16px!important;padding:0 12px!important;width:100%!important;box-sizing:border-box!important;box-shadow:none!important}"+
+"#res3{display:block;min-width:0!important;height:44px!important;margin:0!important;border:1px solid #b9b1a8!important;border-right:0!important;border-radius:3px 0 0 3px!important;background:#fff!important;font-size:16px!important;padding:0 12px!important;width:100%!important;box-sizing:border-box!important;box-shadow:none!important}"+
 "#res3:focus{outline:2px solid "+C.a+";outline-offset:-2px}"+
 "label[for=res3] .salesdiscountcode-button-container{float:none!important;width:auto!important;margin:0!important;padding:0!important}"+
-"#res3_salesdiscountcode_button{display:block;height:44px!important;margin:0!important;padding:0 22px!important;border:0!important;border-radius:0 8px 8px 0!important;background:"+C.a+"!important;color:#fff!important;font-weight:700!important;font-size:16px!important;line-height:44px!important;cursor:pointer;text-transform:none!important;box-shadow:none!important}"+
-"#res3_salesdiscountcode_button:hover{background:"+C.ah+"!important}"+
+"#res3_salesdiscountcode_button{display:block;height:44px!important;margin:0!important;padding:0 22px!important;border:0!important;border-radius:0 3px 3px 0!important;background:"+(HE?C.a:"#095a3e")+"!important;color:#fff!important;font-weight:700!important;font-size:16px!important;line-height:44px!important;cursor:pointer;text-transform:none!important;box-shadow:none!important}"+
+"#res3_salesdiscountcode_button:hover{background:"+(HE?C.ah:"#07472f")+"!important}"+
 "label[for=res3] .clear{display:none!important}"+
 "#res3_errormessage{margin-top:6px}label[for=res3]>#res3_errormessage{grid-column:1/-1}"+
 ".osk-anden{display:flex!important;align-items:center;gap:8px;margin:2px 0 14px!important;padding:0!important;float:none!important;width:auto!important;clear:both}"+
@@ -86,7 +86,10 @@ function betaling(){nulGebyr();var fs=document.querySelectorAll("span.payment-fe
 function kode(){var ls=document.querySelectorAll("#customer-data label");for(var i=0;i<ls.length;i++){if(/^\s*Vælg kodeord/i.test(ls[i].textContent))ls[i].style.setProperty("display","none","important");}}
 
 function rabat(){var l=document.querySelector("label[for=res3] .salesdiscountcode-label");if(l&&!l.getAttribute("data-osk")){l.setAttribute("data-osk","1");l.textContent="Har du en rabatkode?";}
-  var i=document.getElementById("res3");if(i&&!i.placeholder)i.placeholder="Indsæt din kode";}
+  var i=document.getElementById("res3");if(i&&!i.placeholder)i.placeholder="Indsæt din kode";
+  var box=document.querySelector("label[for=res3]"),col=document.getElementById("column-order-summary");if(!box||!col)return;
+  var ref=document.getElementById("usePointsContainer")||document.getElementById("order-summary");if(!ref||ref.parentNode!==col)return;
+  if(ref.nextElementSibling!==box)col.insertBefore(box,ref.nextSibling);}
 function anden(){var cb=document.getElementById("checkout_use_alternative_delivery_address");if(!cb)return;var row=cb.closest(".checkout-row");if(!row)return;
   var land=document.querySelector("label[for=checkout_customer_country]");if(!land)return;
   row.classList.add("osk-anden");if(land.nextElementSibling!==row)land.parentNode.insertBefore(row,land.nextSibling);}
