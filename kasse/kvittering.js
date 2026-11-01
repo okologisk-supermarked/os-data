@@ -7,7 +7,7 @@ var HE=/helsekost-ekspres/i.test(location.hostname);
 var C=HE?{a:"#1e5b3a",l:"#f2f7f4",b:"#d5e5da",btn:"#1e5b3a",btnh:"#16452c",mail:"info@helsekost-ekspres.dk",tlf:"42 47 93 90"}
         :{a:"#2e7d32",l:"#f1f8f1",b:"#d3e8d4",btn:"#f7941d",btnh:"#e0820f",mail:"info@okologisk-supermarked.dk",tlf:"50 42 77 72"};
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
-function txt(e){return e?(e.innerText||e.textContent||"").replace(/ /g," ").trim():"";}
+function txt(e){if(!e)return "";var c=e.cloneNode(true);[].slice.call(c.querySelectorAll("br")).forEach(function(b){b.parentNode.replaceChild(document.createTextNode("\n"),b);});[].slice.call(c.querySelectorAll("div,p,tr,td")).forEach(function(d){d.appendChild(document.createTextNode(d.tagName==="TD"?" ":"\n"));});return c.textContent.replace(/\u00a0/g," ").replace(/[ \t]*\n[ \t]*/g,"\n").replace(/[ \t]+/g," ").trim();}
 function one(s){return String(s||"").replace(/\s+/g," ").trim();}
 var CHK='<svg viewBox="0 0 24 24" width="30" height="30" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>';
 var css=
