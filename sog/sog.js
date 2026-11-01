@@ -99,16 +99,28 @@ function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"
   var vis=function(e){return e&&e.offsetWidth>0&&e.offsetHeight>0;},bk=document.querySelector("header #basket"),anc=vis(acc)?acc:(vis(bk)?bk:acc),ref=vis(m)?m:anc,pr=(b.offsetParent||document.body).getBoundingClientRect(),rr=ref.getBoundingClientRect(),ra=anc.getBoundingClientRect(),top=Math.round(rr.top-pr.top),h=Math.round(rr.height)||44;
   b.style.cssText="position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:"+h+"px;color:#222;z-index:60;text-decoration:none;left:"+Math.max(0,Math.round(ra.left-pr.left)-50)+"px;top:"+top+"px";}
 // Google-bedømmelse (eget badge, kræver ikke cookies; Googles eget badge er slået fra på begge shops). Tallet rettes her.
-var OS_RATING=HE?{s:"4,6",d:"helsekost-ekspres.dk"}:{s:"4,7",d:"okologisk-supermarked.dk"};
+var OS_RATING=HE?{s:"4,6",n:144,f:[80,12,3,2,3],d:"helsekost-ekspres.dk",nv:"Helsekost-Ekspres.dk"}:{s:"4,7",n:367,f:[78,12,3,1,6],d:"okologisk-supermarked.dk",nv:"Økologisk-Supermarked.dk"};
+var OS_STAR=function(w,c){return "<svg viewBox=\"0 0 24 24\" width=\""+w+"\" height=\""+w+"\" aria-hidden=\"true\"><path fill=\""+(c||"#f4a20c")+"\" d=\"M12 2.6l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z\"/></svg>";};
+function osBadgeBox(){var x=document.getElementById("os-gbox");if(x){x.parentNode.removeChild(x);return;}var R=OS_RATING,v=parseFloat(R.s.replace(",","."));
+  var st="";for(var k=1;k<=5;k++)st+=OS_STAR(18,k<=Math.round(v)?"#f4a20c":"#dadce0");
+  var bars="";for(var b=0;b<5;b++)bars+="<div style=\"display:flex;align-items:center;gap:8px;margin:3px 0;font-size:13px;color:#5f6368\"><span style=\"width:10px;text-align:right\">"+(5-b)+"</span><div style=\"flex:1;height:8px;background:#e8eaed;border-radius:4px;overflow:hidden\"><div style=\"height:100%;width:"+R.f[b]+"%;background:#f4a20c\"></div></div><span style=\"width:34px;text-align:right\">"+R.f[b]+" %</span></div>";
+  var bx=document.createElement("div");bx.id="os-gbox";bx.setAttribute("role","dialog");bx.setAttribute("aria-label","Google Kundeanmeldelser");
+  bx.style.cssText="position:fixed;right:24px;bottom:84px;z-index:2147482001;width:300px;max-width:calc(100vw - 32px);background:#fff;color:#202124;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.2),0 10px 30px rgba(0,0,0,.18);padding:16px 18px 14px;font:14px/1.4 Roboto,Arial,sans-serif;text-align:left";
+  bx.innerHTML="<button type=\"button\" aria-label=\"Luk\" style=\"position:absolute;top:6px;right:8px;border:0;background:none;font-size:24px;line-height:1;color:#5f6368;cursor:pointer;padding:4px\">&times;</button>"+
+   "<div style=\"font-size:13px;color:#5f6368;margin-bottom:6px\">Google Kundeanmeldelser</div>"+
+   "<div style=\"font-weight:500;font-size:15px;margin-bottom:8px\">"+R.nv+"</div>"+
+   "<div style=\"display:flex;align-items:center;gap:10px;margin-bottom:4px\"><span style=\"font-size:34px;font-weight:400\">"+R.s+"</span><span style=\"display:flex\">"+st+"</span></div>"+
+   "<div style=\"font-size:13px;color:#5f6368;margin-bottom:10px\">"+R.n+" anmeldelser</div>"+bars+
+   "<a href=\"https://www.google.com/storepages?q="+R.d+"&c=DK&v=19&hl=da\" target=\"_blank\" rel=\"noopener\" style=\"display:inline-block;margin-top:10px;color:#1a73e8;text-decoration:none;font-size:14px\">Læs anmeldelserne hos Google</a>";
+  document.body.appendChild(bx);bx.querySelector("button").addEventListener("click",function(){bx.parentNode.removeChild(bx);});}
 function osBadge(){var g=document.querySelector('[id^="___ratingbadge"]'),m=document.getElementById("os-gbadge");
   if(g){if(m)m.parentNode.removeChild(m);return;}
   if(m||document.body.classList.contains("webshop-orderstep4"))return;
-  var a=document.createElement("a");a.id="os-gbadge";a.target="_blank";a.rel="noopener";
-  a.href="https://www.google.com/shopping/ratings/account/metrics?q="+OS_RATING.d+"&c=DK&v=19&hl=da";
-  a.setAttribute("aria-label","Google-bedømmelse "+OS_RATING.s+" ud af 5");a.title="Google-bedømmelse "+OS_RATING.s+" ud af 5";
-  a.innerHTML="<span>"+OS_RATING.s+"</span><svg viewBox=\"0 0 24 24\" width=\"22\" height=\"22\" aria-hidden=\"true\"><path fill=\"#f4a20c\" d=\"M12 2.6l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z\"/></svg>";
-  a.style.cssText="position:fixed;right:24px;bottom:24px;z-index:2147482000;display:flex;align-items:center;gap:6px;background:#fff;color:#3c4043;font:500 17px/1 Roboto,Arial,sans-serif;padding:11px 16px;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.12);text-decoration:none";
-  document.body.appendChild(a);}
+  var a=document.createElement("button");a.type="button";a.id="os-gbadge";
+  a.setAttribute("aria-label","Google-bedømmelse "+OS_RATING.s+" ud af 5");a.title="Google Kundeanmeldelser";
+  a.innerHTML="<span>"+OS_RATING.s+"</span>"+OS_STAR(22);
+  a.style.cssText="position:fixed;right:24px;bottom:24px;z-index:2147482000;display:flex;align-items:center;gap:6px;background:#fff;color:#3c4043;font:500 17px/1 Roboto,Arial,sans-serif;padding:11px 16px;border:0;border-radius:999px;box-shadow:0 1px 3px rgba(0,0,0,.25),0 4px 10px rgba(0,0,0,.12);cursor:pointer";
+  a.addEventListener("click",osBadgeBox);document.body.appendChild(a);}
 function osBadgeStart(){setTimeout(osBadge,1000);}
 if(document.readyState==="complete")osBadgeStart();else window.addEventListener("load",osBadgeStart);
 // ØS mobil: loyalitets-ikon i ikonrækken (menu, søg, konto, kurv)
