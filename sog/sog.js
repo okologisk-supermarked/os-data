@@ -2,6 +2,7 @@
    Data: https://github.com/okologisk-supermarked/os-data  (sog/indeks.json, sog/config.json, sog/motor.js) */
 (function(){
 if(window.__osSog)return;window.__osSog=1;
+try{if(/order4/i.test(location.pathname)){var _ks=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_ks){var _k=document.createElement("script");_k.src=_ks[1]+"kasse/kvittering.js";_k.async=true;document.head.appendChild(_k);}}}catch(e){} // pæn ordrebekræftelse (kasse/kvittering.js)
 var RAW="https://raw.githubusercontent.com/okologisk-supermarked/os-data/main/",CDN="https://cdn.jsdelivr.net/gh/okologisk-supermarked/os-data@";
 var HE=/helsekost-ekspres/i.test(location.hostname),SITE=HE?"he":"os";
 var M=null,CFG={},loading=null,ov=null,inp=null,lastQ="",gaT=null;
