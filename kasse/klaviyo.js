@@ -4,7 +4,7 @@
    - Sender Viewed Product, Added to Cart og Started Checkout med samme feltnavne som Plugly brugte,
      så flows (tabt kurv, browse abandonment m.m.) virker uændret.
    - Identificerer kunden ud fra e-mail i kassen.
-   - Så længe Plugly stadig er aktiv på siden, sender scriptet IKKE egne events (undgår dobbelt-tælling). */
+   - Kun hvis Plugly selv henter Klaviyo, sender scriptet IKKE egne events (undgår dobbelt-tælling). */
 (function(){
 if(window.__osKlav)return;window.__osKlav=1;
 var COMPANY="YqREzg",SHOP="https://www.okologisk-supermarked.dk";
@@ -108,7 +108,7 @@ function kasseIdentify(){ // e-mail i kassen → kendt profil (så tabt kurv kan
 
 function start(){
   if(window.__osKlavStart||!samtykke())return;window.__osKlavStart=1;
-  if(plugly())return; // Plugly henter stadig Klaviyo og sender events – vi gør intet, før Plugly er slået fra
+  if(plugly()&&harKlaviyo())return; // kun hvis Plugly stadig selv henter Klaviyo (og sender events) – ellers kører vi
   hentKlaviyo();
   try{seteVare();}catch(e){}
   try{kurvEvents();}catch(e){}
