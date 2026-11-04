@@ -1,118 +1,118 @@
 {
-  "synonymer": {
-    "arioniajuice": [
-      "aronia"
-    ],
-    "aroniajuice": [
-      "aronia"
-    ],
-    "b12vitamin": [
-      "b12"
-    ],
-    "butter": [
-      "butterbeans"
-    ],
-    "butterbeans": [
-      "butter beans"
-    ],
-    "c-vitamin": [
-      "vitamin c"
-    ],
-    "collagenpaptider": [
-      "kollagenpeptider",
-      "collagen"
-    ],
-    "d-vitamin": [
-      "d3"
-    ],
-    "fiber": [
-      "psyllium"
-    ],
-    "fiberhusk": [
-      "psyllium"
-    ],
-    "havremælk": [
-      "havredrik"
-    ],
-    "johannesurt": [
-      "perikon"
-    ],
-    "kollagenpaptider": [
-      "kollagenpeptider",
-      "collagen"
-    ],
-    "lentil": [
-      "linser"
-    ],
-    "magnesiumglyce": [
-      "glycinat"
-    ],
-    "magnesiumglycinat": [
-      "glycinat"
-    ],
-    "magnesiumglycinate": [
-      "glycinat"
-    ],
-    "mandelmælk": [
-      "mandeldrik"
-    ],
-    "nødhjælpdråber": [
-      "rescue"
-    ],
-    "nødhjælpsdropper": [
-      "rescue"
-    ],
-    "nødhjælpsdråber": [
-      "rescue"
-    ],
-    "opvask": [
-      "opvaskemiddel"
-    ],
-    "passata": [
-      "tomater"
-    ],
-    "recou": [
-      "rescue"
-    ],
-    "rismælk": [
-      "risdrik"
-    ],
-    "sennepsmel": [
-      "sennep"
-    ],
-    "shampoo": [
-      "shampo"
-    ],
-    "sojahak": [
-      "fars"
-    ],
-    "sojamælk": [
-      "sojadrik"
-    ],
-    "soleray": [
-      "solaray"
-    ],
-    "tandbørste": [
-      "tandbørster"
-    ],
-    "termoflaske": [
-      "drikkedunk"
-    ],
-    "tørbørste": [
-      "massagebørste"
-    ],
-    "vegansk": [
-      "vegan"
-    ],
-    "walnøder": [
-      "valnødder"
-    ]
-  },
-  "top": {},
-  "skjul": [],
-  "populaere": [
-    "Glutenfri",
-    "Te"
+ "synonymer": {
+  "arioniajuice": [
+   "aronia"
   ],
-  "skjul_sog": []
+  "aroniajuice": [
+   "aronia"
+  ],
+  "b12vitamin": [
+   "b12"
+  ],
+  "butter": [
+   "butterbeans"
+  ],
+  "butterbeans": [
+   "butter beans"
+  ],
+  "c-vitamin": [
+   "vitamin c"
+  ],
+  "collagenpaptider": [
+   "kollagenpeptider",
+   "collagen"
+  ],
+  "d-vitamin": [
+   "d3"
+  ],
+  "fiber": [
+   "psyllium"
+  ],
+  "fiberhusk": [
+   "psyllium"
+  ],
+  "havremælk": [
+   "havredrik"
+  ],
+  "johannesurt": [
+   "perikon"
+  ],
+  "kollagenpaptider": [
+   "kollagenpeptider",
+   "collagen"
+  ],
+  "lentil": [
+   "linser"
+  ],
+  "magnesiumglyce": [
+   "glycinat"
+  ],
+  "magnesiumglycinat": [
+   "glycinat"
+  ],
+  "magnesiumglycinate": [
+   "glycinat"
+  ],
+  "mandelmælk": [
+   "mandeldrik"
+  ],
+  "nødhjælpdråber": [
+   "rescue"
+  ],
+  "nødhjælpsdropper": [
+   "rescue"
+  ],
+  "nødhjælpsdråber": [
+   "rescue"
+  ],
+  "opvask": [
+   "opvaskemiddel"
+  ],
+  "passata": [
+   "tomater"
+  ],
+  "recou": [
+   "rescue"
+  ],
+  "rismælk": [
+   "risdrik"
+  ],
+  "sennepsmel": [
+   "sennep"
+  ],
+  "shampoo": [
+   "shampo"
+  ],
+  "sojahak": [
+   "fars"
+  ],
+  "sojamælk": [
+   "sojadrik"
+  ],
+  "soleray": [
+   "solaray"
+  ],
+  "tandbørste": [
+   "tandbørster"
+  ],
+  "termoflaske": [
+   "drikkedunk"
+  ],
+  "tørbørste": [
+   "massagebørste"
+  ],
+  "vegansk": [
+   "vegan"
+  ],
+  "walnøder": [
+   "valnødder"
+  ]
+ },
+ "top": {},
+ "skjul": [],
+ "populaere": [
+  "Glutenfri",
+  "Te"
+ ],
+ "skjul_sog": []
 }
