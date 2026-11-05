@@ -4,9 +4,10 @@
 #   prismatch_input.json = {"dato":"ÅÅÅÅ-MM-DD","varer":[{"varenr":"...","vist":109,"laveste":115.0,"antal_paa_lager":4}, ...]}
 #     vist = vores VISTE HE-pris efter dagens upload (hel krone), laveste = laveste konkurrentpris PÅ LAGER,
 #     antal_paa_lager = antal konkurrenter med EAN-match (eller godkendt navnematch) og varen på lager.
-#     Alle tjekkede varer skal med (også dem uden badge) – varer der ikke er tjekket i dag beholder deres status.
+#     Alle tjekkede varer skal med (også dem uden badge).
 # Krav (Johnny 05-11-2026): vist pris mindst 1 % under laveste, mindst 3 konkurrenter på lager, højst 40 % billigere
-#   (ellers sandsynligvis forkert match), synlig på HE, ikke KOPI. En vare, der ikke er tjekket i 3 dage, tages ud.
+#   (ellers sandsynligvis forkert match), synlig på HE, ikke KOPI. Varer der ikke var med i dagens priskontrol tages ud
+#   (priskontrollen tjekker hver hverdag alle topsælgere; weekenden står fredagens liste).
 # Uden --upload: tør kørsel. Fortryd-fil: fortryd_3850_<stempel>.csv (varenr;handling;kategorier_foer).
 import json, sys, os, base64, urllib.request, urllib.parse, time, datetime, csv
 B = 'https://www.okologisk-supermarked.dk/admin/WebAPI/v2'; KAT = '3850'
@@ -23,11 +24,10 @@ def req(m, p, b=None):
         except Exception:
             if f == 3: raise
         time.sleep(2 * (f + 1))
-MIN_SHOPS, MIN_UNDER, MAX_UNDER, MAX_ALDER = 3, 0.01, 0.40, 3
+MIN_SHOPS, MIN_UNDER, MAX_UNDER = 3, 0.01, 0.40
 inp = json.load(open(sys.argv[1])); upload = '--upload' in sys.argv
 dato = inp['dato']; tjek = {v['varenr'].strip(): v for v in inp['varer']}
-STATE = os.path.join(os.path.dirname(os.path.abspath(sys.argv[1])), 'prismatch_status.json')
-state = json.load(open(STATE)) if os.path.exists(STATE) else {}   # varenr -> sidst tjekket (dato) når den var billigst
+if len(tjek) < 200: print(f'SIKKERHEDSSTOP: kun {len(tjek)} tjekkede varer i input – intet ændret'); sys.exit(2)
 def ok(v):
     try: vist, lav, n = float(v['vist']), float(v['laveste']), int(v['antal_paa_lager'])
     except (TypeError, ValueError, KeyError): return False
@@ -39,16 +39,13 @@ while True:
     for x in r.get('items', []): nu[x['number'].strip()] = x['number']
     if not r.get('hasMore'): break
     off += 100
-idag = datetime.date.fromisoformat(dato); onsket = set(); mistanke = []
+onsket = set(); mistanke = []
 for nr, v in tjek.items():
-    if ok(v): onsket.add(nr); state[nr] = dato
+    if ok(v): onsket.add(nr)
     else:
-        state.pop(nr, None)
         try:
             if float(v['vist']) < float(v['laveste']) * (1 - MAX_UNDER) and int(v['antal_paa_lager']) >= MIN_SHOPS: mistanke.append(nr)
         except Exception: pass
-for nr in nu:   # ikke tjekket i dag: beholdes, hvis den var billigst inden for 3 dage
-    if nr not in tjek and nr in state and (idag - datetime.date.fromisoformat(state[nr])).days <= MAX_ALDER: onsket.add(nr)
 tilfoej, fjern = sorted(onsket - set(nu)), sorted(set(nu) - onsket)
 if len(tilfoej) + len(fjern) > 600: print('SIKKERHEDSSTOP: over 600 ændringer – intet ændret'); sys.exit(2)
 stamp = datetime.datetime.now().strftime('%Y%m%d_%H%M')
@@ -73,7 +70,6 @@ for nr, handling in [(n, '+') for n in tilfoej] + [(n, '-') for n in fjern]:
         if (KAT in efter) == (handling == '+'): res['tilfoejet' if handling == '+' else 'fjernet'].append(nr)
         else: res['fejl'].append(nr)
     except Exception as e: res['fejl'].append(f'{nr}: {e}')
-if upload: json.dump(state, open(STATE, 'w'))
 print(('UPLOAD' if upload else 'TØR KØRSEL'), '| i 3850 før', len(nu), '| ønsket', len(onsket), '| +', len(res['tilfoejet']), '| -', len(res['fjernet']),
       '| sprunget', len(res['sprunget']), '| fejl', len(res['fejl']), '| over 40 % billigere (tjek match)', len(mistanke))
 if mistanke: print('MISTÆNKELIGE (over 40 % under laveste):', ' '.join(mistanke[:30]))
