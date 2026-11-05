@@ -1,7 +1,7 @@
 {
  "live": {
-  "os": false,
-  "he": false
+  "os": true,
+  "he": true
  },
  "os": {
   "710": {
