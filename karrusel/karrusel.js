@@ -69,6 +69,8 @@ function start(){
   // DanDomains egen forsideliste (fx "Stærke tilbud" på HE) -> karrusel
   Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul){var f=M[id].f&&document.getElementById("bp_ProductCarousel_"+M[id].f);if(f)render(f,D.l[id].t,D.l[id].v,D.c,"before");return;}var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
     if(render(hd||ul,D.l[id].t,D.l[id].v,D.c,"before")){hide(ul);hide(hd);}});
+  // karruseller uden egen plads (fx ØS-kopier på HE): lægges før karrusellen i "foer"
+  Object.keys(M).forEach(function(id){var m=M[id];if(m.s==="dd_forside"||!m.f||!D.l[id]||document.getElementById("bp_ProductCarousel_"+id))return;var a=document.getElementById("bp_ProductCarousel_"+m.f);if(a)render(a,D.l[id].t,D.l[id].v,D.c,"before");});
   var sammeId=Object.keys(M).filter(function(k){return M[k].k==="samme";})[0],sideId=Object.keys(M).filter(function(k){return M[k].k==="side";})[0],andre=M.andre;
   var body=document.body.classList;
   // 2) varekort: andre købte også + samme kategori
