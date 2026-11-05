@@ -24,7 +24,7 @@ var CSS=".osk{position:relative;margin:2.2rem 0 1.4rem;clear:both}.osk h2.osk-t{
 "@media (max-width:1024px){.osk-c{flex-basis:calc((100% - 32px)/3)}}"+
 "@media (max-width:640px){.osk-tr{gap:10px}.osk-c{flex-basis:calc((100% - 10px)/2.15);padding:8px}.osk-c .prodImg{height:170px}.osk-c .prodImg img.osk-i{max-height:170px}.osk-c .prodName{font-size:.82rem}.osk-c .prodPrice{font-size:1.2rem}.osk-a{width:36px;height:36px;top:80px}.osk-p{left:-6px}.osk-n{right:-6px}.osk-c form .button{font-size:.78rem;padding:.6rem .2rem}}"+
 ".osk-f3 .osk-c{flex-basis:calc((100% - 32px)/3)}@media (max-width:640px){.osk-f3 .osk-c{flex-basis:calc((100% - 10px)/2.15)}}.osk-c form .button{font-size:.88rem;line-height:1.2;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
-".osk-skjul{display:none!important}"+(HE?".osk-c form .button{background:#1e5b3a;color:#fff;border:0;border-radius:4px;font-weight:700;padding:.75rem .4rem}.osk-c form .button:hover{background:#174a2f}":"");
+".osk-skjul{display:none!important}"+(HE?".osk h2.osk-t{font-size:2.1rem;font-weight:400;line-height:1.2;color:#333;margin-bottom:1.1rem}@media (max-width:640px){.osk h2.osk-t{font-size:1.5rem}}.osk-c form .button{background:#1e5b3a;color:#fff;border:0;border-radius:4px;font-weight:700;padding:.75rem .4rem}.osk-c form .button:hover{background:#174a2f}":"");
 
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
 function get(u){return fetch(BASE+u).then(function(r){if(!r.ok)throw 0;return r.json();});}
