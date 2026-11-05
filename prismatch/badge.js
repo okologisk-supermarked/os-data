@@ -12,9 +12,9 @@ var CSS=".os-pm{position:absolute;top:6px;left:6px;width:72px;height:72px;border
 "box-shadow:0 2px 6px rgba(0,0,0,.25);transform:rotate(-8deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"+
 "line-height:1;font-family:Roboto,Helvetica,Arial,sans-serif;z-index:5;box-sizing:border-box;pointer-events:none;overflow:hidden;padding:0}"+
 ".os-pm span{display:block;margin:0;padding:0;color:#fff;font-family:Roboto,Helvetica,Arial,sans-serif;line-height:1;text-transform:none;white-space:nowrap}"+
-".os-pm .pa{font-size:11.5px;font-weight:900;letter-spacing:.4px}.os-pm .pb{font-size:7.7px;font-weight:800;letter-spacing:.4px;margin:2px 0 1px}.os-pm .pc{font-size:9.2px;font-weight:800;letter-spacing:0}"+
-".os-pm-big{width:84px;height:84px;top:10px;left:10px}.os-pm-big .pa{font-size:13.5px}.os-pm-big .pb{font-size:9px}.os-pm-big .pc{font-size:10.8px}"+
-"@media (max-width:640px){.os-pm{width:58px;height:58px;top:4px;left:4px}.os-pm .pa{font-size:9.3px}.os-pm .pb{font-size:6.5px}.os-pm .pc{font-size:7.4px}}"+
+".os-pm .pa{font-size:10.5px;font-weight:900;letter-spacing:.3px}.os-pm .pb{font-size:7.7px;font-weight:800;letter-spacing:.4px;margin:2px 0 1px}.os-pm .pc{font-size:8.4px;font-weight:800;letter-spacing:0}"+
+".os-pm-big{width:84px;height:84px;top:10px;left:10px}.os-pm-big .pa{font-size:12.3px}.os-pm-big .pb{font-size:9px}.os-pm-big .pc{font-size:9.8px}"+
+"@media (max-width:640px){.os-pm{width:58px;height:58px;top:4px;left:4px}.os-pm .pa{font-size:8.5px}.os-pm .pb{font-size:6.5px}.os-pm .pc{font-size:6.8px}}"+
 ".os-pm-box{display:flex;gap:10px;align-items:flex-start;border:1px solid #e8730c;background:#fff6ee;border-radius:6px;padding:9px 11px;margin:10px 0 12px;font-size:13px;line-height:1.5;color:#5a2c04}"+
 ".os-pm-box .os-pm-ic{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#e8730c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900}"+
 ".os-pm-box strong{font-weight:700}.os-pm-box a{color:#5a2c04;text-decoration:underline}";
