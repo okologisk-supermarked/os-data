@@ -10,15 +10,16 @@ if(/order4|basket|checkout/i.test(location.pathname))return;
 var KAT="/shop/billigst-i-prismatch-7486c1.html",N={},ANT=8;
 var CSS=".os-pm{position:absolute;top:6px;left:6px;width:72px;height:72px;border-radius:50%;background:#e8730c;color:#fff;border:2px solid #fff;"+
 "box-shadow:0 2px 6px rgba(0,0,0,.25);transform:rotate(-8deg);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;"+
-"line-height:1;font-family:Roboto,Helvetica,Arial,sans-serif;z-index:5;box-sizing:border-box;pointer-events:none}"+
-".os-pm b{font-size:11.5px;font-weight:900;letter-spacing:.6px}.os-pm small{font-size:7.7px;font-weight:800;letter-spacing:.4px;margin:2px 0 1px}.os-pm i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.2px}"+
-".os-pm-big{width:84px;height:84px;top:10px;left:10px}.os-pm-big b{font-size:13.5px}.os-pm-big small{font-size:9px}.os-pm-big i{font-size:11px}"+
-"@media (max-width:640px){.os-pm{width:58px;height:58px;top:4px;left:4px}.os-pm b{font-size:9.5px}.os-pm small{font-size:6.5px}.os-pm i{font-size:7.8px}}"+
+"line-height:1;font-family:Roboto,Helvetica,Arial,sans-serif;z-index:5;box-sizing:border-box;pointer-events:none;overflow:hidden;padding:0}"+
+".os-pm span{display:block;margin:0;padding:0;color:#fff;font-family:Roboto,Helvetica,Arial,sans-serif;line-height:1;text-transform:none;white-space:nowrap}"+
+".os-pm .pa{font-size:11.5px;font-weight:900;letter-spacing:.4px}.os-pm .pb{font-size:7.7px;font-weight:800;letter-spacing:.4px;margin:2px 0 1px}.os-pm .pc{font-size:9.2px;font-weight:800;letter-spacing:0}"+
+".os-pm-big{width:84px;height:84px;top:10px;left:10px}.os-pm-big .pa{font-size:13.5px}.os-pm-big .pb{font-size:9px}.os-pm-big .pc{font-size:10.8px}"+
+"@media (max-width:640px){.os-pm{width:58px;height:58px;top:4px;left:4px}.os-pm .pa{font-size:9.3px}.os-pm .pb{font-size:6.5px}.os-pm .pc{font-size:7.4px}}"+
 ".os-pm-box{display:flex;gap:10px;align-items:flex-start;border:1px solid #e8730c;background:#fff6ee;border-radius:6px;padding:9px 11px;margin:10px 0 12px;font-size:13px;line-height:1.5;color:#5a2c04}"+
 ".os-pm-box .os-pm-ic{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#e8730c;color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900}"+
 ".os-pm-box strong{font-weight:700}.os-pm-box a{color:#5a2c04;text-decoration:underline}";
 function badge(big){var d=document.createElement("div");d.className="os-pm"+(big?" os-pm-big":"");d.setAttribute("aria-label","Billigst i prismatch");
-  d.innerHTML="<b>BILLIGST</b><small>I</small><i>PRISMATCH</i>";return d;}
+  d.innerHTML="<span class=\"pa\">BILLIGST</span><span class=\"pb\">I</span><span class=\"pc\">PRISMATCH</span>";return d;}
 function sat(box,big){if(!box||box.querySelector(".os-pm"))return;if(getComputedStyle(box).position==="static")box.style.position="relative";box.appendChild(badge(big));}
 function nrOf(el){var i=el.querySelector("input[name=ProductID]");return i?i.value.trim():"";}
 function scan(){
