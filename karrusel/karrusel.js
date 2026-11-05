@@ -39,7 +39,7 @@ function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
    "<p class=\"prodName\"><a href=\""+esc(c[1])+"\">"+esc(c[0])+"</a></p>"+
    "<div class=\"priceouter\">"+(tb>=1&&!kopi?"<span class=\"os-for\">Før <s>"+fmt(c[4])+" kr.</s></span>":"")+"<p class=\"prodPrice\">"+kr(c[3])+" DKK</p></div>"+
    "<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(nr)+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\">"+
-   "<button class=\"button primary small expanded\" type=\"submit\">Læg i indkøbsvognen</button></form></div></div>";
+   "<button class=\"button primary small expanded\" type=\"submit\">"+(HE?"Læg i kurv":"Læg i indkøbsvogn")+"</button></form></div></div>";
 }
 function render(anchor,titel,nrs,C,place){
   nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<3)return null;
