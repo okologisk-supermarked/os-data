@@ -61,7 +61,7 @@ def solgt(nr, dage):
 
 # ---------- 2. Pr. shop ----------
 def byg(site, kode):
-    cfg = CFG[kode]
+    cfg = {k: v for k, v in CFG[kode].items() if v.get('aktiv', True) is not False}  # slukkede karruseller vises ikke
     cur = 'DKK' if site == 26 else 'DKK2'
     ix = json.load(open(os.path.join(R, 'sog', 'indeks.json' if site == 26 else 'indeks_he.json')))
     rows = {r[0]: r for r in ix['p']}
