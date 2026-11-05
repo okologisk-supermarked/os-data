@@ -101,7 +101,7 @@ function heLup(){if(!HE)return;var acc=document.querySelector("header a.account"
   var vis=function(e){return e&&e.offsetWidth>0&&e.offsetHeight>0;},bk=document.querySelector("header #basket"),anc=vis(acc)?acc:(vis(bk)?bk:acc),ref=vis(m)?m:anc,pr=(b.offsetParent||document.body).getBoundingClientRect(),rr=ref.getBoundingClientRect(),ra=anc.getBoundingClientRect(),top=Math.round(rr.top-pr.top),h=Math.round(rr.height)||44;
   b.style.cssText="position:absolute;display:flex;align-items:center;justify-content:center;width:44px;height:"+h+"px;color:#222;z-index:60;text-decoration:none;left:"+Math.max(0,Math.round(ra.left-pr.left)-50)+"px;top:"+top+"px";}
 // Google-bedømmelse (eget badge, kræver ikke cookies; Googles eget badge er slået fra på begge shops). Tallet rettes her.
-var OS_RATING=HE?{s:"4,6",n:142,f:[80,12,3,2,3],d:"helsekost-ekspres.dk",nv:"Helsekost-Ekspres.dk"}:{s:"4,7",n:366,f:[78,12,3,1,6],d:"okologisk-supermarked.dk",nv:"Økologisk-Supermarked.dk"};
+var OS_RATING=HE?{s:"4,6",n:142,f:[81,11,3,2,3],d:"helsekost-ekspres.dk",nv:"Helsekost-Ekspres.dk"}:{s:"4,7",n:365,f:[78,12,3,1,6],d:"okologisk-supermarked.dk",nv:"Økologisk-Supermarked.dk"};
 var OS_STAR=function(w,c){return "<svg viewBox=\"0 0 24 24\" width=\""+w+"\" height=\""+w+"\" aria-hidden=\"true\"><path fill=\""+(c||"#f4a20c")+"\" d=\"M12 2.6l2.9 6 6.6.8-4.9 4.5 1.3 6.5L12 17.2l-5.9 3.2 1.3-6.5L2.5 9.4l6.6-.8z\"/></svg>";};
 function osBadgeBox(){var x=document.getElementById("os-gbox");if(x){x.parentNode.removeChild(x);return;}var R=OS_RATING,v=parseFloat(R.s.replace(",","."));
   var st="";for(var k=1;k<=5;k++)st+=OS_STAR(18,k<=Math.round(v)?"#f4a20c":"#dadce0");
