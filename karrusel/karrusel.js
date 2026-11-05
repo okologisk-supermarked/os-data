@@ -43,7 +43,7 @@ function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
    "<button class=\"button primary small expanded\" type=\"submit\">"+(HE?"Læg i kurv":"Læg i indkøbsvogn")+"</button></form></div></div>";
 }
 function render(anchor,titel,nrs,C,place,cls){
-  nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<3)return null;
+  nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<(cls==="osk-rel"?1:3))return null;
   var w=document.createElement("div");w.className="osk row column"+(cls?" "+cls:"");
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(titel)+"</h2><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige varer\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
     nrs.map(function(n){return card(n,C[n]);}).join("")+"</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste varer\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
@@ -86,6 +86,14 @@ function start(){
     if(sEl&&e.s&&V.k[e.s]){var lst=V.k[e.s].filter(function(x){return x!==nr;});if(render(aw||sEl,M[sammeId].t,lst,C,"after"))hide(sEl);}
    }).catch(function(){});
   }
+  // 2b) DanDomains "Relaterede varer" på varekortet -> karrusel (data læses fra siden selv)
+  var rUl=nr&&document.querySelector("div.related ul.Related_Custom_UL");
+  if(rUl){var rBox=rUl.closest(".related")||rUl,rHd=rBox.querySelector(".header"),RC={},rN=[];
+   [].forEach.call(rUl.children,function(li){var inp=li.querySelector("input[id^=AmountRelated_]"),a=li.querySelector("a[href]"),im=li.querySelector(".image img"),nm=li.querySelector(".RelatedProdName"),pr=li.querySelector(".price");
+    if(!inp||!a||!nm||!pr)return;var n=inp.id.replace("AmountRelated_",""),m=pr.textContent.match(/\d[\d.]*,\d{2}/g)||[];if(!m.length)return;
+    var tal=function(s){return parseFloat(s.replace(/\./g,"").replace(",","."));},p=tal(m[m.length-1]),f=m.length>1?tal(m[0]):0;
+    RC[n]=[nm.textContent.trim(),a.getAttribute("href"),im?(im.getAttribute("data-src")||im.getAttribute("src")):"",p,f>p?f:0,1,0];rN.push(n);});
+   if(render(rBox,(rHd&&rHd.textContent.trim())||"Relaterede varer",rN,RC,"after","osk-rel"))hide(rBox);}
   // 3) kategoriside: populært i denne kategori
   var kEl=sideId&&document.getElementById("bp_ProductCarousel_"+sideId);
   if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3"))hide(kEl);}).catch(function(){});}
