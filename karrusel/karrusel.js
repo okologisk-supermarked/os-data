@@ -93,5 +93,10 @@ function start(){
   if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3"))hide(kEl);}).catch(function(){});}
  }).catch(function(){});
 }
-if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
+// Varekort: temaet viser kun #specs (felt 2 + 3 m.fl.), hvis et af felterne 4+ har tekst – så varer med kun
+// felt 2/3 (fx brand-2317 InnovaGoods) fik ingen beskrivelse. Vis #specs, når felt 2 eller 3 har tekst (Johnny 05-11-2026).
+function specs(){var s=document.getElementById("specs");if(!s||/(^|\s)active(\s|$)/.test(s.className))return;var li=s.children;
+  for(var i=0;i<2&&i<li.length;i++){if(li[i].textContent.replace(/\s+/g,"")){s.className+=" active";return;}}}
+function start2(){start();specs();setTimeout(specs,800);}
+if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start2);else start2();
 })();
