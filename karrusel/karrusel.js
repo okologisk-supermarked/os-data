@@ -17,13 +17,13 @@ var CSS=".osk{position:relative;margin:2.2rem 0 1.4rem;clear:both}.osk h2.osk-t{
 ".osk-c .prodImg>a{display:flex;align-items:center;justify-content:center;width:100%;height:100%}.osk-c .prodImg img.osk-i{max-height:240px;max-width:100%;width:auto;height:auto;object-fit:contain}"+
 ".osk-c .prodImg .lbl.dkOko{position:absolute;left:4px;bottom:4px;width:44px;height:auto}"+
 ".osk-c .prodName{margin:0;border-top:1px solid #eee;padding-top:10px;font-size:.92rem;line-height:1.3;min-height:3.9em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}.osk-c .prodName a{color:#222;text-decoration:none}"+
-".osk-c .priceouter{margin-top:auto;text-align:right;padding-top:1.6em}.osk-c .prodPrice{margin:0;font-size:1.5rem;line-height:1.1;color:#222}.osk-c .prodPrice span{font-size:.6em;vertical-align:super}"+
+".osk-c .priceouter{margin-top:auto;text-align:right;padding-top:1.6em}.osk-c .prodPrice{margin:0;font-size:1.5rem;line-height:1.1;color:#222;font-weight:700}.osk-c .prodPrice span{font-size:.6em;vertical-align:super}"+
 ".osk-c form{margin:10px 0 0}.osk-c form .button{width:100%;margin:0}"+
 ".osk-a{position:absolute;top:110px;z-index:6;width:44px;height:44px;border-radius:50%;border:1px solid #ddd;background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.15);cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0;color:#222;transition:opacity .2s}"+
 ".osk-a svg{width:20px;height:20px}.osk-a:hover{background:#f4f4f4}.osk-a[disabled]{opacity:0;pointer-events:none}.osk-p{left:-14px}.osk-n{right:-14px}"+
 "@media (max-width:1024px){.osk-c{flex-basis:calc((100% - 32px)/3)}}"+
 "@media (max-width:640px){.osk-tr{gap:10px}.osk-c{flex-basis:calc((100% - 10px)/2.15);padding:8px}.osk-c .prodImg{height:170px}.osk-c .prodImg img.osk-i{max-height:170px}.osk-c .prodName{font-size:.82rem}.osk-c .prodPrice{font-size:1.2rem}.osk-a{width:36px;height:36px;top:80px}.osk-p{left:-6px}.osk-n{right:-6px}.osk-c form .button{font-size:.78rem;padding:.6rem .2rem}}"+
-".osk-f3 .osk-c{flex-basis:calc((100% - 32px)/3)}@media (max-width:640px){.osk-f3 .osk-c{flex-basis:calc((100% - 10px)/2.15)}}.osk-c form .button{font-size:.88rem;line-height:1.2}"+
+".osk-f3 .osk-c{flex-basis:calc((100% - 32px)/3)}@media (max-width:640px){.osk-f3 .osk-c{flex-basis:calc((100% - 10px)/2.15)}}.osk-c form .button{font-size:.88rem;line-height:1.2;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}"+
 ".osk-skjul{display:none!important}"+(HE?".osk-c form .button{background:#1e5b3a;color:#fff;border:0;border-radius:4px;font-weight:700;padding:.75rem .4rem}.osk-c form .button:hover{background:#174a2f}":"");
 
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
@@ -42,9 +42,9 @@ function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
    "<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(nr)+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\">"+
    "<button class=\"button primary small expanded\" type=\"submit\">"+(HE?"Læg i kurv":"Læg i indkøbsvogn")+"</button></form></div></div>";
 }
-function render(anchor,titel,nrs,C,place){
+function render(anchor,titel,nrs,C,place,cls){
   nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<3)return null;
-  var w=document.createElement("div");w.className="osk row column"+(nrs.length<=3?" osk-f3":"");
+  var w=document.createElement("div");w.className="osk row column"+(cls?" "+cls:"");
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(titel)+"</h2><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige varer\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
     nrs.map(function(n){return card(n,C[n]);}).join("")+"</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste varer\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
   if(place==="before")anchor.parentNode.insertBefore(w,anchor);else anchor.parentNode.insertBefore(w,anchor.nextSibling);
@@ -86,7 +86,7 @@ function start(){
   }
   // 3) kategoriside: populært i denne kategori
   var kEl=sideId&&document.getElementById("bp_ProductCarousel_"+sideId);
-  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after"))hide(kEl);}).catch(function(){});}
+  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3"))hide(kEl);}).catch(function(){});}
  }).catch(function(){});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
