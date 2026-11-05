@@ -82,6 +82,15 @@
   }
  },
  "he": {
+  "staerke": {
+   "navn": "Forside – Stærke tilbud (DanDomains forsidevarer)",
+   "titel": "Stærke tilbud",
+   "kilde": "forside",
+   "sted": "dd_forside",
+   "dage": 30,
+   "antal": 24,
+   "lager": false
+  },
   "714": {
    "navn": "Forside",
    "titel": "Populære varer lige nu",

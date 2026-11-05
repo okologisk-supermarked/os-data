@@ -65,6 +65,9 @@ function start(){
   var M=D.m||{},ph=[].slice.call(document.querySelectorAll("div[id^=bp_ProductCarousel_]"));
   // 1) faste karruseller (forside m.m.)
   ph.forEach(function(el){var id=el.id.replace("bp_ProductCarousel_","");var L=D.l&&D.l[id];if(!L)return;if(render(el,L.t,L.v,D.c,"after"))hide(el);});
+  // DanDomains egen forsideliste (fx "Stærke tilbud" på HE) -> karrusel
+  Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul)return;var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
+    if(render(hd||ul,D.l[id].t,D.l[id].v,D.c,"before")){hide(ul);hide(hd);}});
   var sammeId=Object.keys(M).filter(function(k){return M[k].k==="samme";})[0],sideId=Object.keys(M).filter(function(k){return M[k].k==="side";})[0],andre=M.andre;
   var body=document.body.classList;
   // 2) varekort: andre købte også + samme kategori

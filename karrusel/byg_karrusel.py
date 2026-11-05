@@ -74,11 +74,12 @@ def byg(site, kode):
     for x in cc:
         for c in x:
             kat[str(c['id'])] = {'navn': (c.get('name') or '').strip(), 'url': DOM.sub('', c.get('url') or ''), 'skjult': bool(c.get('hidden'))}
-    pkat, oko = {}, set()
+    pkat, oko, forside = {}, set(), []
     for x in pp:
         for p in x:
             nr = (p.get('productNumber') or '').strip()
             if nr not in rows: continue
+            if (p.get('presentation') or {}).get('showOnFrontPage'): forside.append(nr)  # "Vis på forsiden" i DanDomain
             ids = [str(c['id']) for c in ((p.get('categories') or {}).get('items') or [])]
             if any(i.lower() == 'organic' for i in ids): oko.add(nr)
             pkat[nr] = ids
@@ -104,10 +105,13 @@ def byg(site, kode):
     alle_ej_kopi = [n for n in rows if not KOPI.search(n)]
     for cid, c in cfg.items():
         meta[cid] = {'t': c['titel'], 'k': c['kilde']}
+        if c.get('sted'): meta[cid]['s'] = c['sted']
         if c['kilde'] == 'alle':
             faste[cid] = {'t': c['titel'], 'v': kort(rang(alle_ej_kopi, c.get('dage', 30), c.get('lager'), c['antal']))}
         elif c['kilde'] == 'kategori':
             faste[cid] = {'t': c['titel'], 'v': kort(rang(medlem.get(str(c['kategori']), []), c.get('dage', 30), c.get('lager'), c['antal']))}
+        elif c['kilde'] == 'forside':
+            faste[cid] = {'t': c['titel'], 'v': kort(rang(forside, c.get('dage', 30), c.get('lager'), c['antal']))}
         elif c['kilde'] == 'varer':
             faste[cid] = {'t': c['titel'], 'v': kort([n for n in c.get('varer', []) if ok(n, c.get('lager'))][:c['antal']])}
 
