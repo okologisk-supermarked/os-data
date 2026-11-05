@@ -106,6 +106,7 @@ def byg(site, kode):
     for cid, c in cfg.items():
         meta[cid] = {'t': c['titel'], 'k': c['kilde']}
         if c.get('sted'): meta[cid]['s'] = c['sted']
+        if c.get('foer'): meta[cid]['f'] = c['foer']
         if c['kilde'] == 'alle':
             faste[cid] = {'t': c['titel'], 'v': kort(rang(alle_ej_kopi, c.get('dage', 30), c.get('lager'), c['antal']))}
         elif c['kilde'] == 'kategori':
@@ -135,7 +136,7 @@ def byg(site, kode):
         ref = side or samme
         if not ref: break
         lst = rang([n for n in medlem.get(i, []) if not KOPI.search(n)], ref.get('dage', 90), ref.get('lager'), max(ref['antal'], (samme or ref)['antal']) + 1)
-        if len(lst) >= 4: katlist[i] = lst
+        if len(lst) >= 3: katlist[i] = lst
     alle_kort = set()
     if side:
         u = {}

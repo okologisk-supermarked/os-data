@@ -23,6 +23,7 @@ var CSS=".osk{position:relative;margin:2.2rem 0 1.4rem;clear:both}.osk h2.osk-t{
 ".osk-a svg{width:20px;height:20px}.osk-a:hover{background:#f4f4f4}.osk-a[disabled]{opacity:0;pointer-events:none}.osk-p{left:-14px}.osk-n{right:-14px}"+
 "@media (max-width:1024px){.osk-c{flex-basis:calc((100% - 32px)/3)}}"+
 "@media (max-width:640px){.osk-tr{gap:10px}.osk-c{flex-basis:calc((100% - 10px)/2.15);padding:8px}.osk-c .prodImg{height:170px}.osk-c .prodImg img.osk-i{max-height:170px}.osk-c .prodName{font-size:.82rem}.osk-c .prodPrice{font-size:1.2rem}.osk-a{width:36px;height:36px;top:80px}.osk-p{left:-6px}.osk-n{right:-6px}.osk-c form .button{font-size:.78rem;padding:.6rem .2rem}}"+
+".osk-f3 .osk-c{flex-basis:calc((100% - 32px)/3)}@media (max-width:640px){.osk-f3 .osk-c{flex-basis:calc((100% - 10px)/2.15)}}.osk-c form .button{font-size:.88rem;line-height:1.2}"+
 ".osk-skjul{display:none!important}"+(HE?".osk-c form .button{background:#1e5b3a;color:#fff;border:0;border-radius:4px;font-weight:700;padding:.75rem .4rem}.osk-c form .button:hover{background:#174a2f}":"");
 
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
@@ -43,7 +44,7 @@ function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
 }
 function render(anchor,titel,nrs,C,place){
   nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<3)return null;
-  var w=document.createElement("div");w.className="osk row column";
+  var w=document.createElement("div");w.className="osk row column"+(nrs.length<=3?" osk-f3":"");
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(titel)+"</h2><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige varer\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
     nrs.map(function(n){return card(n,C[n]);}).join("")+"</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste varer\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
   if(place==="before")anchor.parentNode.insertBefore(w,anchor);else anchor.parentNode.insertBefore(w,anchor.nextSibling);
@@ -66,7 +67,7 @@ function start(){
   // 1) faste karruseller (forside m.m.)
   ph.forEach(function(el){var id=el.id.replace("bp_ProductCarousel_","");var L=D.l&&D.l[id];if(!L)return;if(render(el,L.t,L.v,D.c,"after"))hide(el);});
   // DanDomains egen forsideliste (fx "Stærke tilbud" på HE) -> karrusel
-  Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul)return;var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
+  Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul){var f=M[id].f&&document.getElementById("bp_ProductCarousel_"+M[id].f);if(f)render(f,D.l[id].t,D.l[id].v,D.c,"before");return;}var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
     if(render(hd||ul,D.l[id].t,D.l[id].v,D.c,"before")){hide(ul);hide(hd);}});
   var sammeId=Object.keys(M).filter(function(k){return M[k].k==="samme";})[0],sideId=Object.keys(M).filter(function(k){return M[k].k==="side";})[0],andre=M.andre;
   var body=document.body.classList;

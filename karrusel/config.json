@@ -70,7 +70,7 @@
    "titel": "Populært i denne kategori",
    "kilde": "side",
    "dage": 90,
-   "antal": 15,
+   "antal": 3,
    "lager": false
   },
   "andre": {
@@ -83,13 +83,15 @@
  },
  "he": {
   "staerke": {
-   "navn": "Forside – Stærke tilbud (DanDomains forsidevarer)",
+   "navn": "Forside – Stærke tilbud",
    "titel": "Stærke tilbud",
-   "kilde": "forside",
+   "kilde": "kategori",
    "sted": "dd_forside",
    "dage": 30,
    "antal": 24,
-   "lager": false
+   "lager": false,
+   "kategori": "3799",
+   "foer": "717"
   },
   "714": {
    "navn": "Forside",
@@ -121,8 +123,8 @@
    "titel": "Populært i denne kategori",
    "kilde": "side",
    "dage": 90,
-   "antal": 15,
-   "lager": true
+   "antal": 3,
+   "lager": false
   },
   "andre": {
    "navn": "Varekort – andre købte også",
