@@ -5,198 +5,198 @@
  },
  "os": {
   "710": {
-   "antal": 40,
-   "dage": 2,
-   "kilde": "alle",
-   "lager": true,
    "navn": "Forside nr. 1",
-   "titel": "Bedst sælgende i dag"
+   "titel": "Bedst sælgende i dag",
+   "kilde": "alle",
+   "dage": 2,
+   "antal": 40,
+   "lager": true
   },
   "711": {
-   "antal": 15,
-   "dage": 90,
-   "kilde": "samme",
-   "lager": false,
    "navn": "Varekort – samme kategori",
-   "titel": "Populært i samme kategori"
+   "titel": "Populært i samme kategori",
+   "kilde": "samme",
+   "dage": 90,
+   "antal": 15,
+   "lager": false
   },
   "712": {
-   "antal": 15,
-   "dage": 90,
-   "kilde": "side",
-   "lager": false,
    "navn": "Kategoriside",
-   "titel": "Populært i denne kategori"
+   "titel": "Populært i denne kategori",
+   "kilde": "side",
+   "dage": 90,
+   "antal": 15,
+   "lager": false
   },
   "713": {
-   "antal": 50,
-   "dage": 30,
-   "kategori": "3803",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Forside nr. 2",
-   "titel": "Vi presser fødevarepriserne"
+   "titel": "Vi presser fødevarepriserne",
+   "kilde": "kategori",
+   "kategori": "3803",
+   "dage": 30,
+   "antal": 50,
+   "lager": true
   },
   "735": {
-   "antal": 50,
-   "dage": 30,
-   "kategori": "3803",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Varekort øverst",
-   "titel": "Vi presser fødevarepriserne"
+   "titel": "Vi presser fødevarepriserne",
+   "kilde": "kategori",
+   "kategori": "3803",
+   "dage": 30,
+   "antal": 50,
+   "lager": true
   },
   "828": {
-   "antal": 50,
-   "dage": 90,
-   "kategori": "3808",
-   "kilde": "kategori",
-   "lager": false,
    "navn": "Forside nr. 3",
-   "titel": "Stærke priser på Kosttilskud"
+   "titel": "Stærke priser på Kosttilskud",
+   "kilde": "kategori",
+   "kategori": "3808",
+   "dage": 90,
+   "antal": 50,
+   "lager": false
   },
   "836": {
-   "antal": 50,
-   "dage": 90,
-   "kategori": "3809",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Forside nr. 4",
-   "titel": "Tilbud på Personlig pleje"
+   "titel": "Tilbud på Personlig pleje",
+   "kilde": "kategori",
+   "kategori": "3809",
+   "dage": 90,
+   "antal": 50,
+   "lager": true
   },
   "837": {
-   "antal": 50,
-   "dage": 90,
-   "kategori": "3810",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Forside nr. 5",
-   "titel": "Nedsatte Rengøringsartikler"
+   "titel": "Nedsatte Rengøringsartikler",
+   "kilde": "kategori",
+   "kategori": "3810",
+   "dage": 90,
+   "antal": 50,
+   "lager": true
   },
   "andre": {
-   "antal": 12,
-   "kilde": "andre",
-   "lager": false,
    "navn": "Varekort – andre købte også",
-   "titel": "Andre købte også"
+   "titel": "Andre købte også",
+   "kilde": "andre",
+   "antal": 12,
+   "lager": false
   }
  },
  "he": {
   "714": {
-   "antal": 15,
-   "dage": 3,
-   "kilde": "alle",
-   "lager": true,
    "navn": "Forside",
-   "titel": "Populære varer lige nu"
+   "titel": "Populære varer lige nu",
+   "kilde": "alle",
+   "dage": 3,
+   "antal": 15,
+   "lager": true
   },
   "715": {
-   "antal": 15,
-   "dage": 90,
-   "kilde": "samme",
-   "lager": true,
    "navn": "Varekort – samme kategori",
-   "titel": "Populært i samme kategori"
+   "titel": "Populært i samme kategori",
+   "kilde": "samme",
+   "dage": 90,
+   "antal": 15,
+   "lager": true
   },
   "716": {
-   "antal": 15,
-   "dage": 90,
-   "kilde": "side",
-   "lager": false,
    "navn": "Kategoriside",
-   "titel": "Populært i denne kategori"
+   "titel": "Populært i denne kategori",
+   "kilde": "side",
+   "dage": 90,
+   "antal": 15,
+   "lager": false
   },
   "717": {
-   "antal": 15,
-   "dage": 30,
-   "kategori": "3848",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Forside nederst",
-   "titel": "Kosttilskud"
+   "titel": "Kosttilskud",
+   "kilde": "kategori",
+   "kategori": "3848",
+   "dage": 300,
+   "antal": 15,
+   "lager": true
   },
   "andre": {
-   "antal": 12,
-   "kilde": "andre",
-   "lager": false,
    "navn": "Varekort – andre købte også",
-   "titel": "Andre købte også"
+   "titel": "Andre købte også",
+   "kilde": "andre",
+   "antal": 12,
+   "lager": false
   },
   "os710": {
-   "aktiv": false,
-   "antal": 40,
-   "dage": 2,
-   "foer": "717",
-   "kilde": "alle",
-   "lager": true,
    "navn": "ØS-kopi: Forside nr. 1",
-   "titel": "Bedst sælgende i dag"
+   "titel": "Bedst sælgende i dag",
+   "kilde": "alle",
+   "foer": "717",
+   "dage": 2,
+   "antal": 40,
+   "lager": true,
+   "aktiv": false
   },
   "os713": {
-   "aktiv": false,
-   "antal": 50,
-   "dage": 30,
-   "foer": "717",
-   "kategori": "3803",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "ØS-kopi: Forside nr. 2",
-   "titel": "Vi presser fødevarepriserne"
+   "titel": "Vi presser fødevarepriserne",
+   "kilde": "kategori",
+   "kategori": "3803",
+   "foer": "717",
+   "dage": 30,
+   "antal": 50,
+   "lager": true,
+   "aktiv": false
   },
   "os735": {
-   "aktiv": false,
-   "antal": 50,
-   "dage": 30,
-   "foer": "715",
-   "kategori": "3803",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "ØS-kopi: Varekort øverst",
-   "titel": "Vi presser fødevarepriserne"
+   "titel": "Vi presser fødevarepriserne",
+   "kilde": "kategori",
+   "kategori": "HELSAM-BRAND-862",
+   "foer": "715",
+   "dage": 300,
+   "antal": 50,
+   "lager": true,
+   "aktiv": true
   },
   "os828": {
-   "aktiv": false,
-   "antal": 50,
-   "dage": 90,
-   "foer": "717",
-   "kategori": "3808",
-   "kilde": "kategori",
-   "lager": false,
    "navn": "ØS-kopi: Forside nr. 3",
-   "titel": "Stærke priser på Kosttilskud"
+   "titel": "Stærke priser på Kosttilskud",
+   "kilde": "kategori",
+   "kategori": "3808",
+   "foer": "717",
+   "dage": 90,
+   "antal": 50,
+   "lager": false,
+   "aktiv": false
   },
   "os836": {
-   "aktiv": false,
-   "antal": 50,
-   "dage": 90,
-   "foer": "717",
-   "kategori": "3809",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "ØS-kopi: Forside nr. 4",
-   "titel": "Tilbud på Personlig pleje"
+   "titel": "Tilbud på Personlig pleje",
+   "kilde": "kategori",
+   "kategori": "3809",
+   "foer": "717",
+   "dage": 90,
+   "antal": 50,
+   "lager": true,
+   "aktiv": false
   },
   "os837": {
-   "aktiv": false,
-   "antal": 50,
-   "dage": 90,
-   "foer": "717",
-   "kategori": "3810",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "ØS-kopi: Forside nr. 5",
-   "titel": "Nedsatte Rengøringsartikler"
+   "titel": "Nedsatte Rengøringsartikler",
+   "kilde": "kategori",
+   "kategori": "3810",
+   "foer": "717",
+   "dage": 90,
+   "antal": 50,
+   "lager": true,
+   "aktiv": false
   },
   "staerke": {
-   "antal": 12,
-   "dage": 365,
-   "foer": "717",
-   "kategori": "483",
-   "kilde": "kategori",
-   "lager": true,
    "navn": "Forside – Stærke tilbud",
+   "titel": "Stærke tilbud",
+   "kilde": "kategori",
+   "kategori": "483",
    "sted": "dd_forside",
-   "titel": "Stærke tilbud"
+   "foer": "717",
+   "dage": 365,
+   "antal": 12,
+   "lager": true
   }
  }
 }
