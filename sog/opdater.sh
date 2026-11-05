@@ -5,12 +5,13 @@ cd "$(dirname "$0")/.."
 python3 sog/byg_indeks.py 26
 python3 sog/byg_indeks.py 27
 python3 karrusel/byg_karrusel.py || echo "ADVARSEL: karrusel-data ikke opdateret"
+python3 prismatch/byg_badge.py || echo "ADVARSEL: prismatch-badge ikke opdateret"
 python3 - <<'P'
 import json
 for f in ['sog/indeks.json','sog/indeks_he.json']:
     d=json.load(open(f));assert d['meta']['n']>5000,'for få varer i '+f
 P
-git add sog/indeks.json sog/indeks_he.json kurv/kurv_he.json sog/config.json karrusel/
+git add sog/indeks.json sog/indeks_he.json kurv/kurv_he.json sog/config.json karrusel/ prismatch/he.json
 git diff --cached --quiet && { echo "Ingen ændringer"; exit 0; }
 git commit -qm "Natlig opdatering af søgeindeks
 
