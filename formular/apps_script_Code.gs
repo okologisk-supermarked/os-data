@@ -20,6 +20,76 @@ function logSog(d) {
   return svar({ ok: true });
 }
 
+// ---- Karruseller: klik og salg pr. karrusel pr. dag (fanen "Karrusel" i søgelog-arket) ----
+// Én række pr. dag, shop og karrusel: Dato | Shop | Karrusel | Klik | Ordrer | Stk | Beløb. Ingen persondata.
+function logKar(d) {
+  var site = d.site === 'he' ? 'he' : 'os';
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(5000);
+    var sh = karArk(), dato = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyy-MM-dd');
+    var add = {};
+    function plus(k, kl, o, stk, kr) {
+      k = rens(k).replace(/[^a-z0-9_-]/gi, '').slice(0, 20); if (!k) return;
+      var a = add[k] = add[k] || [0, 0, 0, 0]; a[0] += kl; a[1] += o; a[2] += stk; a[3] += kr;
+    }
+    if (d.e === 'klik') plus(d.k, 1, 0, 0, 0);
+    else if (d.e === 'salg' && d.linjer && d.linjer.length) {
+      var set = {};
+      d.linjer.slice(0, 50).forEach(function (l) {
+        var kr = Math.max(0, Math.min(100000, Number(l.beloeb) || 0)), stk = Math.max(0, Math.min(1000, parseInt(l.antal, 10) || 0));
+        plus(l.k, 0, set[l.k] ? 0 : 1, stk, kr); set[l.k] = 1;
+      });
+    }
+    var n = sh.getLastRow(), fra = Math.max(2, n - 80), vals = n >= 2 ? sh.getRange(fra, 1, n - fra + 1, 7).getValues() : [];
+    Object.keys(add).forEach(function (k) {
+      var a = add[k], hit = -1;
+      for (var i = vals.length - 1; i >= 0; i--) {
+        var dv = vals[i][0] instanceof Date ? Utilities.formatDate(vals[i][0], 'Europe/Copenhagen', 'yyyy-MM-dd') : String(vals[i][0]);
+        if (dv === dato && vals[i][1] === site && String(vals[i][2]) === k) { hit = i; break; }
+      }
+      if (hit >= 0) {
+        var r = vals[hit]; sh.getRange(fra + hit, 4, 1, 4).setValues([[Number(r[3]) + a[0], Number(r[4]) + a[1], Number(r[5]) + a[2], Math.round((Number(r[6]) + a[3]) * 100) / 100]]);
+      } else {
+        sh.appendRow([dato, site, k, a[0], a[1], a[2], Math.round(a[3] * 100) / 100]);
+        vals.push([dato, site, k, a[0], a[1], a[2], a[3]]);
+      }
+    });
+    karKomprimer(sh);
+  } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
+  return svar({ ok: true });
+}
+
+// Én gang i døgnet: dagsrækker ældre end 35 dage lægges sammen til månedsrækker (Dato = 'ÅÅÅÅ-MM'),
+// og måneder ældre end 13 måneder slettes. Så holder arket sig lille (ca. 1.000 rækker).
+function karKomprimer(sh) {
+  var p = PropertiesService.getScriptProperties(), idag = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyy-MM-dd');
+  if (p.getProperty('KAR_KOMP') === idag) return;
+  p.setProperty('KAR_KOMP', idag);
+  var n = sh.getLastRow(); if (n < 2) return;
+  var rows = sh.getRange(2, 1, n - 1, 7).getValues();
+  var graense = Utilities.formatDate(new Date(Date.now() - 35 * 864e5), 'Europe/Copenhagen', 'yyyy-MM-dd');
+  var slet = Utilities.formatDate(new Date(Date.now() - 400 * 864e5), 'Europe/Copenhagen', 'yyyy-MM');
+  var dag = [], md = {}, ordenM = [];
+  rows.forEach(function (r) {
+    var dv = r[0] instanceof Date ? Utilities.formatDate(r[0], 'Europe/Copenhagen', 'yyyy-MM-dd') : String(r[0]);
+    if (dv.length === 10 && dv >= graense) { dag.push([dv, r[1], r[2], r[3], r[4], r[5], r[6]]); return; }
+    var m = dv.slice(0, 7); if (m < slet) return;
+    var key = m + '|' + r[1] + '|' + r[2];
+    if (!md[key]) { md[key] = [m, r[1], String(r[2]), 0, 0, 0, 0]; ordenM.push(key); }
+    for (var i = 3; i < 7; i++) md[key][i] += Number(r[i]) || 0;
+  });
+  var ud = ordenM.map(function (k) { var x = md[k]; x[6] = Math.round(x[6] * 100) / 100; return x; }).concat(dag);
+  sh.getRange(2, 1, n - 1, 7).clearContent();
+  if (ud.length) sh.getRange(2, 1, ud.length, 7).setValues(ud);
+}
+
+function karArk() {
+  var ss = sogArk().getParent(), sh = ss.getSheetByName('Karrusel');
+  if (!sh) { sh = ss.insertSheet('Karrusel'); sh.appendRow(['Dato', 'Shop', 'Karrusel', 'Klik', 'Ordrer', 'Stk', 'Beløb']); sh.getRange('A:A').setNumberFormat('@'); }
+  return sh;
+}
+
 function sogArk() {
   var p = PropertiesService.getScriptProperties(), id = p.getProperty('SOG'), ss;
   if (id) { ss = SpreadsheetApp.openById(id); }
@@ -61,6 +131,7 @@ function doPost(e) {
   try {
     var d = JSON.parse(e.postData.contents || '{}');
     if (d.type === 'sog') return logSog(d);
+    if (d.type === 'kar') return logKar(d);
     if (d.website) return svar({ ok: true }); // honeypot: bots udfylder skjult felt
     var type = d.type === 'reklamation' ? 'reklamation' : 'fortryd';
     var he = d.site === 'he';

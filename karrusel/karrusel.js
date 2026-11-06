@@ -28,6 +28,12 @@ var CSS=".osk{position:relative;margin:2.2rem 0 1.4rem;clear:both}.osk h2.osk-t{
 
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
 function get(u){return fetch(BASE+u).then(function(r){if(!r.ok)throw 0;return r.json();});}
+// Klik-måling (Johnny 06-11-2026): klik på en vare i en karrusel logges (Google Apps Script, fane "Karrusel"),
+// og varen huskes i 14 dage, så ordrebekræftelsen (kasse/kvittering.js) kan tælle salget med til karrusellen.
+var LOG="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec";
+function klik(kid,nr){if(!kid||!nr||TEST)return;try{var m=JSON.parse(localStorage.getItem("osKarK")||"{}"),nu=Date.now();Object.keys(m).forEach(function(x){if(nu-m[x].t>14*864e5)delete m[x];});
+  m[nr.toUpperCase()]={k:kid,t:nu};localStorage.setItem("osKarK",JSON.stringify(m));}catch(e){}
+  try{var b=JSON.stringify({type:"kar",e:"klik",k:kid,nr:nr,site:K});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
 function kr(n){var s=n.toFixed(2).split(".");return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,".")+"<span>"+s[1]+"</span>";}
 function fmt(n){return n.toFixed(2).replace(".",",");}
 var ARR="<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"M15 18l-6-6 6-6\"/></svg>";
@@ -42,13 +48,15 @@ function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
    "<form method=\"POST\" action=\"/shop/basket.asp\"><input type=\"hidden\" name=\"Add\" value=\"1\"><input type=\"hidden\" name=\"ProductID\" value=\""+esc(nr)+"\"><input type=\"hidden\" name=\"AMOUNT\" value=\"1\"><input type=\"hidden\" name=\"BuyReturnUrl\" value=\""+esc(ret)+"\">"+
    "<button class=\"button primary small expanded\" type=\"submit\">"+(HE?"Læg i kurv":"Læg i indkøbsvogn")+"</button></form></div></div>";
 }
-function render(anchor,titel,nrs,C,place,cls){
+function render(anchor,titel,nrs,C,place,cls,kid){
   nrs=(nrs||[]).filter(function(n){return C[n];});if(nrs.length<3)return null;
   var w=document.createElement("div");w.className="osk row column"+(cls?" "+cls:"");
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(titel)+"</h2><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige varer\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
     nrs.map(function(n){return card(n,C[n]);}).join("")+"</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste varer\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
   if(place==="before")anchor.parentNode.insertBefore(w,anchor);else anchor.parentNode.insertBefore(w,anchor.nextSibling);
   var tr=w.querySelector(".osk-tr"),p=w.querySelector(".osk-p"),n=w.querySelector(".osk-n");
+  if(kid){var sendt={};function hit(ev){var c=ev.target.closest&&ev.target.closest(".osk-c");if(!c)return;if(ev.type==="click"&&!ev.target.closest("a"))return;var nr=c.getAttribute("data-productno");if(sendt[nr])return;sendt[nr]=1;klik(kid,nr);}
+    tr.addEventListener("click",hit);tr.addEventListener("submit",hit);tr.addEventListener("auxclick",hit);}
   function upd(){var max=tr.scrollWidth-tr.clientWidth-4;p.disabled=tr.scrollLeft<=4;n.disabled=tr.scrollLeft>=max;}
   function step(d){var c=tr.querySelector(".osk-c");var cw=c?c.getBoundingClientRect().width+parseFloat(getComputedStyle(tr).columnGap||16):tr.clientWidth;var per=Math.max(1,Math.floor((tr.clientWidth+8)/cw));tr.scrollBy({left:d*per*cw,behavior:"smooth"});}
   p.onclick=function(){step(-1);};n.onclick=function(){step(1);};
@@ -65,12 +73,12 @@ function start(){
   var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
   var M=D.m||{},ph=[].slice.call(document.querySelectorAll("div[id^=bp_ProductCarousel_]"));
   // 1) faste karruseller (forside m.m.)
-  ph.forEach(function(el){var id=el.id.replace("bp_ProductCarousel_","");var L=D.l&&D.l[id];if(!L)return;if(render(el,L.t,L.v,D.c,"after"))hide(el);});
+  ph.forEach(function(el){var id=el.id.replace("bp_ProductCarousel_","");var L=D.l&&D.l[id];if(!L)return;if(render(el,L.t,L.v,D.c,"after",null,id))hide(el);});
   // DanDomains egen forsideliste (fx "Stærke tilbud" på HE) -> karrusel
-  Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul){var f=M[id].f&&document.getElementById("bp_ProductCarousel_"+M[id].f);if(f)render(f,D.l[id].t,D.l[id].v,D.c,"before");return;}var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
-    if(render(hd||ul,D.l[id].t,D.l[id].v,D.c,"before")){hide(ul);hide(hd);}});
+  Object.keys(M).forEach(function(id){if(M[id].s!=="dd_forside"||!D.l[id])return;var ul=document.querySelector("ul.Frontpage_Custom_UL");if(!ul){var f=M[id].f&&document.getElementById("bp_ProductCarousel_"+M[id].f);if(f)render(f,D.l[id].t,D.l[id].v,D.c,"before",null,id);return;}var hd=ul.previousElementSibling&&/headline/.test(ul.previousElementSibling.className)?ul.previousElementSibling:null;
+    if(render(hd||ul,D.l[id].t,D.l[id].v,D.c,"before",null,id)){hide(ul);hide(hd);}});
   // karruseller uden egen plads (fx ØS-kopier på HE): lægges før karrusellen i "foer"
-  Object.keys(M).forEach(function(id){var m=M[id];if(m.s==="dd_forside"||!m.f||!D.l[id]||document.getElementById("bp_ProductCarousel_"+id))return;var a=document.getElementById("bp_ProductCarousel_"+m.f);if(a)render(a,D.l[id].t,D.l[id].v,D.c,"before");});
+  Object.keys(M).forEach(function(id){var m=M[id];if(m.s==="dd_forside"||!m.f||!D.l[id]||document.getElementById("bp_ProductCarousel_"+id))return;var a=document.getElementById("bp_ProductCarousel_"+m.f);if(a)render(a,D.l[id].t,D.l[id].v,D.c,"before",null,id);});
   var sammeId=Object.keys(M).filter(function(k){return M[k].k==="samme";})[0],sideId=Object.keys(M).filter(function(k){return M[k].k==="side";})[0],andre=M.andre;
   var body=document.body.classList;
   // 2) varekort: andre købte også + samme kategori
@@ -82,15 +90,15 @@ function start(){
     var sEl=sammeId&&document.getElementById("bp_ProductCarousel_"+sammeId);
     var dd=document.querySelector(".CustomersAlsoBought_Custom_DIV"),ddRow=dd&&dd.closest(".row"),ddHead=ddRow&&ddRow.previousElementSibling;
     var aw=null;
-    if(andre&&e.a){var anchor=ddRow||sEl;if(anchor){aw=render(anchor,andre.t,e.a,C,"before");if(aw&&ddRow){hide(ddRow);if(ddHead&&/købte også/i.test(ddHead.textContent))hide(ddHead);}}}
-    if(sEl&&e.s&&V.k[e.s]){var lst=V.k[e.s].filter(function(x){return x!==nr;});if(render(aw||sEl,M[sammeId].t,lst,C,"after"))hide(sEl);}
+    if(andre&&e.a){var anchor=ddRow||sEl;if(anchor){aw=render(anchor,andre.t,e.a,C,"before",null,"andre");if(aw&&ddRow){hide(ddRow);if(ddHead&&/købte også/i.test(ddHead.textContent))hide(ddHead);}}}
+    if(sEl&&e.s&&V.k[e.s]){var lst=V.k[e.s].filter(function(x){return x!==nr;});if(render(aw||sEl,M[sammeId].t,lst,C,"after",null,sammeId))hide(sEl);}
    }).catch(function(){});
   }
   // 2b) DanDomains "Relaterede varer" bruges ikke længere (Johnny 05-11-2026) – skjules på begge shops
   [].forEach.call(document.querySelectorAll("div.related"),function(el){if(el.querySelector("ul.Related_Custom_UL"))hide(el);});
   // 3) kategoriside: populært i denne kategori
   var kEl=sideId&&document.getElementById("bp_ProductCarousel_"+sideId);
-  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3"))hide(kEl);}).catch(function(){});}
+  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3",sideId))hide(kEl);}).catch(function(){});}
  }).catch(function(){});
 }
 // Varekort: temaet viser kun #specs (felt 2 + 3 m.fl.), hvis et af felterne 4+ har tekst – så varer med kun

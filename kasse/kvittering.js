@@ -50,6 +50,19 @@ var css=
 ".osq-btn2{display:inline-block;background:#fff;color:#333!important;border:1px solid #ccc;text-decoration:none!important;border-radius:8px;padding:12px 20px;font-size:15px;cursor:pointer}"+
 "@media print{.osq-btns{display:none}}";
 function addCss(){if(document.getElementById("osq-css"))return;var s=document.createElement("style");s.id="osq-css";s.textContent=css;document.head.appendChild(s);}
+// Karrusel-salg (Johnny 06-11-2026): varer kunden har klikket på i en karrusel de seneste 14 dage (karrusel/karrusel.js
+// gemmer dem i localStorage "osKarK") tælles som salg fra den karrusel. Sendes én gang pr. ordre.
+function karSalg(nr,linjer){try{
+  var m=JSON.parse(localStorage.getItem("osKarK")||"{}"),sendt=JSON.parse(localStorage.getItem("osKarO")||"[]"),nu=Date.now(),out=[];
+  if(sendt.indexOf(nr)>=0)return;
+  linjer.forEach(function(l){if(l.rabat)return;var v=String(l.varenr||"").trim().toUpperCase(),h=m[v];if(!h||nu-h.t>14*864e5)return;
+    var a=parseInt(l.antal,10)||1,b=parseFloat(String(l.pris).replace(/[^\d,.-]/g,"").replace(/\./g,"").replace(",","."))||0;out.push({k:h.k,nr:v,antal:a,beloeb:b});delete m[v];});
+  sendt.push(nr);localStorage.setItem("osKarO",JSON.stringify(sendt.slice(-30)));localStorage.setItem("osKarK",JSON.stringify(m));
+  if(!out.length)return;
+  var LOG="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec";
+  var b=JSON.stringify({type:"kar",e:"salg",ordre:nr,site:HE?"he":"os",linjer:out});
+  if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});
+}catch(e){}}
 function byg(){
   var t=document.querySelector(".TableLines_OrderStep4");if(!t||document.querySelector(".osq"))return;
   var rows=[].slice.call(t.querySelectorAll("tr"));
@@ -73,6 +86,7 @@ function byg(){
     if(m3){tot={ex:m3[1],moms:m3[2],ink:m3[3]};}
   });
   if(!nr||!linjer.length||!tot.ink)return; // ukendt opbygning: rør intet
+  karSalg(nr,linjer);
   var mail=(kunde.filter(function(x){return /@/.test(x);})[0])||"";
   var adr=kunde.filter(function(x){return !/@/.test(x);});
   var navnGeb={"Forsendelsesgebyr":"Fragt","Betalingsgebyr":"Betalingsgebyr","Kortgebyr":"Kortgebyr"};
