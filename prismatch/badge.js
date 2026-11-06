@@ -26,8 +26,8 @@ function nrOf(el){var i=el.querySelector("input[name=ProductID]");return i?i.val
 function scan(){
   // DanDomains varelister
   [].forEach.call(document.querySelectorAll("form[id^=productlistBuyForm]"),function(f){if(N[nrOf(f)])sat(f.querySelector(".image"));});
-  // egne karruseller (karrusel.js)
-  [].forEach.call(document.querySelectorAll(".osk-c[data-productno]"),function(c){if(N[(c.getAttribute("data-productno")||"").trim()])sat(c.querySelector(".prodImg"));});
+  // egne karruseller (karrusel.js) og søgeresultater (sog.js)
+  [].forEach.call(document.querySelectorAll(".osk-c[data-productno],.oss-card[data-productno]"),function(c){if(N[(c.getAttribute("data-productno")||"").trim()])sat(c.querySelector(".prodImg"));});
   // varesiden
   var pf=document.querySelector("form.product-details-buy-form");
   if(pf&&N[nrOf(pf)]){
