@@ -1,5 +1,8 @@
-/* Økologisk-Supermarked – egen Klaviyo-sporing (erstatter Plugly)
-   Indlæses af sog/sog.js på alle ØS-sider (ikke Helsekost-Ekspres).
+/* Økologisk-Supermarked og Helsekost-Ekspres – egen Klaviyo-sporing (erstatter Plugly)
+   Indlæses af sog/sog.js på alle sider på begge shops.
+   HE (Johnny 06-11-2026): samme events, men med "HE " foran navnet (HE Viewed Product, HE Added to Cart,
+   HE Started Checkout, HE Placed Order), så ØS-flows aldrig udløses af HE-kunder. "HE Placed Order" sendes
+   fra kvitteringssiden (order4), fordi HE-ordrer ikke længere kommer til Klaviyo via Plugly.
    - Henter Klaviyos script (onsite: popup + sporing), hvis det ikke allerede er der.
    - Sender Viewed Product, Added to Cart og Started Checkout med samme feltnavne som Plugly brugte,
      så flows (tabt kurv, browse abandonment m.m.) virker uændret.
@@ -7,7 +10,7 @@
    - Kun hvis Plugly selv henter Klaviyo, sender scriptet IKKE egne events (undgår dobbelt-tælling). */
 (function(){
 if(window.__osKlav)return;window.__osKlav=1;
-var COMPANY="YqREzg",SHOP="https://www.okologisk-supermarked.dk";
+var COMPANY="YqREzg",HE=/helsekost-ekspres/i.test(location.hostname),SHOP=HE?"https://helsekost-ekspres.dk":"https://www.okologisk-supermarked.dk",P=HE?"HE ":"";
 var BASE=(function(){var s=document.currentScript&&document.currentScript.src||"";var m=s.match(/^(.*os-data@[^\/]+\/)/);return m?m[1]:null;})();
 
 function samtykke(){ // DanDomains cookie-banner: kræver samtykke til tracking-cookies, hvis banneret er slået til
@@ -41,7 +44,7 @@ function indeks(){ // produktdata (billede, url) fra søgeindekset – kun når 
   if(IDX)return IDX;
   IDX=new Promise(function(ok){
     if(!BASE)return ok({});
-    fetch(BASE+"sog/indeks.json").then(function(r){return r.json();}).then(function(d){
+    fetch(BASE+(HE?"sog/indeks_he.json":"sog/indeks.json")).then(function(r){return r.json();}).then(function(d){
       var m={};(d.p||[]).forEach(function(p){m[String(p[0]).toLowerCase()]={url:abs(p[2]),img:abs(p[3]),brand:p[6]||"",kat:p[7]||""};});ok(m);
     }).catch(function(){ok({});});
   });
@@ -63,7 +66,7 @@ function seteVare(){
   var img=abs(og&&og.content);
   var ev={ProductName:it.name,ProductID:String(it.id),SKU:String(it.id),Categories:kat.length?kat:[it.category].filter(Boolean),
     ImageURL:img,URL:url,Brand:it.brand||"",Price:pr};
-  klaviyo.push(["track","Viewed Product",ev]);
+  ev.Shop=HE?"HE":"OS";klaviyo.push(["track",P+"Viewed Product",ev]);
   klaviyo.push(["trackViewedItem",{Title:ev.ProductName,ItemId:ev.ProductID,Categories:ev.Categories,ImageUrl:img,Url:url,Metadata:{Brand:ev.Brand,Price:pr}}]);
 }
 
@@ -73,11 +76,11 @@ function kurvEvents(addLive){
   indeks().then(function(m){
     var ref=co||add,items=ref.map(function(it){return vare(it,m);});
     var tot=rund(items.reduce(function(s,i){return s+i.RowTotal;},0));
-    var base={$value:tot,ItemNames:items.map(function(i){return i.ProductName;}),Items:items,CheckoutURL:SHOP+"/shop/checkout.html"};
+    var base={Shop:HE?"HE":"OS",$value:tot,ItemNames:items.map(function(i){return i.ProductName;}),Items:items,CheckoutURL:SHOP+"/shop/checkout.html"};
     if(add&&!co){ // Added to Cart: kun ét event pr. side
       var a=vare(add[0],m),k=Object.assign({},base,{AddedItemProductName:a.ProductName,AddedItemProductID:a.ProductID,AddedItemSKU:a.SKU,
         AddedItemImageURL:a.ImageURL,AddedItemURL:a.ProductURL,AddedItemPrice:a.ItemPrice,AddedItemQuantity:a.Quantity,AddedItemCategories:a.ProductCategories});
-      klaviyo.push(["track","Added to Cart",k]);
+      klaviyo.push(["track",P+"Added to Cart",k]);
     }
     if(co){ // kun når kunden er kendt (ellers sendes det, når e-mailen er tastet)
       var sig=items.map(function(i){return i.ProductID+"x"+i.Quantity;}).join(",");
@@ -85,7 +88,7 @@ function kurvEvents(addLive){
         if(!kendt)return;
         try{if(sessionStorage.getItem("osKlavCo")===sig)return;sessionStorage.setItem("osKlavCo",sig);}catch(e){}
         base.$event_id="co_"+sig.replace(/[^\w,]/g,"")+"_"+Math.floor(Date.now()/3600000);
-        klaviyo.push(["track","Started Checkout",base]);
+        klaviyo.push(["track",P+"Started Checkout",base]);
       });
     }
   });
@@ -106,6 +109,20 @@ function kasseIdentify(){ // e-mail i kassen → kendt profil (så tabt kurv kan
   setTimeout(tjek,1500);
 }
 
+function hePlacedOrder(){ // kun HE: ordren fra kvitteringssiden (DanDomains gtag "purchase")
+  if(!HE||!/order4/i.test(location.pathname))return;
+  var dl=window.dataLayer||[],ev=null;
+  for(var i=0;i<dl.length;i++){var a=dl[i];if(a&&a[0]==="event"&&a[1]==="purchase"&&a[2]&&a[2].transaction_id){ev=a[2];break;}}
+  if(!ev)return;var id=String(ev.transaction_id);
+  try{if(localStorage.getItem("osKlavPO")===id)return;localStorage.setItem("osKlavPO",id);}catch(e){}
+  indeks().then(function(m){
+    var items=(ev.items||[]).map(function(it){return vare(it,m);});
+    klaviyo.push(["track","HE Placed Order",{Shop:"HE",OrderId:id,$event_id:"he_"+id,$value:rund(Number(ev.value)||0),
+      ItemNames:items.map(function(x){return x.ProductName;}),Items:items,
+      Brands:items.map(function(x){return x.Brand;}).filter(Boolean),Categories:[].concat.apply([],items.map(function(x){return x.ProductCategories;}))}]);
+  });
+}
+
 function start(){
   if(window.__osKlavStart||!samtykke())return;window.__osKlavStart=1;
   if(plugly()&&harKlaviyo())return; // kun hvis Plugly stadig selv henter Klaviyo (og sender events) – ellers kører vi
@@ -113,6 +130,7 @@ function start(){
   try{seteVare();}catch(e){}
   try{kurvEvents();}catch(e){}
   try{kasseIdentify();}catch(e){}
+  try{hePlacedOrder();}catch(e){}
   try{ // læg-i-kurv uden sideskift (ajax): DanDomain kalder gtag('event','add_to_cart',…) → dataLayer.push
     var dl=window.dataLayer=window.dataLayer||[],org=dl.push;
     dl.push=function(a){try{if(a&&a[0]==="event"&&a[1]==="add_to_cart"&&a[2]&&a[2].items&&a[2].items.length)kurvEvents(a[2].items);}catch(e){}return org.apply(dl,arguments);};
