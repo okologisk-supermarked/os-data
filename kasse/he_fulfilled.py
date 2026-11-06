@@ -57,12 +57,11 @@ for o in ordrer:
     for l in (o.get('lines') or {}).get('items', []):
         if l.get('isCredited'): continue
         nr = (l.get('productNumber') or '').strip()
-        if not nr: continue
+        if not nr or nr.lower().startswith('loyalty') or (l.get('quantity') or 0) <= 0: continue
         x = idx.get(nr.lower(), {})
         items.append({'ProductID': nr, 'ProductName': l.get('productName', ''), 'Quantity': l.get('quantity', 1),
-                      'ItemPrice': l.get('unitPrice', 0),
                       'ProductURL': x.get('url') or f'{SHOP}/shop/default.asp?productid={urllib.parse.quote(nr)}',
-                      'ImageURL': x.get('img', ''), 'Brand': x.get('brand', '')})
+                      'ImageURL': x.get('img', '')})
     navn = ((o.get('customerInfo') or {}).get('attention') or (o.get('customerInfo') or {}).get('name') or '').split()
     prof = {'email': email}
     if navn: prof['first_name'] = navn[0]
@@ -73,7 +72,7 @@ for o in ordrer:
             'value': round(o.get('totalPrice') or 0, 2),  # ingen 'time' = nu, så flowet altid udløses (labeltid ligger i LabelTid)
             'unique_id': 'he_ful_' + oid,
             'properties': {'Shop': 'HE', 'OrderId': oid, 'TrackNumber': o['trackNumber'].strip(), 'LabelTid': mod.isoformat(),
-                           'ItemNames': [i['ProductName'] for i in items], 'Items': items}}}]}}})
+                           'Items': items}}}]}}})
 body = {'data': {'type': 'event-bulk-create-job', 'attributes': {'events-bulk-create': {'data': data}}}}
 json.dump(body if data else [], open(ud, 'w'), ensure_ascii=False, separators=(',', ':'))
 print(f'HE-ordrer med label de seneste {dage} dage, ikke sendt før: {len(data)}', ' '.join(d['attributes']['events']['data'][0]['attributes']['properties']['OrderId'] for d in data))
