@@ -83,7 +83,7 @@
  },
  "he": {
   "714": {
-   "navn": "Forside",
+   "navn": "Forside nr. 1",
    "titel": "Billigst i Prismatch",
    "kilde": "kategori",
    "kategori": "3850",
@@ -108,13 +108,13 @@
    "lager": false
   },
   "717": {
-   "navn": "Forside nederst",
+   "navn": "Forside nr. 3",
    "titel": "Kosttilskud",
    "kilde": "kategori",
    "kategori": "3848",
    "dage": 365,
    "antal": 15,
-   "lager": true
+   "lager": false
   },
   "andre": {
    "navn": "Varekort – andre købte også",
@@ -123,29 +123,8 @@
    "antal": 12,
    "lager": false
   },
-  "os710": {
-   "navn": "ØS-kopi: Forside nr. 1",
-   "titel": "Bedst sælgende i dag",
-   "kilde": "alle",
-   "foer": "717",
-   "dage": 2,
-   "antal": 40,
-   "lager": true,
-   "aktiv": false
-  },
-  "os713": {
-   "navn": "ØS-kopi: Forside nr. 2",
-   "titel": "Vi presser fødevarepriserne",
-   "kilde": "kategori",
-   "kategori": "3803",
-   "foer": "717",
-   "dage": 30,
-   "antal": 50,
-   "lager": true,
-   "aktiv": false
-  },
   "os735": {
-   "navn": "ØS-kopi: Varekort øverst",
+   "navn": "Varekort øverst",
    "titel": "Vi presser fødevarepriserne",
    "kilde": "kategori",
    "kategori": "HELSAM-BRAND-862",
@@ -155,41 +134,8 @@
    "lager": true,
    "aktiv": true
   },
-  "os828": {
-   "navn": "ØS-kopi: Forside nr. 3",
-   "titel": "Stærke priser på Kosttilskud",
-   "kilde": "kategori",
-   "kategori": "3808",
-   "foer": "717",
-   "dage": 90,
-   "antal": 50,
-   "lager": false,
-   "aktiv": false
-  },
-  "os836": {
-   "navn": "ØS-kopi: Forside nr. 4",
-   "titel": "Tilbud på Personlig pleje",
-   "kilde": "kategori",
-   "kategori": "3809",
-   "foer": "717",
-   "dage": 90,
-   "antal": 50,
-   "lager": true,
-   "aktiv": false
-  },
-  "os837": {
-   "navn": "ØS-kopi: Forside nr. 5",
-   "titel": "Nedsatte Rengøringsartikler",
-   "kilde": "kategori",
-   "kategori": "3810",
-   "foer": "717",
-   "dage": 90,
-   "antal": 50,
-   "lager": true,
-   "aktiv": false
-  },
   "staerke": {
-   "navn": "Forside – Stærke tilbud",
+   "navn": "Forside nr. 2",
    "titel": "Populære varer lige nu",
    "kilde": "alle",
    "sted": "dd_forside",
