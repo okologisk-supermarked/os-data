@@ -20,7 +20,18 @@ function logBesog(d) {
     var P = PropertiesService.getScriptProperties(), k = 'b_' + site + '_' + dag;
     P.setProperty(k, String((parseInt(P.getProperty(k), 10) || 0) + 1));
   } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
+  try { var PP = PropertiesService.getScriptProperties(); if (Date.now() - (Number(PP.getProperty('B_SYNC')) || 0) > 6e5) { PP.setProperty('B_SYNC', String(Date.now())); syncBesog(); } } catch (z) {}
   return svar({ ok: true });
+}
+// Fanen "Besøg" i søgelog-arket (Dato | ØS | HE), læses af nøgletal-kørslen via Google Sheets. Opdateres højst hvert 10. minut.
+function syncBesog() {
+  var t = hentBesog(400), dage = {};
+  ['os', 'he'].forEach(function (s) { Object.keys(t[s]).forEach(function (d) { dage[d] = dage[d] || [0, 0]; dage[d][s === 'os' ? 0 : 1] = t[s][d]; }); });
+  var rows = Object.keys(dage).sort().reverse().map(function (d) { return [d.slice(0, 4) + '-' + d.slice(4, 6) + '-' + d.slice(6), dage[d][0], dage[d][1]]; });
+  var ss = sogArk().getParent(), sh = ss.getSheetByName('Besøg');
+  if (!sh) { sh = ss.insertSheet('Besøg'); sh.getRange('A:A').setNumberFormat('@'); }
+  sh.clearContents(); sh.getRange(1, 1, 1, 4).setValues([['Dato', 'ØS', 'HE', 'Opdateret ' + Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyy-MM-dd HH:mm')]]);
+  if (rows.length) sh.getRange(2, 1, rows.length, 3).setValues(rows);
 }
 // Til nøgletal-dashboardet: ?a=besog&dage=62 -> {os:{ÅÅÅÅMMDD:n}, he:{...}}. Rydder tal ældre end 400 dage.
 function hentBesog(dage) {
