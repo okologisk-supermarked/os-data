@@ -15,6 +15,8 @@ LIVE = CFG.pop('live', {})  # {'os': bool, 'he': bool} – karrusellerne vises k
 SHARDS = 32
 DOM = re.compile(r'^https?://[^/]+')
 SKIP = re.compile(r'^(HELSAM|3784|3806|3814|3846|146$|organic|3844|brand-)', re.I)
+# Kategorisider ('Populært i denne kategori'): brandsider (HELSAM-BRAND-*, brand-*) kommer med (Johnny 10-11-2026)
+SIDE_SKIP = re.compile(r'^(HELSAM(?!-BRAND-)|3784|3806|3814|3846|146$|organic|3844)', re.I)
 INTERN = re.compile(r'^lager |tilbud|discount|stop madspild|outlet|køb europæisk|nyhed|bedst|kampagne|black ?friday|gratis|kopi|julevarer', re.I)
 KOPI = re.compile(r'\(KOPI\)', re.I)
 
@@ -132,7 +134,7 @@ def byg(site, kode):
     samme = next((c for c in cfg.values() if c['kilde'] == 'samme'), None)
     katlist = {}
     for i, k in kat.items():
-        if k['skjult'] or not k['url'] or SKIP.match(i) or INTERN.search(k['navn']): continue
+        if k['skjult'] or not k['url'] or SIDE_SKIP.match(i) or INTERN.search(k['navn']): continue
         ref = side or samme
         if not ref: break
         lst = rang([n for n in medlem.get(i, []) if not KOPI.search(n)], ref.get('dage', 90), ref.get('lager'), max(ref['antal'], (samme or ref)['antal']) + 1)
