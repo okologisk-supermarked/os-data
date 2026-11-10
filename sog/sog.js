@@ -137,6 +137,18 @@ function osKonto(){if(HE||document.getElementById("os-konto"))return;var row=doc
   var st=document.createElement("style");st.textContent="@media (max-width:639px){a.loyaltyAccount{display:none!important}}body.webshop-checkout #os-konto{display:none!important}";document.head.appendChild(st);}
 if(!HE){if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",osKonto);else osKonto();}
 if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t);heLup.t=setTimeout(heLup,150);});window.addEventListener("load",heLup);}
+// menneskelige besøg (Johnny 10-11-2026): ét signal pr. besøg fra indgangssiden efter en menneskelig handling; intet gemmes hos kunden
+(function(){try{
+  var h=function(x){return String(x||"").replace(/^www\./i,"").toLowerCase();},ref="";try{ref=document.referrer?h(new URL(document.referrer).hostname):"";}catch(e){}
+  if(ref===h(location.hostname))return;
+  if(/order|checkout|admin/i.test(location.pathname))return;
+  var nt=(performance.getEntriesByType&&performance.getEntriesByType("navigation")[0]||{}).type;if(nt==="reload"||nt==="back_forward")return;
+  if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|phantom|selenium|puppeteer|playwright|python|curl|wget/i.test(navigator.userAgent))return;
+  var ev=["scroll","pointermove","touchstart","keydown"],sendt=0;
+  function send(){if(sendt)return;sendt=1;ev.forEach(function(e){window.removeEventListener(e,send,true);});
+    try{var b=JSON.stringify({type:"besog",site:SITE});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
+  ev.forEach(function(e){window.addEventListener(e,send,{capture:true,passive:true});});
+}catch(e){}})();
 window.addEventListener("pagehide",logNu);
 window.osSog={open:open,close:close};
 // overtag butikkens søgefelter
