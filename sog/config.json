@@ -1,5 +1,8 @@
 {
  "synonymer": {
+  "alfalfa": [
+   "lucerne"
+  ],
   "arioniajuice": [
    "aronia"
   ],
@@ -8,6 +11,12 @@
   ],
   "b12vitamin": [
    "b12"
+  ],
+  "barberkost": [
+   "barberbørste"
+  ],
+  "boghvedekerner": [
+   "boghvede"
   ],
   "bolcher": [
    "pastiller"
@@ -24,6 +33,18 @@
   "c-vitamin": [
    "vitamin c"
   ],
+  "cannellini": [
+   "hvide"
+  ],
+  "cellalter": [
+   "cellesalt"
+  ],
+  "cellsalter": [
+   "cellesalt"
+  ],
+  "celslalter": [
+   "cellesalt"
+  ],
   "collagenpaptider": [
    "kollagenpeptider",
    "collagen"
@@ -39,6 +60,12 @@
   ],
   "havremælk": [
    "havredrik"
+  ],
+  "homeopatiska": [
+   "homøopatiske"
+  ],
+  "homøopatiska": [
+   "homøopatiske"
   ],
   "johannesurt": [
    "perikon"
@@ -109,6 +136,9 @@
   ],
   "solhat": [
    "echinacea"
+  ],
+  "sortkommen": [
+   "nigellafrø"
   ],
   "steinbeiskopipapir": [
    "kopipapir"
