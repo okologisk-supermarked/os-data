@@ -5,7 +5,35 @@ var BUTIK = 'Økologisk-Supermarked';
 
 function doGet(e) {
   if (e && e.parameter && e.parameter.a === 'pop') return svar(populaere(e.parameter.s === 'he' ? 'he' : 'os'));
+  if (e && e.parameter && e.parameter.a === 'besog') return svar(hentBesog(parseInt(e.parameter.dage, 10) || 62));
   return ContentService.createTextOutput('OK');
+}
+
+// ---- Menneskelige besøg (Johnny 10-11-2026): kun et tal pr. shop og dag, ingen data om kunden ----
+// Shop-koden sender ét signal pr. besøg (indgangssiden, efter en menneskelig handling). Gemmes i Script Properties som b_<site>_<ÅÅÅÅMMDD>.
+function logBesog(d) {
+  var site = d.site === 'he' ? 'he' : 'os';
+  var dag = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyyMMdd');
+  var lock = LockService.getScriptLock();
+  try {
+    lock.waitLock(5000);
+    var P = PropertiesService.getScriptProperties(), k = 'b_' + site + '_' + dag;
+    P.setProperty(k, String((parseInt(P.getProperty(k), 10) || 0) + 1));
+  } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
+  return svar({ ok: true });
+}
+// Til nøgletal-dashboardet: ?a=besog&dage=62 -> {os:{ÅÅÅÅMMDD:n}, he:{...}}. Rydder tal ældre end 400 dage.
+function hentBesog(dage) {
+  var P = PropertiesService.getScriptProperties(), alle = P.getProperties(), ud = { os: {}, he: {} };
+  var graense = Utilities.formatDate(new Date(Date.now() - Math.min(dage, 400) * 864e5), 'Europe/Copenhagen', 'yyyyMMdd');
+  var slet = Utilities.formatDate(new Date(Date.now() - 400 * 864e5), 'Europe/Copenhagen', 'yyyyMMdd');
+  Object.keys(alle).forEach(function (k) {
+    var m = /^b_(os|he)_(\d{8})$/.exec(k);
+    if (!m) return;
+    if (m[2] < slet) { P.deleteProperty(k); return; }
+    if (m[2] >= graense) ud[m[1]][m[2]] = parseInt(alle[k], 10) || 0;
+  });
+  return ud;
 }
 
 // ---- Søgelog til den nye søgning (kun søgeord, antal resultater og et tilfældigt session-id) ----
@@ -132,6 +160,7 @@ function doPost(e) {
     var d = JSON.parse(e.postData.contents || '{}');
     if (d.type === 'sog') return logSog(d);
     if (d.type === 'kar') return logKar(d);
+    if (d.type === 'besog') return logBesog(d);
     if (d.website) return svar({ ok: true }); // honeypot: bots udfylder skjult felt
     var type = d.type === 'reklamation' ? 'reklamation' : 'fortryd';
     var he = d.site === 'he';
