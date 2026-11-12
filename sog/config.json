@@ -12,6 +12,9 @@
   "b12vitamin": [
    "b12"
   ],
+  "babyshampoo": [
+   "shampoo"
+  ],
   "barberkost": [
    "barberbørste"
   ],
@@ -61,6 +64,12 @@
   "fiberhusk": [
    "psyllium"
   ],
+  "glrris": [
+   "ris"
+  ],
+  "gærris": [
+   "ris"
+  ],
   "havremælk": [
    "havredrik"
   ],
@@ -104,6 +113,9 @@
   "mandelmælk": [
    "mandeldrik"
   ],
+  "medjoo": [
+   "dadler"
+  ],
   "nødhjælpdråber": [
    "rescue"
   ],
@@ -125,6 +137,9 @@
   "recou": [
    "rescue"
   ],
+  "remuladr": [
+   "remoulade"
+  ],
   "rismælk": [
    "risdrik"
   ],
@@ -136,6 +151,9 @@
   ],
   "shampoo": [
    "shampo"
+  ],
+  "smeltechokolade": [
+   "chokolade"
   ],
   "sojahak": [
    "fars"
