@@ -13,12 +13,13 @@ function doGet(e) {
 // Shop-koden sender ét signal pr. besøg (indgangssiden, efter en menneskelig handling). Gemmes i Script Properties som b_<site>_<ÅÅÅÅMMDD>.
 function logBesog(d) {
   var site = d.site === 'he' ? 'he' : 'os';
-  var dag = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyyMMdd');
+  var dag = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyyMMdd'), time = Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'HH');
   var lock = LockService.getScriptLock();
   try {
     lock.waitLock(5000);
-    var P = PropertiesService.getScriptProperties(), k = 'b_' + site + '_' + dag;
+    var P = PropertiesService.getScriptProperties(), k = 'b_' + site + '_' + dag, kt = 't_' + site + '_' + dag + '_' + time;
     P.setProperty(k, String((parseInt(P.getProperty(k), 10) || 0) + 1));
+    P.setProperty(kt, String((parseInt(P.getProperty(kt), 10) || 0) + 1));   // pr. time (12-11-2026), gemmes 14 dage
   } catch (x) {} finally { try { lock.releaseLock(); } catch (y) {} }
   try { var PP = PropertiesService.getScriptProperties(); if (Date.now() - (Number(PP.getProperty('B_SYNC')) || 0) > 6e5) { PP.setProperty('B_SYNC', String(Date.now())); syncBesog(); } } catch (z) {}
   return svar({ ok: true });
@@ -32,13 +33,27 @@ function syncBesog() {
   if (!sh) { sh = ss.insertSheet('Besøg'); sh.getRange('A:A').setNumberFormat('@'); }
   sh.clearContents(); sh.getRange(1, 1, 1, 4).setValues([['Dato', 'ØS', 'HE', 'Opdateret ' + Utilities.formatDate(new Date(), 'Europe/Copenhagen', 'yyyy-MM-dd HH:mm')]]);
   if (rows.length) sh.getRange(2, 1, rows.length, 3).setValues(rows);
+  // Fanen "Besøg pr. time" (Dato | Time | ØS | HE), seneste 14 dage
+  var alle = PropertiesService.getScriptProperties().getProperties(), tm = {};
+  Object.keys(alle).forEach(function (k) {
+    var m = /^t_(os|he)_(\d{8})_(\d{2})$/.exec(k); if (!m) return;
+    var id = m[2] + m[3]; tm[id] = tm[id] || [0, 0]; tm[id][m[1] === 'os' ? 0 : 1] = parseInt(alle[k], 10) || 0;
+  });
+  var tr = Object.keys(tm).sort().reverse().map(function (id) { return [id.slice(0, 4) + '-' + id.slice(4, 6) + '-' + id.slice(6, 8), id.slice(8), tm[id][0], tm[id][1]]; });
+  var st = ss.getSheetByName('Besøg pr. time');
+  if (!st) { st = ss.insertSheet('Besøg pr. time'); st.getRange('A:B').setNumberFormat('@'); }
+  st.clearContents(); st.getRange(1, 1, 1, 4).setValues([['Dato', 'Time', 'ØS', 'HE']]);
+  if (tr.length) st.getRange(2, 1, tr.length, 4).setValues(tr);
 }
 // Til nøgletal-dashboardet: ?a=besog&dage=62 -> {os:{ÅÅÅÅMMDD:n}, he:{...}}. Rydder tal ældre end 400 dage.
 function hentBesog(dage) {
   var P = PropertiesService.getScriptProperties(), alle = P.getProperties(), ud = { os: {}, he: {} };
   var graense = Utilities.formatDate(new Date(Date.now() - Math.min(dage, 400) * 864e5), 'Europe/Copenhagen', 'yyyyMMdd');
   var slet = Utilities.formatDate(new Date(Date.now() - 400 * 864e5), 'Europe/Copenhagen', 'yyyyMMdd');
+  var sletT = Utilities.formatDate(new Date(Date.now() - 14 * 864e5), 'Europe/Copenhagen', 'yyyyMMdd');
   Object.keys(alle).forEach(function (k) {
+    var mt = /^t_(os|he)_(\d{8})_\d{2}$/.exec(k);
+    if (mt) { if (mt[2] < sletT) P.deleteProperty(k); return; }
     var m = /^b_(os|he)_(\d{8})$/.exec(k);
     if (!m) return;
     if (m[2] < slet) { P.deleteProperty(k); return; }

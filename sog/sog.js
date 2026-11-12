@@ -137,17 +137,35 @@ function osKonto(){if(HE||document.getElementById("os-konto"))return;var row=doc
   var st=document.createElement("style");st.textContent="@media (max-width:639px){a.loyaltyAccount{display:none!important}}body.webshop-checkout #os-konto{display:none!important}";document.head.appendChild(st);}
 if(!HE){if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",osKonto);else osKonto();}
 if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t);heLup.t=setTimeout(heLup,150);});window.addEventListener("load",heLup);}
-// menneskelige besøg (Johnny 10-11-2026): ét signal pr. besøg fra indgangssiden efter en menneskelig handling; intet gemmes hos kunden
+// menneskelige besøg (Johnny 10-11-2026, skærpet 12-11-2026): ét signal pr. besøg fra indgangssiden efter en ægte menneskelig handling; intet gemmes hos kunden
 (function(){try{
   var h=function(x){return String(x||"").replace(/^www\./i,"").toLowerCase();},ref="";try{ref=document.referrer?h(new URL(document.referrer).hostname):"";}catch(e){}
   if(ref===h(location.hostname))return;
   if(/order|checkout|admin/i.test(location.pathname))return;
-  var nt=(performance.getEntriesByType&&performance.getEntriesByType("navigation")[0]||{}).type;if(nt==="reload"||nt==="back_forward")return;
-  if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|facebookexternalhit|phantom|selenium|puppeteer|playwright|python|curl|wget/i.test(navigator.userAgent))return;
-  var ev=["scroll","pointermove","touchstart","keydown"],sendt=0;
-  function send(){if(sendt)return;sendt=1;ev.forEach(function(e){window.removeEventListener(e,send,true);});
+  var nt=(performance.getEntriesByType&&performance.getEntriesByType("navigation")[0]||{}).type;if(nt==="reload"||nt==="back_forward"||nt==="prerender")return;
+  var ua=navigator.userAgent||"";
+  if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|inspection|facebookexternalhit|phantom|selenium|puppeteer|playwright|cypress|electron|prerender|rendertron|python|curl|wget|java|go-http|node|axios|okhttp|httpclient|scan|monitor|uptime|pingdom|gtmetrix|semrush|ahrefs|validator|google|bing|yandex|baidu|duckduck|petal|bytespider|gptbot|claude|perplexity/i.test(ua))return;
+  try{if(navigator.userAgentData&&navigator.userAgentData.brands.some(function(b){return /headless/i.test(b.brand);}))return;}catch(e){}
+  if(!navigator.languages||!navigator.languages.length)return;                   // headless har ofte ingen sprog
+  if(!window.outerWidth||!window.outerHeight||screen.width<240||screen.height<240)return; // usynligt/0-vindue
+  var mobil=/Mobi|Android|iPhone|iPad/i.test(ua);
+  if(!mobil&&/Chrome\//.test(ua)&&!/Edg\//.test(ua)&&(!window.chrome||!navigator.plugins||!navigator.plugins.length))return; // gammel headless Chrome
+  if(document.prerendering)return;
+  var t0=Date.now(),sendt=0,xy=null,flyt=0;
+  var ev=["pointermove","pointerdown","touchstart","keydown","wheel"];  // ikke "scroll": maskiner scroller med kode
+  function ud(){ev.forEach(function(e){window.removeEventListener(e,lyt,true);});}
+  function send(){if(sendt)return;sendt=1;ud();
     try{var b=JSON.stringify({type:"besog",site:SITE});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
-  ev.forEach(function(e){window.addEventListener(e,send,{capture:true,passive:true});});
+  function lyt(e){
+    if(!e.isTrusted||document.visibilityState!=="visible")return;              // kodeudløste hændelser tæller ikke
+    if(Date.now()-t0<1500)return;                                              // mennesker er ikke så hurtige
+    if(e.type==="pointermove"){                                                // musen skal flytte sig flere gange
+      if(e.pointerType&&e.pointerType!=="mouse")return;
+      var p=e.clientX+","+e.clientY;if(p===xy)return;xy=p;if(++flyt<4)return;
+    }
+    send();
+  }
+  ev.forEach(function(e){window.addEventListener(e,lyt,{capture:true,passive:true});});
 }catch(e){}})();
 window.addEventListener("pagehide",logNu);
 window.osSog={open:open,close:close};
