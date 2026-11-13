@@ -69,20 +69,20 @@ function crc32(s){var c,t=window.__crcT;if(!t){t=window.__crcT=[];for(var n=0;n<
 
 // Mærke-slider i bunden af forsiden (erstatter Plugly-logoslideren, Johnny 13-11-2026): de største mærker efter
 // omsætning, med tre billeder af mærkets mest solgte varer. Klik går til mærkets side. Pile, ingen autoplay.
-var MCSS=".osk-m .osk-st{text-align:center;margin:-.6rem 0 1rem;color:#666;font-size:.9rem}"+
+var MCSS=".osk.osk-m{width:100%;max-width:75rem;margin:2.2rem auto 1.4rem;padding:0 .9375rem;box-sizing:border-box;float:none}.osk-m .osk-st{text-align:center;margin:-.6rem 0 1rem;color:#666;font-size:.9rem}"+
 ".osk-m .osk-mc{flex:0 0 calc((100% - 64px)/5);text-decoration:none;color:#222;align-items:center;text-align:center;padding:12px 10px 10px}"+
 ".osk-m .osk-mc:hover{border-color:#b9b9b9;box-shadow:0 2px 10px rgba(0,0,0,.08)}"+
-".osk-m .osk-mi{display:flex;gap:6px;justify-content:center;align-items:center;height:110px;width:100%;margin:0 0 10px}"+
-".osk-m .osk-mi img{flex:1 1 0;min-width:0;max-height:110px;object-fit:contain}"+
+".osk-m .osk-mi{display:flex;gap:6px;justify-content:center;align-items:center;height:130px;width:100%;margin:0 0 10px}"+
+".osk-m .osk-mi img{flex:1 1 0;min-width:0;max-height:130px;object-fit:contain}"+
 ".osk-m .osk-mn{margin:0;font-weight:700;font-size:1rem;line-height:1.25;border-top:1px solid #eee;padding-top:9px;width:100%}"+
-".osk-m .osk-ma{margin:3px 0 0;font-size:.8rem;color:#777}.osk-m .osk-a{top:70px}"+
+".osk-m .osk-ma{margin:3px 0 0;font-size:.8rem;color:#777}.osk-m .osk-a{top:80px}"+
 "@media (max-width:1024px){.osk-m .osk-mc{flex-basis:calc((100% - 48px)/4)}}"+
 "@media (max-width:640px){.osk-m .osk-mc{flex-basis:calc((100% - 10px)/2.3)}.osk-m .osk-mi{height:80px}.osk-m .osk-mi img{max-height:80px}.osk-m .osk-mn{font-size:.88rem}.osk-m .osk-a{top:50px}}";
 var cssOk=0;function css(){if(cssOk)return;cssOk=1;var st=document.createElement("style");st.textContent=CSS+MCSS;document.head.appendChild(st);}
 function maerker(B){
   var a=document.querySelector("div[id^=bp_logoslider_id_]");if(!a||!B||!B.v||B.v.length<4)return;
   css();
-  var w=document.createElement("div");w.className="osk osk-m row column";
+  var w=document.createElement("div");w.className="osk osk-m";
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(B.t)+"</h2><p class=\"osk-st\">Klik på et mærke og se alle varerne</p><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige mærker\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
     B.v.map(function(m){return "<a class=\"osk-c osk-mc\" href=\""+esc(m[1])+"\"><div class=\"osk-mi\">"+m[3].map(function(i){return "<img loading=\"lazy\" src=\""+esc(i)+"\" alt=\"\">";}).join("")+
       "</div><p class=\"osk-mn\">"+esc(m[0])+"</p><p class=\"osk-ma\">"+m[2]+" varer</p></a>";}).join("")+
