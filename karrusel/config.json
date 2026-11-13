@@ -154,8 +154,8 @@
    "InnovaGoods"
   ],
   "live": {
-   "os": false,
-   "he": false
+   "os": true,
+   "he": true
   }
  }
 }
