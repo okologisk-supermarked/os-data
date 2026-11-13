@@ -33,7 +33,8 @@
     if(c.link)d.style.cursor="pointer";
     document.body.insertBefore(d,document.body.firstChild);
   }
-  fetch(base+"config.json").then(function(r){return r.json();}).then(function(cfg){
+  // Indstillinger fra Shopstyring (karrusel/config.json → topbjaelke), ellers topbjaelke/config.json
+  fetch(base+"../karrusel/config.json").then(function(r){return r.json();}).then(function(k){if(k&&k.topbjaelke)return k.topbjaelke;throw 0;}).catch(function(){return fetch(base+"config.json").then(function(r){return r.json();});}).then(function(cfg){
     var c=cfg&&cfg[K];if(!ok(c))return;
     if(document.body)vis(c);else document.addEventListener("DOMContentLoaded",function(){vis(c);});
   }).catch(function(){});

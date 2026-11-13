@@ -157,5 +157,31 @@
   "udelad": [
    "InnovaGoods"
   ]
+ },
+ "topbjaelke": {
+  "os": {
+   "aktiv": true,
+   "id": "biogan-priser",
+   "badge": "",
+   "tekst": "Vi presser fødevarepriserne",
+   "knap": "Køb nu, tryk her",
+   "link": "/shop/biogan-1945c1.html",
+   "bg": "#3f7e0c",
+   "knap_bg": "#e2231a",
+   "start": "",
+   "slut": ""
+  },
+  "he": {
+   "aktiv": true,
+   "id": "biogan-priser",
+   "badge": "BIOGAN",
+   "tekst": "Vi presser fødevarepriserne",
+   "knap": "KØB NU",
+   "link": "/shop/biogan-1945c1.html",
+   "bg": "#0a5719",
+   "knap_bg": "#eb0000",
+   "start": "",
+   "slut": ""
+  }
  }
 }
