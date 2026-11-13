@@ -3,6 +3,7 @@
    Logoer, navne og forklaringer i maerker/maerker.json – nyt mærke = ny linje dér + logo i mappen. */
 (function(){
   var me=document.currentScript&&document.currentScript.src||"",base=me.replace(/maerker\.js.*$/,"");
+  var st=document.createElement("style");st.textContent="#labels[data-osm]{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:14px}#labels[data-osm]>div{margin:0!important}#labels[data-osm] img{height:64px!important;width:auto!important;max-width:110px!important;object-fit:contain}@media(max-width:640px){#labels[data-osm] img{height:52px!important}}";document.head.appendChild(st);
   function run(){
     var box=document.getElementById("labels");if(!box||box.getAttribute("data-osm"))return;
     var f7=box.getAttribute("data-f7"),codes={};
