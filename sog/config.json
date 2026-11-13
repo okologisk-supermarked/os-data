@@ -27,6 +27,9 @@
   "bolcher": [
    "pastiller"
   ],
+  "bushflower": [
+   "essences"
+  ],
   "butter": [
    "butterbeans"
   ],
@@ -50,6 +53,9 @@
   ],
   "celslalter": [
    "cellesalt"
+  ],
+  "chokoladejulekalender": [
+   "julekalender"
   ],
   "collagenpaptider": [
    "kollagenpeptider",
@@ -78,6 +84,9 @@
   ],
   "homøopatiska": [
    "homøopatiske"
+  ],
+  "hyperikon": [
+   "perikon"
   ],
   "johannesurt": [
    "perikon"
@@ -146,8 +155,14 @@
   "risottoris": [
    "risotto"
   ],
+  "rollon": [
+   "roll"
+  ],
   "sennepsmel": [
    "sennep"
+  ],
+  "shampobar": [
+   "shampoo"
   ],
   "shampoo": [
    "shampo"
@@ -169,6 +184,9 @@
   ],
   "solhat": [
    "echinacea"
+  ],
+  "sorghummel": [
+   "sorghum"
   ],
   "sortkommen": [
    "nigellafrø"
