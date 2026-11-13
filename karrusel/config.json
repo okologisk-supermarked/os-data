@@ -169,7 +169,8 @@
    "bg": "#008e2b",
    "knap_bg": "#ff931e",
    "start": "",
-   "slut": ""
+   "slut": "",
+   "knap_fg": "#ffffff"
   },
   "he": {
    "aktiv": true,
@@ -178,10 +179,11 @@
    "tekst": "Vi presser fødevarepriserne",
    "knap": "KØB NU",
    "link": "/shop/biogan-1945c1.html",
-   "bg": "#0a5719",
-   "knap_bg": "#eb0000",
+   "bg": "#1e5b3a",
+   "knap_bg": "#ffffff",
    "start": "",
-   "slut": ""
+   "slut": "",
+   "knap_fg": "#000000"
   }
  }
 }

@@ -23,7 +23,7 @@
     if(document.getElementById("osbar"))return;
     var d=document.createElement("div");d.id="osbar";d.className="osbar";d.style.background=c.bg||"#3f7e0c";
     d.innerHTML=(c.badge?"<span class=\"osbar-badge\">"+esc(c.badge)+"</span>":"")+"<span class=\"osbar-tekst\">"+esc(c.tekst)+"</span>"+
-      (c.link&&c.knap?"<a class=\"osbar-knap\" href=\""+esc(c.link)+"\" style=\"background:"+esc(c.knap_bg||"#e2231a")+"\">"+esc(c.knap)+"</a>":"")+
+      (c.link&&c.knap?"<a class=\"osbar-knap\" href=\""+esc(c.link)+"\" style=\"background:"+esc(c.knap_bg||"#e2231a")+";color:"+esc(c.knap_fg||"#fff")+"!important\">"+esc(c.knap)+"</a>":"")+
       "<button type=\"button\" class=\"osbar-x\" aria-label=\"Luk\">&times;</button>";
     d.addEventListener("click",function(e){
       if(e.target.closest(".osbar-x")){d.remove();try{sessionStorage.setItem("osbar-luk",c.id);}catch(x){}return;}
