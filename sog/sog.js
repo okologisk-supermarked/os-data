@@ -32,6 +32,7 @@ var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direct
 ".oss-card .prodImg{position:relative;text-align:center;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}.oss-card .prodImg img{max-height:150px;max-width:100%;object-fit:contain}"+
 ".oss-card .prodName{color:#222;font-size:.86rem;line-height:1.3;min-height:3.4em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-decoration:none;border-top:1px solid #eee;padding-top:8px}"+
 ".oss-card .priceouter{margin-top:auto;text-align:right;padding-top:1.5em}.oss-card .prodPrice{font-size:1.25rem;font-weight:400;color:#222}.oss-card .prodPrice span{font-size:.65em;vertical-align:super}"+
+".oss-guide{display:flex;flex-direction:column;gap:6px;margin:0 0 14px}.oss-guide a{display:block;background:#F5EFE3;border-radius:8px;padding:10px 14px;color:#24372A;text-decoration:none;font-weight:600}.oss-guide a:hover{background:#ece3cf}.oss-guide span{display:inline-block;background:#2F4A33;color:#fff;font-size:.72rem;font-weight:700;border-radius:4px;padding:2px 6px;margin-right:8px;vertical-align:1px;text-transform:uppercase;letter-spacing:.04em}"+
 ".oss-card form{margin:8px 0 0}.oss-card button{width:100%;background:"+(HE?"#1e5b3a":"#f7941d")+";color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;cursor:pointer;font-size:.85rem}"+
 ".oss-list a{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px;margin-bottom:8px;color:#222;text-decoration:none;font-size:.9rem}.oss-list a:after{content:'\\203A';font-size:1.2rem;color:#888}"+
 ".oss-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.oss-chips a{background:#fff;border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none}"+
@@ -39,6 +40,11 @@ var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direct
 ".oss-empty{background:#fff;border-radius:8px;padding:20px;text-align:center;color:#555}"+
 "@media (max-width:900px){.oss-grid{grid-template-columns:repeat(3,1fr)}.oss-side{width:220px;flex-basis:220px}}"+
 "@media (max-width:640px){.oss-top-in{gap:8px}.oss-logo{display:none}.oss-in{display:block;padding:14px 10px 60px}.oss-side{width:auto;margin-top:22px}.oss-grid{grid-template-columns:repeat(2,1fr);gap:10px}.oss-card .prodImg{height:120px}.oss-card .prodImg img{max-height:120px}}";
+var GUIDER=null; // Helseguide-artikler (kun ØS) – helseguide/guider.json
+function guider(q){if(HE||!GUIDER)return [];q=q.toLowerCase().trim();if(q.length<2)return [];var ord=q.split(/[\s,]+/).filter(Boolean),res=[];
+  GUIDER.forEach(function(g){var s=0;g[2].forEach(function(k){if(q===k)s=Math.max(s,3);else if((" "+q+" ").indexOf(" "+k+" ")>=0)s=Math.max(s,2);else if(k.indexOf(" ")<0&&k.length>3&&ord.some(function(w){return w.length>=4&&(k.indexOf(w)===0||w.indexOf(k)===0);}))s=Math.max(s,1);});if(s)res.push([s,g]);});
+  return res.sort(function(a,b){return b[0]-a[0];}).slice(0,2).map(function(x){return x[1];});}
+function guideHtml(gs){return gs.length?"<div class=\"oss-guide\">"+gs.map(function(g){return "<a href=\""+esc(g[1])+"\"><span>Helseguide</span>"+esc(g[0])+" &rarr;</a>";}).join("")+"</div>":"";}
 function esc(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});}
 function kr(n){var s=Number(n).toFixed(2).split(".");return s[0].replace(/\B(?=(\d{3})+(?!\d))/g,".")+"<span>"+s[1]+"</span> DKK";}
 function krp(n){return Number(n).toFixed(2).replace(".",",");}
@@ -47,6 +53,7 @@ function load(){
   if(loading)return loading;
   loading=js(RAW+"sog/version.json?t="+Math.floor(Date.now()/300000)).catch(function(){return {sha:"main"};}).then(function(v){
     var base=CDN+(v.sha||"main")+"/sog/";
+    if(!HE)js(CDN+(v.sha||"main")+"/helseguide/guider.json").then(function(g){GUIDER=g;if(ov&&ov.style.display!=="none")render(inp.value);}).catch(function(){});
     return Promise.all([js(base+(HE?"indeks_he.json":"indeks.json")),js(base+"config.json").catch(function(){return {};}),window.OSMotor?1:new Promise(function(ok,no){var s=document.createElement("script");s.src=base+"motor.js";s.onload=ok;s.onerror=no;document.head.appendChild(s);})]);
   }).then(function(r){CFG=r[1]||{};M=new window.OSMotor(r[0],CFG);M.mest=r[0].mest||null;M.kat=r[0].kat||null;return M;});
   return loading;
@@ -72,8 +79,9 @@ function render(q,limit){
   var r=M.sog(q,limit),note="";
   if(!r.antal){var f=M.foreslaa(q);if(f){var q2=q.replace(/\S+$/,f),r2=M.sog(q2,limit);if(r2.antal){note="<p class=\"oss-note\">Ingen resultater for “"+esc(q)+"”. Viser resultater for <b>"+esc(q2)+"</b>.</p>";r=r2;}}}
   ga(q,r.antal);logSoon(q,r.antal);
-  main.innerHTML=r.antal?"<h4>Produkter <span style=\"font-weight:400;color:#777;font-size:.9rem\">("+r.antal+")</span></h4>"+note+"<div class=\"oss-grid\">"+r.varer.map(card).join("")+"</div>"+(r.antal>r.varer.length?"<button class=\"oss-more\" data-more=\""+(limit+40)+"\">Vis flere produkter</button>":""):
-    "<div class=\"oss-empty\">Vi fandt ingen produkter for “"+esc(q)+"”.<br>Prøv et andet ord, eller skriv til os på info@okologisk-supermarked.dk – så hjælper vi.</div>";
+  var gd=guideHtml(guider(q));
+  main.innerHTML=r.antal?gd+"<h4>Produkter <span style=\"font-weight:400;color:#777;font-size:.9rem\">("+r.antal+")</span></h4>"+note+"<div class=\"oss-grid\">"+r.varer.map(card).join("")+"</div>"+(r.antal>r.varer.length?"<button class=\"oss-more\" data-more=\""+(limit+40)+"\">Vis flere produkter</button>":""):
+    gd+"<div class=\"oss-empty\">Vi fandt ingen produkter for “"+esc(q)+"”.<br>Prøv et andet ord, eller skriv til os på info@okologisk-supermarked.dk – så hjælper vi.</div>";
   side.innerHTML=list("Kategorier",r.grupper)+list("Brands",r.brands);
 }
 function PH(){var i=document.querySelector("#Search_Form input[placeholder]");return i&&i.placeholder||"Søg blandt vores 12.000 produkter";}
