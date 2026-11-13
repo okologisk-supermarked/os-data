@@ -79,17 +79,22 @@ var MCSS=".osk.osk-m{width:100%;max-width:75rem;margin:2.2rem auto 1.4rem;paddin
 "@media (max-width:1024px){.osk-m .osk-mc{flex-basis:calc((100% - 48px)/4)}}"+
 "@media (max-width:640px){.osk-m .osk-mc{flex-basis:calc((100% - 10px)/2.3)}.osk-m .osk-mn{font-size:.88rem}}";
 var cssOk=0;function css(){if(cssOk)return;cssOk=1;var st=document.createElement("style");st.textContent=CSS+MCSS;document.head.appendChild(st);}
+function mslug(t){return "m-"+String(t).toLowerCase().replace(/æ/g,"ae").replace(/ø/g,"oe").replace(/å/g,"aa").normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^a-z0-9]+/g,"-").replace(/^-+|-+$/g,"").slice(0,18);}
 function maerker(B){
   var a=document.querySelector("div[id^=bp_logoslider_id_]");if(!a||!B||!B.v||B.v.length<4)return;
   css();
   var w=document.createElement("div");w.className="osk osk-m";
   w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(B.t)+"</h2><p class=\"osk-st\">Klik på et mærke og se alle varerne</p><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige mærker\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
-    B.v.map(function(m){return "<a class=\"osk-c osk-mc\" href=\""+esc(m[1])+"\"><div class=\"osk-mi\">"+m[3].map(function(i){return "<img loading=\"lazy\" src=\""+esc(i)+"\" alt=\"\">";}).join("")+
+    B.v.map(function(m){return "<a class=\"osk-c osk-mc\" data-m=\""+mslug(m[0])+"\" href=\""+esc(m[1])+"\"><div class=\"osk-mi\">"+m[3].map(function(i){return "<img loading=\"lazy\" src=\""+esc(i)+"\" alt=\"\">";}).join("")+
       "</div><p class=\"osk-mn\">"+esc(m[0])+"</p><p class=\"osk-ma\">"+m[2]+" varer</p></a>";}).join("")+
     "</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste mærker\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
   a.parentNode.insertBefore(w,a);hide(a);
   [].forEach.call(document.querySelectorAll("div[id^=bp_logoslider_id_],div[class^=bp_logoslider_id_]"),hide);
   var tr=w.querySelector(".osk-tr"),p=w.querySelector(".osk-p"),n=w.querySelector(".osk-n");
+  // Klik-måling (Johnny 13-11-2026): klik på et mærke logges i fanen "Karrusel" som "m-<mærke>" (kun antal klik, ingen persondata)
+  var mk={};function mlog(ev){var a=ev.target.closest&&ev.target.closest("a.osk-mc");if(!a||TEST)return;var k=a.getAttribute("data-m");if(!k||mk[k])return;mk[k]=1;
+    try{var b=JSON.stringify({type:"kar",e:"klik",k:k,nr:"",site:K});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
+  tr.addEventListener("click",mlog);tr.addEventListener("auxclick",mlog);
   function upd(){var max=tr.scrollWidth-tr.clientWidth-4;p.disabled=tr.scrollLeft<=4;n.disabled=tr.scrollLeft>=max;}
   function step(d){var c=tr.querySelector(".osk-c");var cw=c?c.getBoundingClientRect().width+16:tr.clientWidth;var per=Math.max(1,Math.floor((tr.clientWidth+8)/cw));tr.scrollBy({left:d*per*cw,behavior:"smooth"});}
   p.onclick=function(){step(-1);};n.onclick=function(){step(1);};
