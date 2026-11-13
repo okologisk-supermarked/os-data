@@ -159,61 +159,61 @@
   ]
  },
  "topbjaelke": {
-  "os": {
-   "aktiv": true,
-   "id": "vi-presser-foedeva",
-   "badge": "",
-   "tekst": "Vi presser fødevarepriserne",
-   "knap": "Køb nu, tryk her",
-   "link": "/shop/foedevarer-tilbud-7344c1.html",
-   "bg": "#008e2b",
-   "knap_bg": "#ff931e",
-   "start": "",
-   "slut": "",
-   "knap_fg": "#ffffff"
-  },
   "he": {
    "aktiv": true,
-   "id": "biogan-priser",
    "badge": "BIOGAN",
-   "tekst": "Vi presser fødevarepriserne",
-   "knap": "KØB NU",
-   "link": "/shop/biogan-1945c1.html",
    "bg": "#1e5b3a",
+   "id": "biogan-priser",
+   "knap": "KØB NU",
    "knap_bg": "#ffffff",
-   "start": "",
+   "knap_fg": "#000000",
+   "link": "/shop/biogan-1945c1.html",
    "slut": "",
-   "knap_fg": "#000000"
+   "start": "",
+   "tekst": "Vi presser fødevarepriserne"
+  },
+  "os": {
+   "aktiv": true,
+   "badge": "",
+   "bg": "#008e2b",
+   "id": "vi-presser-foedeva",
+   "knap": "Køb nu, tryk her",
+   "knap_bg": "#ff931e",
+   "knap_fg": "#ffffff",
+   "link": "/shop/foedevarer-tilbud-7344c1.html",
+   "slut": "",
+   "start": "",
+   "tekst": "Vi presser fødevarepriserne"
   }
  },
  "popup": {
-  "os": {
-   "aktiv": false,
-   "id": "sommerferie",
-   "billede": "popup/sommerferie.jpg",
-   "titel": "🌞 Vi holder sommerferie",
-   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
-   "knap": "Mere Info",
-   "link": "/shop/profile.html",
-   "knap_bg": "#2b7e2a",
-   "knap_fg": "#ffffff",
-   "forsinkelse": 3,
-   "start": "",
-   "slut": ""
-  },
   "he": {
    "aktiv": false,
-   "id": "sommerferie",
    "billede": "popup/sommerferie.jpg",
-   "titel": "🌞 Vi holder sommerferie",
-   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
+   "forsinkelse": 3,
+   "id": "sommerferie",
    "knap": "Mere Info",
-   "link": "/shop/profile.html",
    "knap_bg": "#2b7e2a",
    "knap_fg": "#ffffff",
-   "forsinkelse": 3,
+   "link": "/shop/profile.html",
+   "slut": "",
    "start": "",
-   "slut": ""
+   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
+   "titel": "🌞 Vi holder sommerferie"
+  },
+  "os": {
+   "aktiv": false,
+   "billede": "popup/sommerferie.jpg",
+   "forsinkelse": 3,
+   "id": "sommerferie",
+   "knap": "Mere Info",
+   "knap_bg": "#2b7e2a",
+   "knap_fg": "#ffffff",
+   "link": "/shop/profile.html",
+   "slut": "",
+   "start": "",
+   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
+   "titel": "🌞 Vi holder sommerferie"
   }
  }
 }
