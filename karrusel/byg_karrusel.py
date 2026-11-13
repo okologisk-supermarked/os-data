@@ -12,6 +12,10 @@ from concurrent.futures import ThreadPoolExecutor
 
 CFG = json.load(open(os.path.join(D, 'config.json')))
 LIVE = CFG.pop('live', {})  # {'os': bool, 'he': bool} – karrusellerne vises kun for kunder, når live er true
+# Mærke-slider i bunden af forsiden (erstatter Plugly-logoslideren, Johnny 13-11-2026): de største mærker efter
+# omsætning (stk. solgt x pris) de sidste 'dage' dage. Opdateres hver nat sammen med karrusellerne.
+MRK = dict({'titel': 'Vi fører kun originale varemærker', 'antal': 18, 'dage': 365, 'min_varer': 4,
+            'udelad': [], 'live': {'os': False, 'he': False}}, **CFG.pop('maerker', {}))
 SHARDS = 32
 DOM = re.compile(r'^https?://[^/]+')
 SKIP = re.compile(r'^(HELSAM|3784|3806|3814|3846|146$|organic|3844|brand-)', re.I)
@@ -125,8 +129,24 @@ def byg(site, kode):
             out[n] = [r[1], r[2], r[3], r[4], r[5], r[10], 1 if n in oko else 0]
         return out
 
+    # mærke-slider: [navn, url, antal varer, [3 billeder af mærkets mest solgte varer]]
+    burl = ix.get('b', {}); bs = {}
+    udelad = {x.lower() for x in MRK.get('udelad', [])}
+    for nr, r in rows.items():
+        b = (r[6] or '').strip()
+        if KOPI.search(nr) or not b or b not in burl or b.lower() in udelad: continue
+        e = bs.setdefault(b, [0.0, []]); e[0] += solgt(nr, MRK['dage']) * (r[4] or 0); e[1].append(nr)
+    mrk = []
+    for b, (oms, nrs) in sorted(bs.items(), key=lambda x: -x[1][0]):
+        if oms <= 0 or len(nrs) < MRK['min_varer']: continue
+        top = [n for n in sorted(nrs, key=lambda n: (-solgt(n, MRK['dage']), -(rows[n][8] or 0), rows[n][11])) if rows[n][3]][:3]
+        if len(top) < 3: continue
+        mrk.append([b, burl[b], len(nrs), [rows[n][3] for n in top]])
+        if len(mrk) >= MRK['antal']: break
+
     stamp = time.strftime('%Y-%m-%dT%H:%M:%S')
-    json.dump({'t': stamp, 'live': bool(LIVE.get(kode)), 'm': meta, 'l': faste, 'c': cardsfor(brugt)},
+    json.dump({'t': stamp, 'live': bool(LIVE.get(kode)), 'm': meta, 'l': faste, 'c': cardsfor(brugt),
+               'b': {'t': MRK['titel'], 'live': bool(MRK.get('live', {}).get(kode)), 'v': mrk}},
               open(os.path.join(D, f'{kode}.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
 
     # kategorisider ("side") og samme kategori ("samme")
@@ -173,6 +193,7 @@ def byg(site, kode):
                   open(os.path.join(mappe, f'{i:02d}.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
     # fælles kortdata til varesider og kategorisider (én fil, caches af browseren)
     json.dump({'t': stamp, 'c': cardsfor(alle_kort)}, open(os.path.join(D, f'{kode}_kort.json'), 'w'), ensure_ascii=False, separators=(',', ':'))
+    print(kode, 'mærker', [m[0] for m in mrk])
     print(kode, 'kort', len(alle_kort), 'faste', {k: len(v['v']) for k, v in faste.items()}, 'kategorier', len(katlist), 'varer med køb-sammen', n_andre, 'af', len(rows))
 
 

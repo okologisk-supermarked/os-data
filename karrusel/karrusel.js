@@ -67,10 +67,40 @@ function hide(el){if(el)el.classList.add("osk-skjul");}
 function pid(){var i=document.querySelector("form.product-details-buy-form input[name=ProductID]")||document.querySelector("#mainProduct input[name=ProductID]");return i?i.value.trim():"";}
 function crc32(s){var c,t=window.__crcT;if(!t){t=window.__crcT=[];for(var n=0;n<256;n++){c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;t[n]=c>>>0;}}var crc=0^-1,b=unescape(encodeURIComponent(s));for(var i=0;i<b.length;i++)crc=(crc>>>8)^t[(crc^b.charCodeAt(i))&0xFF];return (crc^-1)>>>0;}
 
+// Mærke-slider i bunden af forsiden (erstatter Plugly-logoslideren, Johnny 13-11-2026): de største mærker efter
+// omsætning, med tre billeder af mærkets mest solgte varer. Klik går til mærkets side. Pile, ingen autoplay.
+var MCSS=".osk-m .osk-st{text-align:center;margin:-.6rem 0 1rem;color:#666;font-size:.9rem}"+
+".osk-m .osk-mc{flex:0 0 calc((100% - 64px)/5);text-decoration:none;color:#222;align-items:center;text-align:center;padding:12px 10px 10px}"+
+".osk-m .osk-mc:hover{border-color:#b9b9b9;box-shadow:0 2px 10px rgba(0,0,0,.08)}"+
+".osk-m .osk-mi{display:flex;gap:6px;justify-content:center;align-items:center;height:110px;width:100%;margin:0 0 10px}"+
+".osk-m .osk-mi img{flex:1 1 0;min-width:0;max-height:110px;object-fit:contain}"+
+".osk-m .osk-mn{margin:0;font-weight:700;font-size:1rem;line-height:1.25;border-top:1px solid #eee;padding-top:9px;width:100%}"+
+".osk-m .osk-ma{margin:3px 0 0;font-size:.8rem;color:#777}.osk-m .osk-a{top:70px}"+
+"@media (max-width:1024px){.osk-m .osk-mc{flex-basis:calc((100% - 48px)/4)}}"+
+"@media (max-width:640px){.osk-m .osk-mc{flex-basis:calc((100% - 10px)/2.3)}.osk-m .osk-mi{height:80px}.osk-m .osk-mi img{max-height:80px}.osk-m .osk-mn{font-size:.88rem}.osk-m .osk-a{top:50px}}";
+var cssOk=0;function css(){if(cssOk)return;cssOk=1;var st=document.createElement("style");st.textContent=CSS+MCSS;document.head.appendChild(st);}
+function maerker(B){
+  var a=document.querySelector("div[id^=bp_logoslider_id_]");if(!a||!B||!B.v||B.v.length<4)return;
+  css();
+  var w=document.createElement("div");w.className="osk osk-m row column";
+  w.innerHTML="<h2 class=\"osk-t mt2\">"+esc(B.t)+"</h2><p class=\"osk-st\">Klik på et mærke og se alle varerne</p><div class=\"osk-w\"><button type=\"button\" class=\"osk-a osk-p\" aria-label=\"Forrige mærker\" disabled>"+ARR+"</button><div class=\"osk-tr\">"+
+    B.v.map(function(m){return "<a class=\"osk-c osk-mc\" href=\""+esc(m[1])+"\"><div class=\"osk-mi\">"+m[3].map(function(i){return "<img loading=\"lazy\" src=\""+esc(i)+"\" alt=\"\">";}).join("")+
+      "</div><p class=\"osk-mn\">"+esc(m[0])+"</p><p class=\"osk-ma\">"+m[2]+" varer</p></a>";}).join("")+
+    "</div><button type=\"button\" class=\"osk-a osk-n\" aria-label=\"Næste mærker\" style=\"transform:scaleX(-1)\">"+ARR+"</button></div>";
+  a.parentNode.insertBefore(w,a);hide(a);
+  [].forEach.call(document.querySelectorAll("div[id^=bp_logoslider_id_],div[class^=bp_logoslider_id_]"),hide);
+  var tr=w.querySelector(".osk-tr"),p=w.querySelector(".osk-p"),n=w.querySelector(".osk-n");
+  function upd(){var max=tr.scrollWidth-tr.clientWidth-4;p.disabled=tr.scrollLeft<=4;n.disabled=tr.scrollLeft>=max;}
+  function step(d){var c=tr.querySelector(".osk-c");var cw=c?c.getBoundingClientRect().width+16:tr.clientWidth;var per=Math.max(1,Math.floor((tr.clientWidth+8)/cw));tr.scrollBy({left:d*per*cw,behavior:"smooth"});}
+  p.onclick=function(){step(-1);};n.onclick=function(){step(1);};
+  tr.addEventListener("scroll",function(){clearTimeout(tr._t);tr._t=setTimeout(upd,60);},{passive:true});window.addEventListener("resize",upd);setTimeout(upd,50);
+}
+
 function start(){
  get("karrusel/"+K+".json").then(function(D){
+  if(D.b&&(D.b.live||TEST))try{maerker(D.b);}catch(e){}
   if(!(D.live||TEST))return;
-  var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
+  css();
   var M=D.m||{},ph=[].slice.call(document.querySelectorAll("div[id^=bp_ProductCarousel_]"));
   // 1) faste karruseller (forside m.m.)
   ph.forEach(function(el){var id=el.id.replace("bp_ProductCarousel_","");var L=D.l&&D.l[id];if(!L)return;if(render(el,L.t,L.v,D.c,"after",null,id))hide(el);});
