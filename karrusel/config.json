@@ -144,5 +144,18 @@
    "antal": 20,
    "lager": true
   }
+ },
+ "maerker": {
+  "titel": "Vi fører kun originale varemærker",
+  "antal": 18,
+  "dage": 365,
+  "min_varer": 4,
+  "udelad": [
+   "InnovaGoods"
+  ],
+  "live": {
+   "os": false,
+   "he": false
+  }
  }
 }

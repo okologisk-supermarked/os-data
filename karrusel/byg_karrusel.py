@@ -129,7 +129,7 @@ def byg(site, kode):
             out[n] = [r[1], r[2], r[3], r[4], r[5], r[10], 1 if n in oko else 0]
         return out
 
-    # mærke-slider: [navn, url, antal varer, [3 billeder af mærkets mest solgte varer]]
+    # mærke-slider: [navn, url, antal varer, [4 billeder af mærkets mest solgte varer]]
     burl = ix.get('b', {}); bs = {}
     udelad = {x.lower() for x in MRK.get('udelad', [])}
     for nr, r in rows.items():
@@ -139,8 +139,8 @@ def byg(site, kode):
     mrk = []
     for b, (oms, nrs) in sorted(bs.items(), key=lambda x: -x[1][0]):
         if oms <= 0 or len(nrs) < MRK['min_varer']: continue
-        top = [n for n in sorted(nrs, key=lambda n: (-solgt(n, MRK['dage']), -(rows[n][8] or 0), rows[n][11])) if rows[n][3]][:3]
-        if len(top) < 3: continue
+        top = [n for n in sorted(nrs, key=lambda n: (-solgt(n, MRK['dage']), -(rows[n][8] or 0), rows[n][11])) if rows[n][3]][:4]
+        if len(top) < 4: continue
         mrk.append([b, burl[b], len(nrs), [rows[n][3] for n in top]])
         if len(mrk) >= MRK['antal']: break
 
