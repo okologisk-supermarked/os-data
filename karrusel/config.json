@@ -185,5 +185,35 @@
    "slut": "",
    "knap_fg": "#000000"
   }
+ },
+ "popup": {
+  "os": {
+   "aktiv": false,
+   "id": "sommerferie",
+   "billede": "popup/sommerferie.jpg",
+   "titel": "🌞 Vi holder sommerferie",
+   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
+   "knap": "Mere Info",
+   "link": "/shop/profile.html",
+   "knap_bg": "#2b7e2a",
+   "knap_fg": "#ffffff",
+   "forsinkelse": 3,
+   "start": "",
+   "slut": ""
+  },
+  "he": {
+   "aktiv": false,
+   "id": "sommerferie",
+   "billede": "popup/sommerferie.jpg",
+   "titel": "🌞 Vi holder sommerferie",
+   "tekst": "Butikken er åben hele døgnet – det er kun os på pakkeriet, der har taget en pause i uge 29, 30 og 31.\nBestil trygt videre, så sender vi din ordre afsted igen i uge 32.",
+   "knap": "Mere Info",
+   "link": "/shop/profile.html",
+   "knap_bg": "#2b7e2a",
+   "knap_fg": "#ffffff",
+   "forsinkelse": 3,
+   "start": "",
+   "slut": ""
+  }
  }
 }

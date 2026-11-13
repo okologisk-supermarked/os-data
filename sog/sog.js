@@ -10,6 +10,7 @@ try{if(/helsekost-ekspres/i.test(location.hostname)){var _hn=(document.currentSc
 try{var _pm=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_pm&&/helsekost-ekspres/i.test(location.hostname)){var _ps=document.createElement("script");_ps.src=_pm[1]+"prismatch/badge.js";_ps.async=true;document.head.appendChild(_ps);}}catch(e){} // "Billigst i prismatch"-badge (prismatch/badge.js) – kun HE
 var RAW="https://raw.githubusercontent.com/okologisk-supermarked/os-data/main/",CDN="https://cdn.jsdelivr.net/gh/okologisk-supermarked/os-data@";
 try{var _tb=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_tb){var _t=document.createElement("script");_t.src=_tb[1]+"topbjaelke/topbjaelke.js";_t.async=true;document.head.appendChild(_t);}}catch(e){} // Topbjælke (topbjaelke/topbjaelke.js) – ØS og HE, erstatter Plugly alert bar
+try{var _pp=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_pp){var _p=document.createElement("script");_p.src=_pp[1]+"popup/popup.js";_p.async=true;document.head.appendChild(_p);}}catch(e){} // Popup (popup/popup.js) – ØS og HE, erstatter Plugly Popup
 var HE=/helsekost-ekspres/i.test(location.hostname),SITE=HE?"he":"os";
 var M=null,CFG={},loading=null,ov=null,inp=null,lastQ="",gaT=null;
 var LOG="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec",POP=null,logged={},logT=null,pend=null;
