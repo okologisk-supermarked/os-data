@@ -1,4 +1,4 @@
-/* Mærker under produktbilledet (ØS og HE). Koder i felt 7 (#M1#M2#E3#...) og #FSC# i tekn. dok. 2.
+/* Mærker under produktbilledet (ØS og HE). Koder i felt 7 (#M1#M2#E3#FSC#...); #FSC# i tekn. dok. 2 virker også stadig.
    Skabelonen skriver <div id="labels" data-f7="..." data-fsc="...">; ellers læses de gamle <img data-tt>.
    Logoer, navne og forklaringer i maerker/maerker.json – nyt mærke = ny linje dér + logo i mappen. */
 (function(){
