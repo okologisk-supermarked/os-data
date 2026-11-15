@@ -6,6 +6,7 @@
 var HE=/helsekost-ekspres/i.test(location.hostname);
 var me=document.currentScript&&document.currentScript.src||"",base=me.replace(/filter\/kat_filter\.js.*$/,"");
 var FN=[["o","Økologisk"],["v","Vegansk"],["g","Glutenfri"],["s","Sukkerfri"],["l","På lager"],["d","Discount"]];
+if(HE)FN=FN.filter(function(f){return f[0]!=="d";}); // HE: ingen Discount-knap (Johnny 15-11-2026)
 var M=null,FILT="",box=null,alle=false,henter=false,ALLE=null,gem=null,ORG=null;
 function cont(){return HE?document.querySelector("#Content_Productlist .ProductList_Custom_UL"):document.querySelector(".ProductList_Custom_DIV");}
 function varer(c){return [].slice.call(c.children).filter(function(e){return e.querySelector&&e.querySelector("input[name=ProductID]");});}
