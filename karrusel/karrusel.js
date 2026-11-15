@@ -27,6 +27,7 @@ var CSS=".osk{position:relative;margin:2.2rem 0 1.4rem;clear:both}.osk h2.osk-t{
 ".osk-skjul{display:none!important}"+(HE?".osk h2.osk-t{font-size:2.1rem;font-weight:400;line-height:1.2;color:#333;margin-bottom:1.1rem}@media (max-width:640px){.osk h2.osk-t{font-size:1.5rem}}.osk-c form .button{background:#1e5b3a;color:#fff;border:0;border-radius:4px;font-weight:700;padding:.75rem .4rem}.osk-c form .button:hover{background:#174a2f}":"");
 
 var esc=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c];});};
+var thumb=function(u){u=String(u||"");return /helsekost-ekspres/i.test(location.hostname)&&/\/images\//.test(u)&&!/-t\.[a-z]+$/i.test(u)?u.replace(/(\.[a-z0-9]+)$/i,"-t$1"):u;}; // brug 500px-udgaven (-t) i karrusellerne i stedet for 1500px
 function get(u){return fetch(BASE+u).then(function(r){if(!r.ok)throw 0;return r.json();});}
 // Klik-måling (Johnny 06-11-2026): klik på en vare i en karrusel logges (Google Apps Script, fane "Karrusel"),
 // og varen huskes i 14 dage, så ordrebekræftelsen (kasse/kvittering.js) kan tælle salget med til karrusellen.
@@ -41,7 +42,7 @@ var ARR="<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke
 function card(nr,c){ // c = [navn,url,billede,pris,for,lager,oko]
   var ret=location.pathname+location.search,kopi=/\(KOPI\)/i.test(nr),tb=(c[4]&&c[4]>c[3])?Math.floor((1-c[3]/c[4])*100+1e-6):0;
   return "<div class=\"osk-c\" data-productno=\""+esc(nr)+"\"><div class=\"prodWrapper\">"+
-   "<div class=\"prodImg\"><a href=\""+esc(c[1])+"\"><img class=\"osk-i\" loading=\"lazy\" src=\""+esc(c[2])+"\" alt=\""+esc(c[0])+"\"></a>"+(c[6]?"<img class=\"lbl dkOko\" src=\"/Respons/assets/logo_M1.svg\" alt=\"\">":"")+"</div>"+
+   "<div class=\"prodImg\"><a href=\""+esc(c[1])+"\"><img class=\"osk-i\" loading=\"lazy\" src=\""+esc(thumb(c[2]))+"\" data-org=\""+esc(c[2])+"\" onerror=\"if(this.dataset.org&&this.src.indexOf(this.dataset.org)<0)this.src=this.dataset.org\" alt=\""+esc(c[0])+"\"></a>"+(c[6]?"<img class=\"lbl dkOko\" src=\"/Respons/assets/logo_M1.svg\" alt=\"\">":"")+"</div>"+
    (tb>=1&&!kopi?"<div class=\"bp_relatedproductsSavingBadge osk-skjul\">-"+tb+"%</div>":"")+
    "<p class=\"prodName\"><a href=\""+esc(c[1])+"\">"+esc(c[0])+"</a></p>"+
    "<div class=\"priceouter\">"+(tb>=1&&!kopi?"<span class=\"os-for\">Før <s>"+fmt(c[4])+" kr.</s></span>":"")+"<p class=\"prodPrice\">"+kr(c[3])+" DKK</p></div>"+
