@@ -17,7 +17,7 @@ function sider(){var pg=document.querySelector(".pager"),t=pg?pg.textContent:"",
   var last=Math.max.apply(null,[1].concat(a)),c=(location.pathname.match(/c(\d+)\.html$/)||[])[1];return {cur:+(c||1),last:last};}
 function css(){if(document.getElementById("osf-css"))return;var s=document.createElement("style");s.id="osf-css";
   var g=HE?"#1e5b3a":"#2e7d32";
-  s.textContent=".osf{display:flex;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;align-items:center;gap:8px;height:34px;margin:6px 0 14px;width:100%;scrollbar-width:none}.osf::-webkit-scrollbar{display:none}.osf a{background:#fff;border:1px solid #cfcfcf;border-radius:20px;padding:6px 12px;font-size:.85rem;line-height:1.2;color:#222;cursor:pointer;text-decoration:none;user-select:none}.osf a:hover{border-color:"+g+"}.osf a.on{background:"+g+";border-color:"+g+";color:#fff}.osf a.on:after{content:' \\00d7'}.osf .osf-n{font-size:.85rem;color:#666;margin-left:4px}";
+  s.textContent=".okf{display:flex;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;align-items:center;gap:8px;height:34px;margin:6px 0 14px;width:100%;scrollbar-width:none}.okf::-webkit-scrollbar{display:none}.okf a{background:#fff;border:1px solid #cfcfcf;border-radius:20px;padding:6px 12px;font-size:.85rem;line-height:1.2;color:#222;cursor:pointer;text-decoration:none;user-select:none}.okf a:hover{border-color:"+g+"}.okf a.on{background:"+g+";border-color:"+g+";color:#fff}.okf a.on:after{content:' \\00d7'}.okf .okf-n{font-size:.85rem;color:#666;margin-left:4px}";
   document.head.appendChild(s);}
 function tegn(){
   var c=cont();if(!c||!box||!M)return;var L=varer(c),vis=0,t={};FN.forEach(function(f){t[f[0]]=0;});
@@ -26,7 +26,7 @@ function tegn(){
   var s=sider(),flere=s.last>1&&!alle;
   box.innerHTML=FN.filter(function(f){return FILT.indexOf(f[0])>=0||t[f[0]]>0||flere;}).map(function(f){var on=FILT.indexOf(f[0])>=0;
     return "<a data-f=\""+f[0]+"\" class=\""+(on?"on":"")+"\">"+f[1]+(on||flere?"":" ("+t[f[0]]+")")+"</a>";}).join("")+
-    (FILT?"<span class=\"osf-n\">"+(henter?"Henter alle varer…":"Viser "+vis+" af "+L.length+" varer")+"</span>":"");
+    (FILT?"<span class=\"okf-n\">"+(henter?"Henter alle varer…":"Viser "+vis+" af "+L.length+" varer")+"</span>":"");
   [].forEach.call(document.querySelectorAll(".pager,.paging"),function(pg){pg.style.visibility=FILT&&alle?"hidden":"";});
 }
 function hentAlle(){
@@ -43,7 +43,7 @@ function hentAlle(){
 function start(){
   if(!document.body||!document.body.classList.contains("webshop-productlist"))return;
   var c=cont();if(!c||document.getElementById("osf"))return;
-  css();box=document.createElement("div");box.id="osf";box.className="osf";var ha=document.getElementById("heAntal");if(ha&&ha.parentNode===c.parentNode)ha.parentNode.insertBefore(box,ha.nextSibling);else c.parentNode.insertBefore(box,c);
+  css();box=document.createElement("div");box.id="osf";box.className="okf";var ha=document.getElementById("heAntal");if(ha&&ha.parentNode===c.parentNode)ha.parentNode.insertBefore(box,ha.nextSibling);else c.parentNode.insertBefore(box,c);
   try{document.documentElement.classList.add("osf-klar");}catch(e){} // fjerner den reserverede plads (CLS)
   box.addEventListener("click",function(e){var a=e.target.closest("[data-f]");if(!a)return;e.preventDefault();var f=a.getAttribute("data-f");
     FILT=FILT.indexOf(f)>=0?FILT.replace(f,""):FILT+f;
