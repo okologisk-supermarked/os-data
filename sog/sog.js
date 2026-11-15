@@ -156,10 +156,19 @@ if(!HE){if(document.readyState==="loading")document.addEventListener("DOMContent
 if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t);heLup.t=setTimeout(heLup,150);});window.addEventListener("load",heLup);}
 // menneskelige besøg (Johnny 10-11-2026, skærpet 12-11-2026): ét signal pr. besøg fra indgangssiden efter en ægte menneskelig handling; intet gemmes hos kunden
 (function(){try{
-  var h=function(x){return String(x||"").replace(/^www\./i,"").toLowerCase();},ref="";try{ref=document.referrer?h(new URL(document.referrer).hostname):"";}catch(e){}
-  if(ref===h(location.hostname))return;
-  if(/order|checkout|admin/i.test(location.pathname))return;
-  var nt=(performance.getEntriesByType&&performance.getEntriesByType("navigation")[0]||{}).type;if(nt==="reload"||nt==="back_forward"||nt==="prerender")return;
+  // 15-11-2026 (Johnny): tælles én gang pr. fane-session på den side, hvor kunden første gang gør noget menneskeligt (ikke kun indgangssiden);
+  // kurv/kasse tæller med; gennemført ordre tæller altid. sessionStorage "osBes" forhindrer dobbelttælling.
+  if(/admin/i.test(location.pathname))return;
+  var SS=null;try{SS=window.sessionStorage;SS.setItem("osBesT","1");SS.removeItem("osBesT");}catch(e){SS=null;}
+  if(SS&&SS.getItem("osBes"))return;
+  if(!SS){ // uden sessionStorage: gammel regel (kun indgangssiden), så ingen tælles flere gange
+    var h=function(x){return String(x||"").replace(/^www\./i,"").toLowerCase();},ref="";try{ref=document.referrer?h(new URL(document.referrer).hostname):"";}catch(e){}
+    if(ref===h(location.hostname))return;
+  }
+  var nt=(performance.getEntriesByType&&performance.getEntriesByType("navigation")[0]||{}).type;if(nt==="prerender")return;
+  function marker(){try{if(SS)SS.setItem("osBes","1");}catch(e){}}
+  function sendNu(){marker();try{var b=JSON.stringify({type:"besog",site:SITE});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
+  if(/order4/i.test(location.pathname)||(document.body&&document.body.classList.contains("webshop-orderstep4"))){sendNu();return;} // den der handler, er et menneske
   var ua=navigator.userAgent||"";
   if(navigator.webdriver||/bot|crawl|spider|slurp|headless|lighthouse|pagespeed|preview|inspection|facebookexternalhit|phantom|selenium|puppeteer|playwright|cypress|electron|prerender|rendertron|python|curl|wget|java|go-http|node|axios|okhttp|httpclient|scan|monitor|uptime|pingdom|gtmetrix|semrush|ahrefs|validator|google|bing|yandex|baidu|duckduck|petal|bytespider|gptbot|claude|perplexity/i.test(ua))return;
   try{if(navigator.userAgentData&&navigator.userAgentData.brands.some(function(b){return /headless/i.test(b.brand);}))return;}catch(e){}
@@ -171,16 +180,15 @@ if(HE){heLup();window.addEventListener("resize",function(){clearTimeout(heLup.t)
   var t0=Date.now(),sendt=0,xy=null,flyt=0;
   var ev=["pointermove","pointerdown","touchstart","keydown","wheel"];  // ikke "scroll": maskiner scroller med kode
   function ud(){ev.forEach(function(e){window.removeEventListener(e,lyt,true);});}
-  function send(){if(sendt)return;sendt=1;ud();
-    try{var b=JSON.stringify({type:"besog",site:SITE});if(!(navigator.sendBeacon&&navigator.sendBeacon(LOG,b)))fetch(LOG,{method:"POST",body:b,keepalive:true,mode:"no-cors"});}catch(e){}}
+  function send(){if(sendt)return;sendt=1;ud();if(SS&&SS.getItem("osBes"))return;sendNu();}
   function lyt(e){
     if(!e.isTrusted||document.visibilityState!=="visible")return;              // kodeudløste hændelser tæller ikke
-    if(Date.now()-t0<1500)return;                                              // mennesker er ikke så hurtige
-    if(e.type==="pointermove"){                                                // musen skal flytte sig flere gange
+    if(e.type==="pointermove"){                                                // kun musebevægelse: flere bevægelser efter 1,5 sek.
       if(e.pointerType&&e.pointerType!=="mouse")return;
+      if(Date.now()-t0<1500)return;
       var p=e.clientX+","+e.clientY;if(p===xy)return;xy=p;if(++flyt<4)return;
     }
-    send();
+    send();                                                                    // tryk, klik, tast og hjul tæller med det samme
   }
   ev.forEach(function(e){window.addEventListener(e,lyt,{capture:true,passive:true});});
 }catch(e){}})();
