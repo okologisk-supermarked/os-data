@@ -25,7 +25,8 @@ Motor.prototype.tok=function(q,D){
   if(!best&&q.length>=4&&(D.nr===q||D.ean===q))best=20;
   return best;
 };
-Motor.prototype.sog=function(qs,max){
+Motor.prototype.sog=function(qs,max,filt){ // filt: krævede mærker, fx "vg" (o=økologisk, v=vegansk, g=glutenfri, s=sukkerfri)
+  filt=filt||"";var tael={o:0,v:0,g:0,s:0};
   max=max||60;var raw=words(qs);if(!raw.length)return {varer:[],grupper:[],brands:[]};
   var toks=raw.filter(function(t){return !STOP[t];});if(!toks.length)toks=raw;
   var self=this,alts=toks.map(function(t){var v=variants(t);(self.syn[t]||[]).forEach(function(x){v=v.concat(words(x).length>1?[]:[x]);});return v;});
@@ -33,6 +34,8 @@ Motor.prototype.sog=function(qs,max){
   for(var i=0;i<this.P.length;i++){var p=this.P[i];if(this.skjul[p[0]])continue;var D=this.D[i],sum=0,hit=0;
     for(var j=0;j<alts.length;j++){var b=0;for(var k=0;k<alts[j].length;k++){var sc=this.tok(alts[j][k],D);if(k>0)sc*=0.9;if(sc>b)b=sc;}if(b){hit++;sum+=b;}}
     if(hit<alts.length&&!(alts.length>=3&&hit>=alts.length-1))continue;
+    var fl=p[12]||"";for(var f in tael)if(fl.indexOf(f)>=0)tael[f]++;
+    if(filt){var mangler=0;for(var fi=0;fi<filt.length;fi++)if(fl.indexOf(filt[fi])<0){mangler=1;break;}if(mangler)continue;}
     var score=sum/alts.length*(hit/alts.length);
     // varen ER det man søger (ordet står i varens kategori) -> samme niveau som når navnet starter med ordet
     var kat=0;for(j=0;j<alts.length&&!kat;j++)for(k=0;k<alts[j].length;k++){var t=alts[j][k];if(t.length>=3&&D.c.some(function(c){return c===t||c.indexOf(t)===0||(t.length>=4&&c.slice(-t.length)===t);})){kat=1;break;}}
@@ -43,10 +46,10 @@ Motor.prototype.sog=function(qs,max){
   var key=norm(qs).trim(),top=this.top[key]||[];
   res.sort(function(a,b){return b[0]-a[0]||a[2]-b[2]||b[3]-a[3];}); // 1) hvor godt ordet passer, 2) sorteringstallet (lavest først), 3) salg
   var out=res.slice(0,max).map(function(r){return self.P[r[1]];});
-  if(top.length){var idx={};self.P.forEach(function(p,i){idx[p[0]]=i;});var tp=top.map(function(n){return self.P[idx[n]];}).filter(Boolean);out=tp.concat(out.filter(function(p){return top.indexOf(p[0])<0;})).slice(0,max);}
+  if(top.length&&!filt){var idx={};self.P.forEach(function(p,i){idx[p[0]]=i;});var tp=top.map(function(n){return self.P[idx[n]];}).filter(Boolean);out=tp.concat(out.filter(function(p){return top.indexOf(p[0])<0;})).slice(0,max);}
   var grupper=Object.keys(this.K).filter(function(n){var w=words(n);return toks.every(function(t){return w.some(function(x){return x.indexOf(t)===0||(t.length>=4&&x.slice(-t.length)===t);});});}).slice(0,8).map(function(n){return [n,self.K[n]];});
   var brands=Object.keys(this.B).filter(function(n){var w=words(n);return toks.every(function(t){return w.some(function(x){return x.indexOf(t)===0;});});}).slice(0,6).map(function(n){return [n,self.B[n]];});
-  return {varer:out,grupper:grupper,brands:brands,antal:res.length};
+  return {varer:out,grupper:grupper,brands:brands,antal:res.length,tael:tael};
 };
 Motor.prototype.foreslaa=function(qs){ // "mente du"
   var t=words(qs).pop();if(!t||t.length<4)return null;var best=null,bs=0,cnt={};

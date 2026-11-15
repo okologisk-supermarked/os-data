@@ -14,7 +14,8 @@ try{var _tb=(document.currentScript&&document.currentScript.src||"").match(/^(.*
 try{var _pp=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_pp){var _p=document.createElement("script");_p.src=_pp[1]+"popup/popup.js";_p.async=true;document.head.appendChild(_p);}}catch(e){} // Popup (popup/popup.js) – ØS og HE, erstatter Plugly Popup
 try{var _mk=(document.currentScript&&document.currentScript.src||"").match(/^(.*os-data@[^\/]+\/)sog\/sog\.js/);if(_mk){var _m=document.createElement("script");_m.src=_mk[1]+"maerker/maerker.js";_m.async=true;document.head.appendChild(_m);}}catch(e){} // Mærker under produktbilledet (maerker/maerker.js) – ØS og HE
 var HE=/helsekost-ekspres/i.test(location.hostname),SITE=HE?"he":"os";
-var M=null,CFG={},loading=null,ov=null,inp=null,lastQ="",gaT=null;
+var M=null,CFG={},loading=null,ov=null,inp=null,lastQ="",gaT=null,FILT="";
+var FN={o:"Økologisk",v:"Vegansk",g:"Glutenfri",s:"Sukkerfri"}; // filtre ud fra mærkerne i felt 7 (o=Ø-/EU-mærket, v=vegansk, g=glutenfri, s=sukkerfri)
 var LOG="https://script.google.com/macros/s/AKfycbwMFAsMPm7KFWa8JrEbZ-ZL4nZ9-Q4dU340nWvUjWDJ_z44GzKbde37SbcnfldfduS0/exec",POP=null,logged={},logT=null,pend=null;
 function sid(){try{var x=sessionStorage.getItem("ossSid");if(!x){x=Math.random().toString(36).slice(2,12);sessionStorage.setItem("ossSid",x);}return x;}catch(e){return "x";}}
 function logNu(){clearTimeout(logT);if(!pend)return;var q=pend.q,n=pend.n;pend=null;var k=q.toLowerCase();if(logged[k]||q.length<2||q.length>40||/@/.test(q))return;logged[k]=1;
@@ -40,6 +41,7 @@ var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direct
 ".oss-card form{margin:8px 0 0}.oss-card button{width:100%;background:"+(HE?"#1e5b3a":"#f7941d")+";color:#fff;border:0;border-radius:4px;padding:8px 4px;font-weight:700;cursor:pointer;font-size:.85rem}"+
 ".oss-list a{display:flex;justify-content:space-between;align-items:center;background:#fff;border:1px solid #e6e6e6;border-radius:6px;padding:10px 12px;margin-bottom:8px;color:#222;text-decoration:none;font-size:.9rem}.oss-list a:after{content:'\\203A';font-size:1.2rem;color:#888}"+
 ".oss-chips{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}.oss-chips a{background:#fff;border:1px solid #ddd;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none}"+
+".oss-filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.oss-filt a{background:#fff;border:1px solid #cfcfcf;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none;user-select:none}.oss-filt a.on{background:"+(HE?"#1e5b3a":"#2e7d32")+";border-color:"+(HE?"#1e5b3a":"#2e7d32")+";color:#fff}.oss-filt a.on:after{content:' ×'}"+
 ".oss-more{display:block;margin:18px auto 0;background:#fff;border:1px solid #2e7d32;color:#2e7d32;border-radius:6px;padding:10px 18px;font-weight:700;cursor:pointer}"+
 ".oss-empty{background:#fff;border-radius:8px;padding:20px;text-align:center;color:#555}"+
 "@media (max-width:900px){.oss-grid{grid-template-columns:repeat(3,1fr)}.oss-side{width:220px;flex-basis:220px}}"+
@@ -80,11 +82,13 @@ function render(q,limit){
     var best;if(M.mest&&M.mest.length){var ix={};M.P.forEach(function(p){ix[p[0]]=p;});best=M.mest.map(function(n){return ix[n];}).filter(Boolean).slice(0,12);}if(!best||best.length<4)best=M.P.slice().sort(function(a,b){return b[8]-a[8];}).slice(0,12);
     main.innerHTML="<h4>Populære søgninger</h4><div class=\"oss-chips\">"+pop.map(function(s){return "<a data-q=\""+esc(s)+"\">"+esc(s)+"</a>";}).join("")+"</div><h4>Mest købte lige nu</h4><div class=\"oss-grid\">"+best.map(card).join("")+"</div>";
     side.innerHTML=M.kat&&M.kat.length?list("Populære kategorier lige nu",M.kat):"";return;}
-  var r=M.sog(q,limit),note="";
-  if(!r.antal){var f=M.foreslaa(q);if(f){var q2=q.replace(/\S+$/,f),r2=M.sog(q2,limit);if(r2.antal){note="<p class=\"oss-note\">Ingen resultater for “"+esc(q)+"”. Viser resultater for <b>"+esc(q2)+"</b>.</p>";r=r2;}}}
+  var r=M.sog(q,limit,FILT),note="";
+  if(!r.antal&&!FILT){var f=M.foreslaa(q);if(f){var q2=q.replace(/\S+$/,f),r2=M.sog(q2,limit);if(r2.antal){note="<p class=\"oss-note\">Ingen resultater for “"+esc(q)+"”. Viser resultater for <b>"+esc(q2)+"</b>.</p>";r=r2;}}}
   ga(q,r.antal);logSoon(q,r.antal);
   var gd=guideHtml(guider(q));
-  main.innerHTML=r.antal?gd+"<h4>Produkter <span style=\"font-weight:400;color:#777;font-size:.9rem\">("+r.antal+")</span></h4>"+note+"<div class=\"oss-grid\">"+r.varer.map(card).join("")+"</div>"+(r.antal>r.varer.length?"<button class=\"oss-more\" data-more=\""+(limit+40)+"\">Vis flere produkter</button>":""):
+  var fk=Object.keys(FN).filter(function(f){return (r.tael&&r.tael[f])||FILT.indexOf(f)>=0;}),fh=fk.length?"<div class=\"oss-filt\">"+fk.map(function(f){var on=FILT.indexOf(f)>=0;return "<a data-filt=\""+f+"\" class=\""+(on?"on":"")+"\">"+FN[f]+(on?"":" ("+r.tael[f]+")")+"</a>";}).join("")+"</div>":"";
+  if(!r.antal&&FILT){main.innerHTML=gd+fh+"<div class=\"oss-empty\">Ingen varer matcher de valgte filtre. Fjern et filter for at se flere.</div>";side.innerHTML="";return;}
+  main.innerHTML=r.antal?gd+"<h4>Produkter <span style=\"font-weight:400;color:#777;font-size:.9rem\">("+r.antal+")</span></h4>"+fh+note+"<div class=\"oss-grid\">"+r.varer.map(card).join("")+"</div>"+(r.antal>r.varer.length?"<button class=\"oss-more\" data-more=\""+(limit+40)+"\">Vis flere produkter</button>":""):
     gd+"<div class=\"oss-empty\">Vi fandt ingen produkter for “"+esc(q)+"”.<br>Prøv et andet ord, eller skriv til os på info@okologisk-supermarked.dk – så hjælper vi.</div>";
   side.innerHTML=list("Kategorier",r.grupper)+list("Brands",r.brands);
 }
@@ -100,7 +104,7 @@ function open(q0,fraIkon){
     var t;inp.addEventListener("input",function(){vis();clearTimeout(t);t=setTimeout(function(){lastQ=inp.value;render(lastQ);},120);});
     inp.addEventListener("keydown",function(e){if(e.key==="Enter"){e.preventDefault();render(inp.value,80);inp.blur();logNu();}if(e.key==="Escape")close();});
     ov.querySelector(".oss-x").onclick=close;
-    ov.addEventListener("click",function(e){if(e.target.closest("a[href],button[type=submit],form button"))logNu();var c=e.target.closest("[data-q]");if(c){inp.value=c.getAttribute("data-q");render(inp.value);}var m=e.target.closest("[data-more]");if(m)render(inp.value,parseInt(m.getAttribute("data-more"),10));});
+    ov.addEventListener("click",function(e){if(e.target.closest("a[href],button[type=submit],form button"))logNu();var c=e.target.closest("[data-q]");if(c){inp.value=c.getAttribute("data-q");render(inp.value);}var m=e.target.closest("[data-more]");if(m)render(inp.value,parseInt(m.getAttribute("data-more"),10));var fb=e.target.closest("[data-filt]");if(fb){var f=fb.getAttribute("data-filt");FILT=FILT.indexOf(f)>=0?FILT.replace(f,""):FILT+f;render(inp.value);}});
   }
   ov.style.display="flex";document.documentElement.style.overflow="hidden";
   if(POP===null){POP=[];hentPop();}

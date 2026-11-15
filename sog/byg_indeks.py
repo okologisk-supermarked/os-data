@@ -14,7 +14,7 @@ def page(o,inc):
         try: return call('GET',f'/sites/{SITE}/products?limit=100&offset={o}&notHidden=true&currency={CUR}&include={inc}')['items']
         except Exception as e: err=e; time.sleep(2)
     raise err
-with ThreadPoolExecutor(6) as ex: pages=list(ex.map(lambda o:page(o,'prices,manufacturers,categories'),range(0,9500,100)))
+with ThreadPoolExecutor(6) as ex: pages=list(ex.map(lambda o:page(o,'prices,manufacturers,categories,customfields'),range(0,9500,100)))
 items=[i for p in pages for i in p]
 # salgstal fra /products
 def ppage(o):
@@ -53,8 +53,10 @@ for i in items:
     if brand and m0.get('link'): brandmap.setdefault(brand,DOM.sub('',m0['link']))
     cats=[c.get('name','') for c in ((i.get('categories') or {}).get('items') or []) if c.get('name') and not SKIP.match(str(c.get('id','')))]
     url=DOM.sub('',i.get('url') or '')
+    f7=((i.get('customFields') or {}).get('customField07') or '').upper()  # mærker -> filtre i søgningen
+    mk=('o' if re.search(r'#M[12]#',f7) else '')+('v' if re.search(r'#(E3|M8)#',f7) else '')+('g' if '#E4#' in f7 else '')+('s' if '#E7#' in f7 else '')
     img=i.get('image') or ''
-    out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0,i.get('sortOrder') if i.get('sortOrder') is not None else 99999])
+    out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0,i.get('sortOrder') if i.get('sortOrder') is not None else 99999,mk])
 # "Mest købte lige nu": antal ordrer pr. vare på ØS de seneste 3 dage, fyldt op med de seneste 30 dage
 import datetime
 def opage(start,o):
@@ -95,7 +97,7 @@ kat=[g for g in sorted(k3,key=lambda g:(-k3[g],-k30.get(g,0)))][:10]
 if len(kat)<10: kat+=[g for g in sorted(k30,key=lambda g:-k30[g]) if g not in kat][:10-len(kat)]
 kat=[[g,catmap[g]] for g in kat]
 print('kat',[g for g,u in kat])
-meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager','sort']}
+meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager','sort','maerker']}
 json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest,'kat':kat},open(os.path.join(D,UD),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,UD)))
 
