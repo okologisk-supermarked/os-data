@@ -102,10 +102,11 @@ function maerker(B){
   tr.addEventListener("scroll",function(){clearTimeout(tr._t);tr._t=setTimeout(upd,60);},{passive:true});window.addEventListener("resize",upd);setTimeout(upd,50);
 }
 
+function klar(){try{document.documentElement.classList.add("osk-klar");}catch(e){}} // fjerner den reserverede plads til kategorikarrusellen (CLS)
 function start(){
  get("karrusel/"+K+".json").then(function(D){
   if(D.b&&(D.b.live||TEST))try{maerker(D.b);}catch(e){}
-  if(!(D.live||TEST))return;
+  if(!(D.live||TEST)){klar();return;}
   css();
   var M=D.m||{},ph=[].slice.call(document.querySelectorAll("div[id^=bp_ProductCarousel_]"));
   // 1) faste karruseller (forside m.m.)
@@ -134,8 +135,8 @@ function start(){
   [].forEach.call(document.querySelectorAll("div.related"),function(el){if(el.querySelector("ul.Related_Custom_UL"))hide(el);});
   // 3) kategoriside: populært i denne kategori
   var kEl=sideId&&document.getElementById("bp_ProductCarousel_"+sideId);
-  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3",sideId))hide(kEl);}).catch(function(){});}
- }).catch(function(){});
+  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3",sideId))hide(kEl);klar();}).catch(klar);}else klar();
+ }).catch(klar);
 }
 // Varekort: temaet viser kun #specs (felt 2 + 3 m.fl.), hvis et af felterne 4+ har tekst – så varer med kun
 // felt 2/3 (fx brand-2317 InnovaGoods) fik ingen beskrivelse. Vis #specs, når felt 2 eller 3 har tekst (Johnny 05-11-2026).
