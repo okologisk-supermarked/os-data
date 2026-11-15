@@ -6,7 +6,7 @@
 var HE=/helsekost-ekspres/i.test(location.hostname);
 var me=document.currentScript&&document.currentScript.src||"",base=me.replace(/filter\/kat_filter\.js.*$/,"");
 var FN=[["o","Økologisk"],["v","Vegansk"],["g","Glutenfri"],["s","Sukkerfri"],["l","På lager"],["d","Discount"]];
-var M=null,FILT="",box=null,alle=false,henter=false;
+var M=null,FILT="",box=null,alle=false,henter=false,ALLE=null,gem=null;
 function cont(){return HE?document.querySelector("#Content_Productlist .ProductList_Custom_UL"):document.querySelector(".ProductList_Custom_DIV");}
 function varer(c){return [].slice.call(c.children).filter(function(e){return e.querySelector&&e.querySelector("input[name=ProductID]");});}
 function nr(e){var i=e.querySelector("input[name=ProductID]");return i?i.value.trim():"";}
@@ -20,9 +20,11 @@ function css(){if(document.getElementById("osf-css"))return;var s=document.creat
   s.textContent=".okf{display:flex;flex-wrap:nowrap;overflow-x:auto;white-space:nowrap;align-items:center;gap:8px;height:34px;margin:6px 0 14px;width:100%;scrollbar-width:none}.okf::-webkit-scrollbar{display:none}.okf a{background:#fff;border:1px solid #cfcfcf;border-radius:20px;padding:6px 12px;font-size:.85rem;line-height:1.2;color:#222;cursor:pointer;text-decoration:none;user-select:none}.okf a:hover{border-color:"+g+"}.okf a.on{background:"+g+";border-color:"+g+";color:#fff}.okf a.on:after{content:' \\00d7'}.okf .okf-n{font-size:.85rem;color:#666;margin-left:4px}";
   document.head.appendChild(s);}
 function tegn(){
-  var c=cont();if(!c||!box||!M)return;var L=varer(c),vis=0,t={};FN.forEach(function(f){t[f[0]]=0;});
+  var c=cont();if(!c||!box||!M)return;if(!ALLE)ALLE=varer(c);var L=ALLE,vis=0,t={};FN.forEach(function(f){t[f[0]]=0;});
+  // skjulte varer flyttes ud i en usynlig beholder (i stedet for display:none), så gitteret ikke får huller
+  if(!gem){gem=document.createElement("div");gem.style.display="none";c.parentNode.insertBefore(gem,c.nextSibling);}
   L.forEach(function(e){var fl=flag(e),ok=true;for(var i=0;i<FILT.length;i++)if(fl.indexOf(FILT[i])<0){ok=false;break;}
-    e.style.display=ok?"":"none";if(ok){vis++;for(var k in t)if(fl.indexOf(k)>=0)t[k]++;}});
+    (ok?c:gem).appendChild(e);if(ok){vis++;for(var k in t)if(fl.indexOf(k)>=0)t[k]++;}});
   var s=sider(),flere=s.last>1&&!alle;
   box.innerHTML=FN.filter(function(f){return FILT.indexOf(f[0])>=0||t[f[0]]>0||flere;}).map(function(f){var on=FILT.indexOf(f[0])>=0;
     return "<a data-f=\""+f[0]+"\" class=\""+(on?"on":"")+"\">"+f[1]+(on||flere?"":" ("+t[f[0]]+")")+"</a>";}).join("")+
@@ -36,9 +38,9 @@ function hentAlle(){
   return Promise.all(sid.map(function(p){return fetch(m[1]+p+".html",{credentials:"same-origin"}).then(function(r){return r.text();}).then(function(h){
       var d=new DOMParser().parseFromString(h,"text/html"),x=HE?d.querySelector("#Content_Productlist .ProductList_Custom_UL"):d.querySelector(".ProductList_Custom_DIV");
       return {p:p,el:x?varer(x):[]};}).catch(function(){return {p:p,el:[]};});}))
-  .then(function(R){R.sort(function(a,b){return a.p-b.p;});var foer=document.createDocumentFragment(),efter=document.createDocumentFragment();
-    R.forEach(function(r){r.el.forEach(function(e){[].forEach.call(e.querySelectorAll("img[loading]"),function(i){i.loading="lazy";});(r.p<s.cur?foer:efter).appendChild(document.importNode(e,true));});});
-    c.insertBefore(foer,c.firstChild);c.appendChild(efter);alle=true;henter=false;});
+  .then(function(R){R.sort(function(a,b){return a.p-b.p;});var foer=[],efter=[];
+    R.forEach(function(r){r.el.forEach(function(e){[].forEach.call(e.querySelectorAll("img[loading]"),function(i){i.loading="lazy";});(r.p<s.cur?foer:efter).push(document.importNode(e,true));});});
+    if(!ALLE)ALLE=varer(c);ALLE=foer.concat(ALLE,efter);alle=true;henter=false;});
 }
 function start(){
   if(!document.body||!document.body.classList.contains("webshop-productlist"))return;
