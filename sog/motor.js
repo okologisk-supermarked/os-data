@@ -34,8 +34,9 @@ Motor.prototype.sog=function(qs,max,filt){ // filt: krævede mærker, fx "vg" (o
   for(var i=0;i<this.P.length;i++){var p=this.P[i];if(this.skjul[p[0]])continue;var D=this.D[i],sum=0,hit=0;
     for(var j=0;j<alts.length;j++){var b=0;for(var k=0;k<alts[j].length;k++){var sc=this.tok(alts[j][k],D);if(k>0)sc*=0.9;if(sc>b)b=sc;}if(b){hit++;sum+=b;}}
     if(hit<alts.length&&!(alts.length>=3&&hit>=alts.length-1))continue;
-    var fl=p[12]||"";for(var f in tael)if(fl.indexOf(f)>=0)tael[f]++;
+    var fl=p[12]||"";
     if(filt){var mangler=0;for(var fi=0;fi<filt.length;fi++)if(fl.indexOf(filt[fi])<0){mangler=1;break;}if(mangler)continue;}
+    for(var f in tael)if(fl.indexOf(f)>=0)tael[f]++; // antal blandt de viste (så tallet passer, hvis filteret lægges oven i)
     var score=sum/alts.length*(hit/alts.length);
     // varen ER det man søger (ordet står i varens kategori) -> samme niveau som når navnet starter med ordet
     var kat=0;for(j=0;j<alts.length&&!kat;j++)for(k=0;k<alts[j].length;k++){var t=alts[j][k];if(t.length>=3&&D.c.some(function(c){return c===t||c.indexOf(t)===0||(t.length>=4&&c.slice(-t.length)===t);})){kat=1;break;}}
