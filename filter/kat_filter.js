@@ -27,7 +27,7 @@ function tegn(){
   box.innerHTML=FN.filter(function(f){return FILT.indexOf(f[0])>=0||t[f[0]]>0||flere;}).map(function(f){var on=FILT.indexOf(f[0])>=0;
     return "<a data-f=\""+f[0]+"\" class=\""+(on?"on":"")+"\">"+f[1]+(on||flere?"":" ("+t[f[0]]+")")+"</a>";}).join("")+
     (FILT?"<span class=\"osf-n\">"+(henter?"Henter alle varer…":"Viser "+vis+" af "+L.length+" varer")+"</span>":"");
-  var pg=document.querySelector(".pager");if(pg)pg.style.display=FILT&&alle?"none":"";
+  [].forEach.call(document.querySelectorAll(".pager,.paging"),function(pg){pg.style.visibility=FILT&&alle?"hidden":"";});
 }
 function hentAlle(){
   var s=sider();if(alle||s.last<=1){alle=true;return Promise.resolve();}
