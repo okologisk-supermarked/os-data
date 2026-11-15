@@ -36,10 +36,9 @@
   }
   // CLS: skabelonens head reserverer plads til bjælken (html.osbar-forvent); fjernes her, når bjælken er sat ind eller ikke skal vises
   function klar(){try{document.documentElement.classList.add("osbar-klar");}catch(x){}}
-  function ingen(){try{localStorage.removeItem("osbarH");}catch(x){}klar();}
   // Indstillinger fra Shopstyring (karrusel/config.json → topbjaelke), ellers topbjaelke/config.json
   fetch(base+"../karrusel/config.json").then(function(r){return r.json();}).then(function(k){if(k&&k.topbjaelke)return k.topbjaelke;throw 0;}).catch(function(){return fetch(base+"config.json").then(function(r){return r.json();});}).then(function(cfg){
-    var c=cfg&&cfg[K];if(!ok(c)){try{if(sessionStorage.getItem("osbar-luk")!==(c&&c.id))localStorage.removeItem("osbarH");}catch(x){}klar();return;}
+    var c=cfg&&cfg[K];if(!ok(c)){try{if(sessionStorage.getItem("osbar-luk")!==(c&&c.id))localStorage.setItem("osbarH","0");}catch(x){}klar();return;}
     if(document.body)vis(c);else document.addEventListener("DOMContentLoaded",function(){vis(c);});
   }).catch(klar);
 })();
