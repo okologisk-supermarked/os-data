@@ -22,7 +22,7 @@ OPT.forEach(function(o){var op=document.createElement("option");op.value=o[0];op
 s.onchange=function(){var v=s.value;gem(v);s.disabled=true;
 fetch("/shop/AjaxWrapper.asp?FC=changesortorder&SortField="+encodeURIComponent(v),{credentials:"same-origin"}).then(function(){location.href=location.pathname.replace(/c\d+\.html$/,"c1.html");}).catch(function(){location.reload();});};
 row.appendChild(s);
-ul.parentNode.insertBefore(row,ul);
+var osf=document.getElementById("osf");(osf&&osf.parentNode===ul.parentNode?osf:ul).parentNode.insertBefore(row,osf&&osf.parentNode===ul.parentNode?osf:ul);
 var n=ul.children.length;
 var pg=document.querySelector(".pager");
 var m=pg&&pg.textContent.match(/Side\s*(\d+)\s*\/\s*(\d+)/);

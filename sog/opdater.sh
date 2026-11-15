@@ -11,7 +11,7 @@ import json
 for f in ['sog/indeks.json','sog/indeks_he.json']:
     d=json.load(open(f));assert d['meta']['n']>5000,'for få varer i '+f
 P
-git add sog/indeks.json sog/indeks_he.json kurv/kurv_he.json sog/config.json karrusel/ prismatch/he.json
+git add sog/indeks.json sog/indeks_he.json sog/filter.json sog/filter_he.json kurv/kurv_he.json sog/config.json karrusel/ prismatch/he.json
 git diff --cached --quiet && { echo "Ingen ændringer"; exit 0; }
 git commit -qm "Natlig opdatering af søgeindeks
 

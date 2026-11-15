@@ -99,6 +99,12 @@ kat=[[g,catmap[g]] for g in kat]
 print('kat',[g for g,u in kat])
 meta={'v':1,'t':time.strftime('%Y-%m-%dT%H:%M:%S'),'n':len(out),'f':['nr','navn','url','billede','pris','for','brand','grupper','salg','ean','lager','sort','maerker']}
 json.dump({'meta':meta,'p':out,'k':catmap,'b':brandmap,'mest':mest,'kat':kat},open(os.path.join(D,UD),'w'),ensure_ascii=False,separators=(',',':'))
+# lille fil til kategorifiltrene: varenr -> o/v/g/s (mærker), l (på lager), d (discount)
+fm={}
+for r in out:
+    f=r[12]+('l' if r[10] else '')+('d' if 'Discount' in r[7].split('|') else '')
+    if f: fm[r[0]]=f
+json.dump({'t':meta['t'],'m':fm},open(os.path.join(D,'filter.json' if SITE==26 else 'filter_he.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,UD)))
 
 # Helsekost-Ekspres: "Gode tilbud lige nu" i kurv-popuppen (kurv/kurv_he.json)
