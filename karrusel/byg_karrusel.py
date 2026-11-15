@@ -168,6 +168,10 @@ def byg(site, kode):
 
     # varesider: andre købte også + samme kategori, delt i 32 filer efter varenummer
     andre = next((c for c in cfg.values() if c['kilde'] == 'andre'), None)
+    brandlist = collections.defaultdict(list)
+    for x in sorted((n for n in rows if not KOPI.search(n) and ok(n, (andre or {}).get('lager'))), key=lambda n: (-solgt(n, 90), -(rows[n][8] or 0), rows[n][11])):
+        bb = (rows[x][6] or '').strip()
+        if bb and len(brandlist[bb]) < 40: brandlist[bb].append(x)
     mappe = os.path.join(D, f'{kode}_v'); os.makedirs(mappe, exist_ok=True)
     shards = [{'p': {}, 'k': {}} for _ in range(SHARDS)]
     n_andre = 0
@@ -180,8 +184,13 @@ def byg(site, kode):
             co = [x for x, _ in sammen.get(nr, collections.Counter()).most_common(80) if x != nr and not KOPI.search(x) and ok(x, andre.get('lager'))]
             co = co[:andre['antal']]
             if co: n_andre += 1
-            if len(co) < 6 and b in katlist:   # fyld op med de mest solgte i samme kategori
-                co += [x for x in katlist[b] if x != nr and x not in co][:andre['antal'] - len(co)]
+            # fyld op med mærkets mest solgte i ANDRE kategorier (ikke samme kategori - den har sin egen karrusel,
+            # ellers blev "Andre købte også" og "Populært i samme kategori" ens). Under 4 varer: ingen karrusel.
+            if len(co) < 6:
+                br = (rows[nr][6] or '').strip()
+                saml = set(katlist.get(b, []))
+                co += [x for x in brandlist.get(br, []) if x != nr and x not in co and x not in saml][:andre['antal'] - len(co)]
+            if len(co) < 4: co = []
             if co: e['a'] = co; alle_kort.update(co)
         if samme and b in katlist:
             e['s'] = b

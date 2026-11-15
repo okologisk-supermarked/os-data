@@ -128,7 +128,7 @@ function start(){
     var dd=document.querySelector(".CustomersAlsoBought_Custom_DIV"),ddRow=dd&&dd.closest(".row"),ddHead=ddRow&&ddRow.previousElementSibling;
     var aw=null;
     if(andre&&e.a){var anchor=ddRow||sEl;if(anchor){aw=render(anchor,andre.t,e.a,C,"before",null,"andre");if(aw&&ddRow){hide(ddRow);if(ddHead&&/købte også/i.test(ddHead.textContent))hide(ddHead);}}}
-    if(sEl&&e.s&&V.k[e.s]){var lst=V.k[e.s].filter(function(x){return x!==nr;});if(render(aw||sEl,M[sammeId].t,lst,C,"after",null,sammeId))hide(sEl);}
+    if(sEl&&e.s&&V.k[e.s]){var vist=e.a||[];var lst=V.k[e.s].filter(function(x){return x!==nr&&vist.indexOf(x)<0;}); /* ingen dubletter med "Andre købte også" */if(render(aw||sEl,M[sammeId].t,lst,C,"after",null,sammeId))hide(sEl);}
    }).catch(function(){});
   }
   // 2b) DanDomains "Relaterede varer" bruges ikke længere (Johnny 05-11-2026) – skjules på begge shops
