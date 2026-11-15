@@ -31,10 +31,31 @@ def cpage(o):
     raise err
 with ThreadPoolExecutor(6) as ex: cp=list(ex.map(cpage,range(0,1300,100)))
 catmap={}
+# Personlig pleje og alle undergrupper (kategorifiltrenes Naturkosmetik/Allergivenlig vises kun her, Johnny 15-11-2026)
+NATK={'M4','M6','M7','M9','M10','M15','M16'}  # NaTrue, Ecocert, Soil Association, BDIH, EcoControl, COSMOS
+def gpage(o):
+    for t in range(4):
+        try: return call('GET',f'/categories?limit=100&offset={o}')['items']
+        except Exception as e: err=e; time.sleep(2)
+    raise err
+with ThreadPoolExecutor(6) as ex: gp=[c for x in ex.map(gpage,range(0,1500,100)) for c in x]
+_idn={c['id']:c['number'] for c in gp};_kids={}
+for c in gp:
+    for pi in (c.get('parentIds') or []): _kids.setdefault(_idn.get(pi,pi),[]).append(c['number'])
+def _ned(n,s):
+    for k in _kids.get(n,[]):
+        if k not in s: s.add(k);_ned(k,s)
+    return s
+PPN=set()
+for c in gp:
+    nm=next((t.get('name') for t in ((c.get('texts') or {}).get('items') or []) if t.get('siteId')==26),'') or ''
+    if nm.strip().lower()=='personlig pleje': PPN|=_ned(c['number'],{c['number']})
+PPU=set()
 for x in cp:
     for c in x:
         if c.get('hidden') or SKIP.match(str(c.get('id',''))) or not c.get('name') or not c.get('url'): continue
         catmap.setdefault(c['name'].strip(),DOM.sub('',c['url']))
+        if str(c.get('id')) in PPN: PPU.add(re.sub(r'c\d+\.html$','c1.html',DOM.sub('',c['url'])))
 brandmap={}
 out=[];seen=set()
 for i in items:
@@ -54,7 +75,8 @@ for i in items:
     cats=[c.get('name','') for c in ((i.get('categories') or {}).get('items') or []) if c.get('name') and not SKIP.match(str(c.get('id','')))]
     url=DOM.sub('',i.get('url') or '')
     f7=((i.get('customFields') or {}).get('customField07') or '').upper()  # mærker -> filtre i søgningen
-    mk=('o' if re.search(r'#M[12]#',f7) else '')+('v' if re.search(r'#(E3|M8)#',f7) else '')+('g' if '#E4#' in f7 else '')+('s' if '#E7#' in f7 else '')
+    k7=set(x for x in f7.split('#') if x)
+    mk=('o' if re.search(r'#M[12]#',f7) else '')+('v' if re.search(r'#(E3|M8)#',f7) else '')+('g' if '#E4#' in f7 else '')+('s' if '#E7#' in f7 else '')+('n' if k7&NATK else '')+('a' if 'M12' in k7 else '')
     img=i.get('image') or ''
     out.append([nr,i.get('name','').strip(),url,img,round(price or 0,2),round(before or 0,2),brand,'|'.join(dict.fromkeys(cats)),sales.get(nr,0),i.get('barcode') or '',1 if (i.get('stockCount') or 0)>0 else 0,i.get('sortOrder') if i.get('sortOrder') is not None else 99999,mk])
 # "Mest købte lige nu": antal ordrer pr. vare på ØS de seneste 3 dage, fyldt op med de seneste 30 dage
@@ -104,7 +126,7 @@ fm={}
 for r in out:
     f=r[12]+('l' if r[10] else '')+('d' if 'Discount' in r[7].split('|') else '')
     if f: fm[r[0]]=f
-json.dump({'t':meta['t'],'m':fm},open(os.path.join(D,'filter.json' if SITE==26 else 'filter_he.json'),'w'),ensure_ascii=False,separators=(',',':'))
+json.dump({'t':meta['t'],'m':fm,'pp':sorted(PPU)},open(os.path.join(D,'filter.json' if SITE==26 else 'filter_he.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,UD)))
 
 # Helsekost-Ekspres: "Gode tilbud lige nu" i kurv-popuppen (kurv/kurv_he.json)

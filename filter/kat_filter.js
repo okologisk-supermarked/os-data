@@ -5,7 +5,7 @@
 (function(){
 var HE=/helsekost-ekspres/i.test(location.hostname);
 var me=document.currentScript&&document.currentScript.src||"",base=me.replace(/filter\/kat_filter\.js.*$/,"");
-var FN=[["o","Økologisk"],["v","Vegansk"],["g","Glutenfri"],["s","Sukkerfri"],["l","På lager"],["d","Discount"]];
+var FN=[["o","Økologisk"],["n","Naturkosmetik"],["a","Allergivenlig"],["v","Vegansk"],["g","Glutenfri"],["s","Sukkerfri"],["l","På lager"],["d","Discount"]];
 if(HE)FN=FN.filter(function(f){return f[0]!=="d";}); // HE: ingen Discount-knap (Johnny 15-11-2026)
 var M=null,FILT="",box=null,alle=false,henter=false,ALLE=null,gem=null,ORG=null;
 function cont(){return HE?document.querySelector("#Content_Productlist .ProductList_Custom_UL"):document.querySelector(".ProductList_Custom_DIV");}
@@ -53,7 +53,7 @@ function start(){
   box.addEventListener("click",function(e){var a=e.target.closest("[data-f]");if(!a)return;e.preventDefault();var f=a.getAttribute("data-f");
     FILT=FILT.indexOf(f)>=0?FILT.replace(f,""):FILT+f;
     if(FILT&&!alle)hentAlle().then(tegn);else tegn();});
-  fetch(base+"sog/"+(HE?"filter_he.json":"filter.json")).then(function(r){return r.json();}).then(function(d){M=d.m||{};tegn();
+  fetch(base+"sog/"+(HE?"filter_he.json":"filter.json")).then(function(r){return r.json();}).then(function(d){M=d.m||{};var pth=location.pathname.replace(/c\d+\.html$/,"c1.html");if((d.pp||[]).indexOf(pth)<0)FN=FN.filter(function(f){return f[0]!=="n"&&f[0]!=="a";});tegn();
     if(sider().last>1)setTimeout(function(){if(!alle&&!henter)hentAlle().then(tegn);},1200);}) // hent de øvrige sider i baggrunden, så antallet kan vises.catch(function(){box.style.display="none";});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",start);else start();
