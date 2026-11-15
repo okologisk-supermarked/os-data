@@ -102,7 +102,7 @@ function maerker(B){
   tr.addEventListener("scroll",function(){clearTimeout(tr._t);tr._t=setTimeout(upd,60);},{passive:true});window.addEventListener("resize",upd);setTimeout(upd,50);
 }
 
-function klar(){try{document.documentElement.classList.add("osk-klar");}catch(e){}} // fjerner den reserverede plads til kategorikarrusellen (CLS)
+function klar(v){try{document.documentElement.classList.add("osk-klar");if(v===0||v===1)localStorage.setItem("osk:"+location.pathname,String(v));}catch(e){}} // fjerner den reserverede plads til kategorikarrusellen (CLS)
 function start(){
  get("karrusel/"+K+".json").then(function(D){
   if(D.b&&(D.b.live||TEST))try{maerker(D.b);}catch(e){}
@@ -135,8 +135,8 @@ function start(){
   [].forEach.call(document.querySelectorAll("div.related"),function(el){if(el.querySelector("ul.Related_Custom_UL"))hide(el);});
   // 3) kategoriside: populært i denne kategori
   var kEl=sideId&&document.getElementById("bp_ProductCarousel_"+sideId);
-  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];if(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3",sideId))hide(kEl);klar();}).catch(klar);}else klar();
- }).catch(klar);
+  if(kEl&&!nr){Promise.all([get("karrusel/"+K+"_kat.json"),get("karrusel/"+K+"_kort.json")]).then(function(r){var l=r[0].u[location.pathname];var ok=!!(l&&render(kEl,M[sideId].t,l,r[1].c,"after","osk-f3",sideId));if(ok)hide(kEl);klar(ok?1:0);}).catch(function(){klar();});}else klar();
+ }).catch(function(){klar();});
 }
 // Varekort: temaet viser kun #specs (felt 2 + 3 m.fl.), hvis et af felterne 4+ har tekst – så varer med kun
 // felt 2/3 (fx brand-2317 InnovaGoods) fik ingen beskrivelse. Vis #specs, når felt 2 eller 3 har tekst (Johnny 05-11-2026).
