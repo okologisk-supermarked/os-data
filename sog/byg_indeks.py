@@ -50,12 +50,12 @@ PPN=set()
 for c in gp:
     nm=next((t.get('name') for t in ((c.get('texts') or {}).get('items') or []) if t.get('siteId')==26),'') or ''
     if nm.strip().lower()=='personlig pleje': PPN|=_ned(c['number'],{c['number']})
-PPU=set()
+PPU=set();PPNAVN=set()
 for x in cp:
     for c in x:
         if c.get('hidden') or SKIP.match(str(c.get('id',''))) or not c.get('name') or not c.get('url'): continue
         catmap.setdefault(c['name'].strip(),DOM.sub('',c['url']))
-        if str(c.get('id')) in PPN: PPU.add(re.sub(r'c\d+\.html$','c1.html',DOM.sub('',c['url'])))
+        if str(c.get('id')) in PPN: PPNAVN.add(c['name'].strip()); PPU.add(re.sub(r'c\d+\.html$','c1.html',DOM.sub('',c['url'])))
 brandmap={}
 out=[];seen=set()
 for i in items:
@@ -126,6 +126,20 @@ fm={}
 for r in out:
     f=r[12]+('l' if r[10] else '')+('d' if 'Discount' in r[7].split('|') else '')
     if f: fm[r[0]]=f
+# også brand- og temagrupper (fx Derma), hvor mindst halvdelen af varerne ligger i Personlig pleje
+_tot={};_pp={}
+for r in out:
+    gs=[g for g in dict.fromkeys(r[7].split('|')) if g];erpp=any(g in PPNAVN for g in gs)
+    for g in gs: _tot[g]=_tot.get(g,0)+1;_pp[g]=_pp.get(g,0)+(1 if erpp else 0)
+for g,n in _tot.items():
+    if n>=3 and _pp[g]*2>=n and g in catmap: PPU.add(re.sub(r'c\d+\.html$','c1.html',catmap[g]))
+_bt={};_bp={}
+for r in out:
+    if not r[6]: continue
+    erpp=any(g in PPNAVN for g in r[7].split('|'))
+    _bt[r[6]]=_bt.get(r[6],0)+1;_bp[r[6]]=_bp.get(r[6],0)+(1 if erpp else 0)
+for b,n in _bt.items():   # mærkesider (fx Derma)
+    if n>=3 and _bp[b]*2>=n and brandmap.get(b): PPU.add(re.sub(r'c\d+\.html$','c1.html',brandmap[b]))
 json.dump({'t':meta['t'],'m':fm,'pp':sorted(PPU)},open(os.path.join(D,'filter.json' if SITE==26 else 'filter_he.json'),'w'),ensure_ascii=False,separators=(',',':'))
 print(meta, os.path.getsize(os.path.join(D,UD)))
 
