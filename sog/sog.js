@@ -33,8 +33,8 @@ var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direct
 ".oss-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}.oss-in{max-width:1180px;margin:0 auto;padding:22px 16px 60px;display:flex;gap:24px;align-items:flex-start}"+
 ".oss-main{flex:1;min-width:0}.oss-side{width:270px;flex:0 0 270px}"+
 ".oss h4{font-size:1.1rem;margin:0 0 12px;font-weight:700}.oss-note{margin:-4px 0 12px;font-size:.9rem;color:#555}.oss-note a{color:#2e7d32;text-decoration:underline;cursor:pointer}"+
-".oss-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}"+
-".oss-card{background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:10px;display:flex;flex-direction:column;position:relative}"+
+".oss-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}"+
+".oss-card{background:#fff;border:1px solid #e6e6e6;border-radius:8px;padding:10px;display:flex;flex-direction:column;position:relative;min-width:0;overflow-wrap:anywhere}"+ /* minmax(0,1fr): lange ord/knaptekster må ikke gøre en kolonne bredere end den anden (Johnny 15-11-2026) */
 ".oss-card .prodImg{position:relative;text-align:center;height:150px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}.oss-card .prodImg img{max-height:150px;max-width:100%;object-fit:contain}"+
 ".oss-card .prodName{color:#222;font-size:.86rem;line-height:1.3;min-height:3.4em;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;text-decoration:none;border-top:1px solid #eee;padding-top:8px}"+
 ".oss-card .priceouter{margin-top:auto;text-align:right;padding-top:1.5em}.oss-card .prodPrice{font-size:1.25rem;font-weight:400;color:#222}.oss-card .prodPrice span{font-size:.65em;vertical-align:super}"+
@@ -45,8 +45,8 @@ var CSS=".oss{position:fixed;inset:0;z-index:2147483000;display:flex;flex-direct
 ".oss-filt{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 14px}.oss-filt a{background:#fff;border:1px solid #cfcfcf;border-radius:20px;padding:6px 12px;font-size:.85rem;color:#222;cursor:pointer;text-decoration:none;user-select:none}.oss-filt a.on{background:"+(HE?"#1e5b3a":"#2e7d32")+";border-color:"+(HE?"#1e5b3a":"#2e7d32")+";color:#fff}.oss-filt a.on:after{content:' ×'}"+
 ".oss-more{display:block;margin:18px auto 0;background:#fff;border:1px solid #2e7d32;color:#2e7d32;border-radius:6px;padding:10px 18px;font-weight:700;cursor:pointer}"+
 ".oss-empty{background:#fff;border-radius:8px;padding:20px;text-align:center;color:#555}"+
-"@media (max-width:900px){.oss-grid{grid-template-columns:repeat(3,1fr)}.oss-side{width:220px;flex-basis:220px}}"+
-"@media (max-width:640px){.oss-top-in{gap:8px}.oss-logo{display:none}.oss-in{display:block;padding:14px 10px 60px}.oss-side{width:auto;margin-top:22px}.oss-grid{grid-template-columns:repeat(2,1fr);gap:10px}.oss-card .prodImg{height:120px}.oss-card .prodImg img{max-height:120px}}";
+"@media (max-width:900px){.oss-grid{grid-template-columns:repeat(3,minmax(0,1fr))}.oss-side{width:220px;flex-basis:220px}}"+
+"@media (max-width:640px){.oss-top-in{gap:8px}.oss-logo{display:none}.oss-in{display:block;padding:14px 10px 60px}.oss-side{width:auto;margin-top:22px}.oss-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.oss-card button{white-space:normal}.oss-card .prodImg{height:120px}.oss-card .prodImg img{max-height:120px}}";
 var GUIDER=null; // Helseguide-artikler (kun ØS) – helseguide/guider.json
 function guider(q){if(HE||!GUIDER)return [];q=q.toLowerCase().trim();if(q.length<2)return [];var ord=q.split(/[\s,]+/).filter(Boolean),res=[];
   GUIDER.forEach(function(g){var s=0;g[2].forEach(function(k){if(q===k)s=Math.max(s,3);else if((" "+q+" ").indexOf(" "+k+" ")>=0)s=Math.max(s,2);else if(k.indexOf(" ")<0&&k.length>3&&ord.some(function(w){return w.length>=4&&(k.indexOf(w)===0||w.indexOf(k)===0);}))s=Math.max(s,1);});if(s)res.push([s,g]);});
