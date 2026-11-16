@@ -21,6 +21,9 @@
   "beligalinser": [
    "beluga"
   ],
+  "bivokslys": [
+   "duftlys"
+  ],
   "boghvedekerner": [
    "boghvede"
   ],
@@ -60,6 +63,9 @@
   "chokoladejulekalender": [
    "julekalender"
   ],
+  "chokoladepålæg": [
+   "pålægschokolade"
+  ],
   "collagenpaptider": [
    "kollagenpeptider",
    "collagen"
@@ -69,6 +75,9 @@
   ],
   "d-vitamin": [
    "d3"
+  ],
+  "decaf": [
+   "koffeinfri"
   ],
   "ditongræs": [
    "citrongræs"
@@ -133,6 +142,9 @@
   ],
   "mandelmælk": [
    "mandeldrik"
+  ],
+  "mct8": [
+   "mct"
   ],
   "medjoo": [
    "dadler"
@@ -212,6 +224,9 @@
   "soybean": [
    "sojabønner"
   ],
+  "spirefrø": [
+   "spirebakke"
+  ],
   "steinbeiskopipapir": [
    "kopipapir"
   ],
@@ -233,11 +248,17 @@
   "vegansk": [
    "vegan"
   ],
+  "vokslys": [
+   "duftlys"
+  ],
   "walnøder": [
    "valnødder"
   ],
   "waterkefir": [
    "vandkefir"
+  ],
+  "æteriskolie": [
+   "æterisk"
   ],
   "økotranebær": [
    "tranebær"
