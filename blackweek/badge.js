@@ -32,7 +32,7 @@ function scan(){
   var pf=document.querySelector("form.product-details-buy-form");
   if(pf&&har(nrOf(pf))){
     sat(document.getElementById("Productinfo_Fancybox_Image_DIV"),true);
-    var buy=pf.querySelector(".info .buy")||pf.querySelector(".buy");
+    var buy=pf.querySelector(".buyWrapper")||pf.querySelector(".info .buy")||pf.querySelector(".buy");
     if(buy&&!document.querySelector(".os-bw-box")){var b=document.createElement("div");b.className="os-bw-box";
       b.innerHTML="<div class=\"os-bw-ic\">%</div><div><strong>Black Week-tilbud</strong><br>Tilbuddet gælder til og med "+SLUT+", så længe lager haves. <a href=\""+KAT+"\">Se alle Black Week-tilbud</a></div>";
       buy.parentNode.insertBefore(b,buy);}
