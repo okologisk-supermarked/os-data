@@ -63,6 +63,9 @@
   "chokoladejulekalender": [
    "julekalender"
   ],
+  "chokoladekalender": [
+   "julekalender"
+  ],
   "chokoladepålæg": [
    "pålægschokolade"
   ],
@@ -125,6 +128,9 @@
   "korender": [
    "koriander"
   ],
+  "kruderier": [
+   "krydderi"
+  ],
   "lentil": [
    "linser"
   ],
@@ -163,6 +169,10 @@
   ],
   "passata": [
    "tomater"
+  ],
+  "pimentón": [
+   "paprika",
+   "pimenton"
   ],
   "prikbladet": [
    "perikon"
