@@ -18,7 +18,7 @@ var CSS=".os-bw{position:absolute;top:6px;left:6px;width:72px;height:72px;border
 ".os-bw.os-bw-big{width:130px;height:130px;top:12px;left:12px;border-width:3px}.os-bw-big .ba,.os-bw-big .bb{font-size:22px;letter-spacing:1px}.os-bw-big .bb{margin:4px 0 6px}.os-bw-big .bc{font-size:14px}"+
 "@media (max-width:640px){.os-bw{width:58px;height:58px;top:4px;left:4px}.os-bw .ba,.os-bw .bb{font-size:9.5px}.os-bw .bc{font-size:6.5px}"+
 ".os-bw.os-bw-big{width:96px;height:96px;top:8px;left:8px}.os-bw-big .ba,.os-bw-big .bb{font-size:16px}.os-bw-big .bc{font-size:10.5px}}"+
-".os-bw-box{display:flex;gap:10px;align-items:flex-start;border:1px solid #111;background:#f7f4ea;border-radius:6px;padding:9px 11px;margin:10px 0 12px;font-size:13px;line-height:1.5;color:#111}"+
+".os-bw-box{text-align:left;display:flex;gap:10px;align-items:flex-start;border:1px solid #111;background:#f7f4ea;border-radius:6px;padding:9px 11px;margin:10px 0 12px;font-size:13px;line-height:1.5;color:#111}"+
 ".os-bw-box .os-bw-ic{flex:0 0 34px;width:34px;height:34px;border-radius:50%;background:#111;color:#f2c94c;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:900}"+
 ".os-bw-box strong{font-weight:700}.os-bw-box a{color:#111;text-decoration:underline}";
 function badge(big){var d=document.createElement("div");d.className="os-bw"+(big?" os-bw-big":"");d.setAttribute("aria-label","Black Week-tilbud");
