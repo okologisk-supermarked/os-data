@@ -1,4 +1,4 @@
-/* Topbjælke (erstatter Plugly alert bar) – ØS og HE. Ét budskab ad gangen fra topbjaelke/config.json – en tændt kampagne-bjælke (<shop>_kampagne) vises i stedet for den faste.
+/* Topbjælke (erstatter Plugly alert bar) – ØS og HE. Ét budskab ad gangen fra topbjaelke/config.json – flere bjælker kan ligge klar (<shop>, <shop>_<navn>); den første med flueben vises.
    Klik logges som type "kar" med k = "t-<id>" (fanen Karrusel i søgelog-arket). Lukket bjælke huskes i resten af besøget. */
 (function(){
   var HE=/helsekost-ekspres/i.test(location.hostname),K=HE?"he":"os";
@@ -38,7 +38,9 @@
   function klar(){try{document.documentElement.classList.add("osbar-klar");}catch(x){}}
   // Indstillinger fra Shopstyring (karrusel/config.json → topbjaelke), ellers topbjaelke/config.json
   fetch(base+"../karrusel/config.json").then(function(r){return r.json();}).then(function(k){if(k&&k.topbjaelke)return k.topbjaelke;throw 0;}).catch(function(){return fetch(base+"config.json").then(function(r){return r.json();});}).then(function(cfg){
-    var c=cfg&&cfg[K];if(cfg&&ok(cfg[K+"_kampagne"]))c=cfg[K+"_kampagne"]; // kampagne-bjælke (fx Black Week) går foran den faste, mens den er tændt
+    // alle bjælker for shoppen: "os" først, derefter "os_<navn>" i alfabetisk orden – den første med flueben (og inden for Vis fra/til) vises
+    var ks=cfg?[K].concat(Object.keys(cfg).filter(function(k){return k.indexOf(K+"_")===0;}).sort()):[],c=cfg&&cfg[K];
+    for(var i=0;i<ks.length;i++){if(ok(cfg[ks[i]])){c=cfg[ks[i]];break;}}
     if(!ok(c)){try{if(sessionStorage.getItem("osbar-luk")!==(c&&c.id))localStorage.setItem("osbarH","0");}catch(x){}klar();return;}
     if(document.body)vis(c);else document.addEventListener("DOMContentLoaded",function(){vis(c);});
   }).catch(klar);
