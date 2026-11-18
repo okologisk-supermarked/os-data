@@ -1,4 +1,4 @@
-/* Topbjælke (erstatter Plugly alert bar) – ØS og HE. Ét budskab ad gangen fra topbjaelke/config.json.
+/* Topbjælke (erstatter Plugly alert bar) – ØS og HE. Ét budskab ad gangen fra topbjaelke/config.json – en tændt kampagne-bjælke (<shop>_kampagne) vises i stedet for den faste.
    Klik logges som type "kar" med k = "t-<id>" (fanen Karrusel i søgelog-arket). Lukket bjælke huskes i resten af besøget. */
 (function(){
   var HE=/helsekost-ekspres/i.test(location.hostname),K=HE?"he":"os";
@@ -22,7 +22,7 @@
   function vis(c){
     if(document.getElementById("osbar"))return;
     var d=document.createElement("div");d.id="osbar";d.className="osbar";d.style.background=c.bg||"#3f7e0c";
-    d.innerHTML=(c.badge?"<span class=\"osbar-badge\">"+esc(c.badge)+"</span>":"")+"<span class=\"osbar-tekst\">"+esc(c.tekst)+"</span>"+
+    d.innerHTML=(c.badge?"<span class=\"osbar-badge\""+(c.badge_bg?" style=\"background:"+esc(c.badge_bg)+";color:"+esc(c.badge_fg||"#fff")+"\"":"")+">"+esc(c.badge)+"</span>":"")+"<span class=\"osbar-tekst\">"+esc(c.tekst)+"</span>"+
       (c.link&&c.knap?"<a class=\"osbar-knap\" href=\""+esc(c.link)+"\" style=\"background:"+esc(c.knap_bg||"#e2231a")+";color:"+esc(c.knap_fg||"#fff")+"!important\">"+esc(c.knap)+"</a>":"")+
       "<button type=\"button\" class=\"osbar-x\" aria-label=\"Luk\">&times;</button>";
     d.addEventListener("click",function(e){
@@ -38,7 +38,8 @@
   function klar(){try{document.documentElement.classList.add("osbar-klar");}catch(x){}}
   // Indstillinger fra Shopstyring (karrusel/config.json → topbjaelke), ellers topbjaelke/config.json
   fetch(base+"../karrusel/config.json").then(function(r){return r.json();}).then(function(k){if(k&&k.topbjaelke)return k.topbjaelke;throw 0;}).catch(function(){return fetch(base+"config.json").then(function(r){return r.json();});}).then(function(cfg){
-    var c=cfg&&cfg[K];if(!ok(c)){try{if(sessionStorage.getItem("osbar-luk")!==(c&&c.id))localStorage.setItem("osbarH","0");}catch(x){}klar();return;}
+    var c=cfg&&cfg[K];if(cfg&&ok(cfg[K+"_kampagne"]))c=cfg[K+"_kampagne"]; // kampagne-bjælke (fx Black Week) går foran den faste, mens den er tændt
+    if(!ok(c)){try{if(sessionStorage.getItem("osbar-luk")!==(c&&c.id))localStorage.setItem("osbarH","0");}catch(x){}klar();return;}
     if(document.body)vis(c);else document.addEventListener("DOMContentLoaded",function(){vis(c);});
   }).catch(klar);
 })();

@@ -184,6 +184,21 @@
    "slut": "",
    "start": "",
    "tekst": "Vi presser fødevarepriserne"
+  },
+  "os_kampagne": {
+   "aktiv": false,
+   "id": "black-week",
+   "badge": "BLACK WEEK",
+   "tekst": "Masser af tilbud hele ugen – til og med 30. november",
+   "knap": "Se alle tilbud",
+   "link": "/shop/black-week-7489c1.html",
+   "bg": "#0e0e0e",
+   "knap_bg": "#d7262e",
+   "knap_fg": "#ffffff",
+   "start": "",
+   "slut": "2026-11-30T23:59",
+   "badge_bg": "#c9a227",
+   "badge_fg": "#0e0e0e"
   }
  },
  "popup": {
