@@ -187,18 +187,18 @@
   },
   "os_kampagne": {
    "aktiv": false,
-   "id": "black-week",
    "badge": "BLACK WEEK",
-   "tekst": "Masser af tilbud hele ugen – til og med 30. november",
-   "knap": "Se alle tilbud",
-   "link": "/shop/black-week-7489c1.html",
+   "badge_bg": "#c9a227",
+   "badge_fg": "#0e0e0e",
    "bg": "#0e0e0e",
+   "id": "black-week",
+   "knap": "Se alle tilbud",
    "knap_bg": "#d7262e",
    "knap_fg": "#ffffff",
-   "start": "",
+   "link": "/shop/black-week-7489c1.html",
    "slut": "2026-11-30T23:59",
-   "badge_bg": "#c9a227",
-   "badge_fg": "#0e0e0e"
+   "start": "",
+   "tekst": "Masser af tilbud hele ugen – til og med 30. november"
   }
  },
  "popup": {
