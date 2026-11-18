@@ -85,6 +85,9 @@
   "ditongræs": [
    "citrongræs"
   ],
+  "drogerietpadderokke": [
+   "padderokke"
+  ],
   "fiber": [
    "psyllium"
   ],
@@ -131,6 +134,9 @@
   "kruderier": [
    "krydderi"
   ],
+  "krydersnaps": [
+   "snaps"
+  ],
   "lentil": [
    "linser"
   ],
@@ -155,6 +161,9 @@
   "medjoo": [
    "dadler"
   ],
+  "mjødurtblomster": [
+   "mjødurt"
+  ],
   "nødhjælpdråber": [
    "rescue"
   ],
@@ -164,8 +173,14 @@
   "nødhjælpsdråber": [
    "rescue"
   ],
+  "olivneolie": [
+   "olivenolie"
+  ],
   "opvask": [
    "opvaskemiddel"
+  ],
+  "overfladedesinfektion": [
+   "desinfektionsmiddel"
   ],
   "passata": [
    "tomater"
@@ -248,6 +263,9 @@
   ],
   "tomatjuice": [
    "tomatsaft"
+  ],
+  "tomatketschup": [
+   "ketchup"
   ],
   "tørbørste": [
    "massagebørste"
