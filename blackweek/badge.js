@@ -1,7 +1,7 @@
 /* "Black Week"-badge på Økologisk-Supermarked (Johnny 17-11-2026).
    Rundt sort badge i venstre side af produktbilledet (varelister, egne karruseller, søgning, varesiden) + boks under prisen på varesiden.
-   Data: blackweek/os.json (bygges af blackweek/byg_badge.py): "n" = varer i kategori 3852 med aktivt tilbud i periode P11 BlackFriday.
-   Test: tilføj ?bwtest=1 til adressen, så vises badget på alle varer i 3852. Indlæses af sog/sog.js. Kun på ØS. */
+   Data: blackweek/os.json (bygges af blackweek/byg_badge.py): alle varer i kategori 3852 (Johnny 18-11-2026: tilknytningen til 3852 udløser badget).
+   Vises kun fra "start" til og med "slut" i os.json. Test før start: tilføj ?bwtest=1 til adressen. Indlæses af sog/sog.js. Kun på ØS. */
 (function(){
 if(window.__osBw)return;window.__osBw=1;
 if(!/okologisk-supermarked/i.test(location.hostname))return;
@@ -40,6 +40,7 @@ function scan(){
 }
 function start(){
   fetch(BASE+"blackweek/os.json").then(function(r){if(!r.ok)throw 0;return r.json();}).then(function(D){
+    var dag=new Date(Date.now()+3600000).toISOString().slice(0,10);if(!TEST&&(!D.start||dag<D.start||dag>D.slut))return;
     ((TEST?D.alle:D.n)||[]).forEach(function(n){N[String(n).trim().toLowerCase()]=1;});
     if(!Object.keys(N).length)return;
     var st=document.createElement("style");st.textContent=CSS;document.head.appendChild(st);
