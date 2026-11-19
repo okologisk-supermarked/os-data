@@ -48,6 +48,9 @@
   "c-vitamin": [
    "vitamin c"
   ],
+  "cacao": [
+   "kakao"
+  ],
   "cannellini": [
    "hvide"
   ],
@@ -88,6 +91,9 @@
   "drogerietpadderokke": [
    "padderokke"
   ],
+  "essentiel": [
+   "æterisk"
+  ],
   "fiber": [
    "psyllium"
   ],
@@ -96,6 +102,9 @@
   ],
   "glrris": [
    "ris"
+  ],
+  "græskarfrø": [
+   "græskarkerner"
   ],
   "gærris": [
    "ris"
@@ -115,8 +124,14 @@
   "johannesurt": [
    "perikon"
   ],
+  "karklud": [
+   "cloth"
+  ],
   "kirsebærpude": [
    "kirsepude"
+  ],
+  "klematis": [
+   "skovranke"
   ],
   "knækkede": [
    "knækket"
@@ -136,6 +151,12 @@
   ],
   "krydersnaps": [
    "snaps"
+  ],
+  "lavander": [
+   "lavendel"
+  ],
+  "lavender": [
+   "lavendel"
   ],
   "lentil": [
    "linser"
@@ -252,6 +273,9 @@
   "spirefrø": [
    "spirebakke"
   ],
+  "spisekisel": [
+   "silica"
+  ],
   "steinbeiskopipapir": [
    "kopipapir"
   ],
@@ -272,6 +296,9 @@
   ],
   "urtegården": [
    "urtegaarden"
+  ],
+  "vaniliepulver": [
+   "vanilje"
   ],
   "vegansk": [
    "vegan"
