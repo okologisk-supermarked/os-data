@@ -1,5 +1,8 @@
 {
  "synonymer": {
+  "adenosyl": [
+   "b12"
+  ],
   "alfalfa": [
    "lucerne"
   ],
@@ -136,6 +139,9 @@
   "knækkede": [
    "knækket"
   ],
+  "kokossmil": [
+   "smil"
+  ],
   "koleterol": [
    "kolesterol"
   ],
@@ -184,6 +190,12 @@
   ],
   "mjødurtblomster": [
    "mjødurt"
+  ],
+  "møllerstran": [
+   "møllers"
+  ],
+  "naturris": [
+   "råris"
   ],
   "nødhjælpdråber": [
    "rescue"
