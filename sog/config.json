@@ -79,6 +79,9 @@
    "kollagenpeptider",
    "collagen"
   ],
+  "cornichons": [
+   "drueagurker"
+  ],
   "cyanocobalamin": [
    "b12"
   ],
@@ -103,6 +106,9 @@
   "fiberhusk": [
    "psyllium"
   ],
+  "fodscrub": [
+   "scrub"
+  ],
   "glrris": [
    "ris"
   ],
@@ -124,8 +130,14 @@
   "hyperikon": [
    "perikon"
   ],
+  "hårsæbebar": [
+   "shampoobar"
+  ],
   "johannesurt": [
    "perikon"
+  ],
+  "kandiserede": [
+   "kandiseret"
   ],
   "karklud": [
    "cloth"
@@ -197,6 +209,12 @@
   "naturris": [
    "råris"
   ],
+  "nutela": [
+   "hasselnøddecreme"
+  ],
+  "nutella": [
+   "hasselnøddecreme"
+  ],
   "nødhjælpdråber": [
    "rescue"
   ],
@@ -243,6 +261,9 @@
   "rosenblade": [
    "rosenkronblade"
   ],
+  "semulje": [
+   "durummel"
+  ],
   "sennepsmel": [
    "sennep"
   ],
@@ -251,6 +272,9 @@
   ],
   "shampoo": [
    "shampo"
+  ],
+  "skærbæk": [
+   "skærtoft"
   ],
   "smeltechokolade": [
    "chokolade"
@@ -282,6 +306,9 @@
   "soybean": [
    "sojabønner"
   ],
+  "speltpasta": [
+   "spelt"
+  ],
   "spirefrø": [
    "spirebakke"
   ],
@@ -297,11 +324,17 @@
   "termoflaske": [
    "drikkedunk"
   ],
+  "tiamine": [
+   "thiamin"
+  ],
   "tomatjuice": [
    "tomatsaft"
   ],
   "tomatketschup": [
    "ketchup"
+  ],
+  "turmeric": [
+   "gurkemeje"
   ],
   "tørbørste": [
    "massagebørste"
@@ -314,6 +347,9 @@
   ],
   "vegansk": [
    "vegan"
+  ],
+  "violer": [
+   "viol"
   ],
   "vokslys": [
    "duftlys"
