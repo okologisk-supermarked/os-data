@@ -173,7 +173,7 @@
    "tekst": "Vi presser fødevarepriserne"
   },
   "os": {
-   "aktiv": true,
+   "aktiv": false,
    "badge": "",
    "bg": "#008e2b",
    "id": "vi-presser-foedeva",
@@ -186,7 +186,7 @@
    "tekst": "Vi presser fødevarepriserne"
   },
   "os_kampagne": {
-   "aktiv": false,
+   "aktiv": true,
    "badge": "BLACK WEEK",
    "badge_bg": "#c9a227",
    "badge_fg": "#0e0e0e",
