@@ -27,7 +27,7 @@ function sat(box,big){if(!box||box.querySelector(".os-bw"))return;if(getComputed
 function har(nr){return !!N[(nr||"").trim().toLowerCase()];}
 function nrOf(el){var i=el.querySelector("input[name=ProductID]");return i?i.value:"";}
 function scan(){
-  [].forEach.call(document.querySelectorAll("form[id^=productlistBuyForm]"),function(f){if(har(nrOf(f)))sat(f.querySelector(".image"));});
+  [].forEach.call(document.querySelectorAll("form[id^=productlistBuyForm]"),function(f){if(har(nrOf(f)))sat(f.querySelector(".prodImg")||f.querySelector(".image"));});
   [].forEach.call(document.querySelectorAll(".osk-c[data-productno],.oss-card[data-productno]"),function(c){if(har(c.getAttribute("data-productno")))sat(c.querySelector(".prodImg"));});
   var pf=document.querySelector("form.product-details-buy-form");
   if(pf&&har(nrOf(pf))){
