@@ -7,10 +7,11 @@
   "710": {
    "antal": 40,
    "dage": 2,
-   "kilde": "alle",
+   "kategori": "3852",
+   "kilde": "kategori",
    "lager": true,
    "navn": "Forside nr. 1",
-   "titel": "Bedst sælgende i dag"
+   "titel": "Black Week"
   },
   "711": {
    "antal": 15,
