@@ -100,6 +100,9 @@
   "d-vitamin": [
    "d3"
   ],
+  "dandelion": [
+   "mælkebøtte"
+  ],
   "decaf": [
    "koffeinfri"
   ],
@@ -172,6 +175,9 @@
   "kokossmil": [
    "smil"
   ],
+  "kokossmør": [
+   "creamed"
+  ],
   "koleterol": [
    "kolesterol"
   ],
@@ -221,8 +227,14 @@
   "medjoo": [
    "dadler"
   ],
+  "menstyru": [
+   "menstruation"
+  ],
   "mjødurtblomster": [
    "mjødurt"
+  ],
+  "mælkebøtterod": [
+   "mælkebøtte"
   ],
   "møllerstran": [
    "møllers"
@@ -303,6 +315,9 @@
   "shampoo": [
    "shampo"
   ],
+  "skårede": [
+   "skårne"
+  ],
   "skærbæk": [
    "skærtoft"
   ],
@@ -326,6 +341,9 @@
   ],
   "solhat": [
    "echinacea"
+  ],
+  "sonnet": [
+   "sonett"
   ],
   "sorghummel": [
    "sorghum"
